@@ -13,6 +13,7 @@ export default function Footer() {
               <Link href="/women" className="hover:underline">Women</Link>
               <Link href="/men" className="hover:underline">Men</Link>
               <Link href="/children" className="hover:underline">Unisex</Link>
+              <Link href="/bags" className="hover:underline">Bags</Link>
             </nav>
           </div>
           <div>
@@ -26,7 +27,7 @@ export default function Footer() {
         </div>
 
         {/* Right side: Map */}
-        <div className="w-72 h-72 rounded-2xl overflow-hidden shadow-lg flex-shrink-0">
+        <div className="w-96 h-72 rounded-2xl overflow-hidden shadow-lg flex-shrink-0">
           <iframe
             src="https://www.google.com/maps?q=Runda%20Mall,Nairobi&output=embed"
             loading="lazy"
