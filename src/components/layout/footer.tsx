@@ -15,6 +15,12 @@ export default function Footer() {
               <Link href="/children" className="hover:underline">Unisex</Link>
               <Link href="/bags" className="hover:underline">Bags</Link>
             </nav>
+            <p className="text-sm text-gray-600 mt-4 max-w-md">
+              Discover curated fashion that blends timeless elegance with modern simplicity.
+              Each piece is thoughtfully designed to empower your personal style.
+              Experience quality craftsmanship and sustainable materials in every collection.
+              Join us in celebrating the art of everyday dressing.
+            </p>
           </div>
           <div>
             <div className="flex flex-wrap justify-center md:justify-start gap-x-5 gap-y-2 text-xs text-gray-800">
@@ -27,7 +33,7 @@ export default function Footer() {
         </div>
 
         {/* Right side: Map */}
-        <div className="w-96 h-72 rounded-2xl overflow-hidden shadow-lg flex-shrink-0">
+        <div className="w-[31rem] h-[22rem] rounded-2xl overflow-hidden shadow-lg flex-shrink-0">
           <iframe
             src="https://www.google.com/maps?q=Runda%20Mall,Nairobi&output=embed"
             loading="lazy"
