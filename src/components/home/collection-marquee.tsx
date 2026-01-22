@@ -6,7 +6,7 @@ const collections = [
     title: 'WOMEN',
     items: ['Dresses', 'Two-Piece Sets', 'Tops', 'Sweaters'],
     href: '/women',
-    style: { background: 'linear-gradient(180deg, #ff3b2f, #2b0000)' },
+    style: { background: 'linear-gradient(180deg, #8a5a44, #3c2a1e)' },
     isImage: false,
     imageHint: '',
   },
@@ -22,7 +22,7 @@ const collections = [
     title: 'MEN',
     items: ['T-Shirts & Polos', 'Official Shirts', 'Casual Shirts', 'Suits & Blazers'],
     href: '/men',
-    style: { background: 'linear-gradient(180deg, #2f80ed, #0b2f5a)' },
+    style: { background: 'linear-gradient(180deg, #58504a, #1f1c1a)' },
     isImage: false,
     imageHint: '',
   },
@@ -61,8 +61,7 @@ export default function CollectionMarquee() {
   const allCards = [...collections, ...collections]; // Duplicate for seamless loop
 
   return (
-    <section className="py-20 bg-white overflow-hidden">
-      <p className="text-center text-gray-500 mb-6">Drag to explore our collections</p>
+    <section className="py-12 bg-transparent overflow-hidden">
       <div className="overflow-hidden w-full">
         <div className="flex gap-8 w-max animate-scroll">
           {allCards.map((collection, index) => (

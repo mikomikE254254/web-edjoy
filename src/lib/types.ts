@@ -5,6 +5,7 @@ export type Product = {
   description: string;
   price: number;
   collection: string;
+  category: 'women' | 'men' | 'unisex';
   images: {
     id: string;
     url: string;

@@ -1,26 +1,48 @@
 import Link from "next/link";
-import { Input } from "@/components/ui/input";
+import { Heart, Menu, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Menu } from "lucide-react";
 
 export default function Header() {
   return (
-    <header className="p-4 md:px-6 bg-gray-50 border-b">
-        <div className="flex items-center gap-4 max-w-6xl mx-auto">
-            <Button variant="ghost" size="icon" className="md:hidden">
-                <Menu className="h-6 w-6" />
-                <span className="sr-only">Menu</span>
-            </Button>
-            <div className="text-2xl font-bold">
-                <Link href="/">Nextgen</Link>
-            </div>
-            <nav className="ml-auto hidden md:flex gap-6 items-center">
-                <Link href="/men" className="hover:underline text-sm">Men</Link>
-                <Link href="/women" className="hover:underline text-sm">Women</Link>
-                <Link href="/children" className="hover:underline text-sm">Children</Link>
-            </nav>
-            <Input className="ml-4 px-3 py-2 rounded-lg border max-w-[200px] hidden sm:block" placeholder="Search" />
+    <header className="sticky top-0 z-50 w-full border-b border-white/10 bg-background/80 backdrop-blur-lg">
+      <div className="container flex h-16 items-center max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="mr-4 hidden md:flex">
+          <Link href="/" className="mr-6 flex items-center space-x-2">
+            <span className="font-bold text-lg tracking-wide">eddjoys.ke</span>
+          </Link>
+          <nav className="flex items-center space-x-6 text-sm font-medium">
+            <Link href="/" className="transition-colors hover:text-foreground/80 text-foreground/60">Home</Link>
+            <Link href="/women" className="transition-colors hover:text-foreground/80 text-foreground/60">Women</Link>
+            <Link href="/men" className="transition-colors hover:text-foreground/80 text-foreground/60">Men</Link>
+            <Link href="/unisex" className="transition-colors hover:text-foreground/80 text-foreground/60">Unisex</Link>
+          </nav>
         </div>
+        
+        {/* Mobile Menu Trigger */}
+        <div className="md:hidden flex items-center">
+            <Button variant="ghost" size="icon">
+                <Menu />
+                <span className="sr-only">Toggle Menu</span>
+            </Button>
+            <Link href="/" className="ml-4">
+              <span className="font-bold text-lg tracking-wide">eddjoys.ke</span>
+            </Link>
+        </div>
+
+
+        <div className="flex flex-1 items-center justify-end space-x-4">
+          <nav className="flex items-center space-x-2">
+            <Button variant="ghost" size="icon">
+              <Heart className="h-5 w-5 text-foreground/70" />
+              <span className="sr-only">Wishlist</span>
+            </Button>
+            <Button variant="ghost" size="icon">
+              <ShoppingCart className="h-5 w-5 text-foreground/70" />
+              <span className="sr-only">Cart</span>
+            </Button>
+          </nav>
+        </div>
+      </div>
     </header>
   );
 }

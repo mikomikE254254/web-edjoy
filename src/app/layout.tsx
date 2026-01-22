@@ -10,8 +10,8 @@ const jost = Jost({ subsets: ['latin'], weight: ['400', '500', '600', '700'], va
 
 
 export const metadata: Metadata = {
-  title: 'NextGen',
-  description: 'NextGen E-Commerce',
+  title: 'eddjoys.ke',
+  description: 'Premium Kenyan Fashion',
 };
 
 export default function RootLayout({
@@ -22,7 +22,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${manrope.variable} ${jost.variable} font-sans antialiased`}>
-        <div className="flex min-h-screen flex-col bg-gray-50">
+        <div className="flex min-h-screen flex-col">
           <Header />
           <main className="flex-grow">{children}</main>
           <Footer />
