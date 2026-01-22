@@ -21,7 +21,7 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
         </div>
 
         <div className="flex flex-col">
-          <h1 className="font-headline text-4xl font-bold lg:text-5xl">{product.name}</h1>
+          <h1 className="text-4xl font-bold lg:text-5xl">{product.name}</h1>
           <p className="mt-4 text-2xl font-semibold text-primary">${product.price.toFixed(2)}</p>
           <p className="mt-6 text-base leading-relaxed text-muted-foreground">{product.description}</p>
           
