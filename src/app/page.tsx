@@ -12,6 +12,8 @@ export default function Home() {
     'Bag': PlaceHolderImages.find(p => p.id === 'cat-bag'),
     'T-shirt': PlaceHolderImages.find(p => p.id === 'cat-tshirt'),
   };
+  const promoImage1 = PlaceHolderImages.find(p => p.id === 'cat-bag');
+  const promoImage2 = PlaceHolderImages.find(p => p.id === 'ethereal-trench-side');
 
   return (
     <>
@@ -35,13 +37,41 @@ export default function Home() {
       </section>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-        <div className="bg-beige p-6 rounded-xl flex items-center justify-between">
-          <span className="font-medium">Where dreams meet couture</span>
-          <button className="bg-white/50 text-black px-4 py-2 rounded-full text-sm font-semibold">Shop Now</button>
+        <div className="relative rounded-xl overflow-hidden group h-full min-h-[140px]">
+          {promoImage1 && (
+            <Image
+              src={promoImage1.imageUrl}
+              alt={promoImage1.description}
+              fill
+              className="object-cover transition-transform duration-300 group-hover:scale-105"
+              data-ai-hint={promoImage1.imageHint}
+              sizes="(max-width: 768px) 100vw, 50vw"
+            />
+          )}
+          <div className="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent p-6 flex items-center">
+            <div>
+              <h3 className="text-white font-medium text-lg">Where dreams meet couture</h3>
+              <button className="mt-2 bg-white/90 text-black px-4 py-2 rounded-full text-sm font-semibold w-fit backdrop-blur-sm">Shop Now</button>
+            </div>
+          </div>
         </div>
-        <div className="bg-gray-100 p-6 rounded-xl flex items-center justify-between">
-          <span className="font-medium">Enchanting styles for every woman</span>
-          <button className="bg-white/50 text-black px-4 py-2 rounded-full text-sm font-semibold">Shop Now</button>
+        <div className="relative rounded-xl overflow-hidden group h-full min-h-[140px]">
+          {promoImage2 && (
+            <Image
+              src={promoImage2.imageUrl}
+              alt={promoImage2.description}
+              fill
+              className="object-cover transition-transform duration-300 group-hover:scale-105"
+              data-ai-hint={promoImage2.imageHint}
+              sizes="(max-width: 768px) 100vw, 50vw"
+            />
+          )}
+          <div className="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent p-6 flex items-center">
+            <div>
+              <h3 className="text-white font-medium text-lg">Enchanting styles for every woman</h3>
+              <button className="mt-2 bg-white/90 text-black px-4 py-2 rounded-full text-sm font-semibold w-fit backdrop-blur-sm">Shop Now</button>
+            </div>
+          </div>
         </div>
       </div>
 
