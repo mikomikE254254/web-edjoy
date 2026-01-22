@@ -38,13 +38,13 @@ export default function ProductCard({ product }: { product: Product }) {
         {/* Wishlist Icon (Top-right) */}
         <button
           onClick={(e) => { e.preventDefault(); console.log('Add to wishlist'); }}
-          className="absolute top-4 right-4 bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center transition-transform hover:scale-110"
+          className="absolute top-4 right-4 bg-black/20 backdrop-blur-sm text-white rounded-full w-8 h-8 flex items-center justify-center transition-colors hover:bg-black/40 hover:scale-110"
         >
-          <Heart size={16} fill="white" />
+          <Heart size={16} />
         </button>
 
         {/* Glassmorphism Info Panel */}
-        <div className="absolute bottom-4 left-4 right-4 bg-white/30 backdrop-blur-lg rounded-2xl p-3 flex items-center justify-between border-2 border-white/30">
+        <div className="absolute bottom-4 left-4 right-4 bg-white/50 backdrop-blur-lg rounded-2xl p-3 flex items-center justify-between border-2 border-white/50">
           <div className="flex-1 truncate">
             <h3 className="text-sm font-semibold text-gray-900 truncate">{product.name}</h3>
             <div className="flex items-baseline gap-1.5 mt-1">
