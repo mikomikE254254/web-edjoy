@@ -1,3 +1,46 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "ethereal-trench-main",
+      "imageUrl": "https://images.unsplash.com/photo-1734057491918-0d51f2383712?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxmYXNoaW9uJTIwdHJlbmNoY29hdHxlbnwwfHx8fDE3NjkwNDYzODV8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "Main shot of a model wearing the Ethereal Trench Coat.",
+      "imageHint": "fashion trenchcoat"
+    },
+    {
+      "id": "ethereal-trench-side",
+      "imageUrl": "https://images.unsplash.com/photo-1627577279497-4b24bf1021b6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxmYXNoaW9uJTIwbW9kZWx8ZW58MHx8fHwxNzY4OTg4MjQ0fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "Side view of the Ethereal Trench Coat.",
+      "imageHint": "fashion model"
+    },
+    {
+      "id": "ethereal-trench-back",
+      "imageUrl": "https://images.unsplash.com/photo-1605698686605-0e2e567d9a78?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx3b21hbiUyMGJhY2t8ZW58MHx8fHwxNzY5MDQ2Mzg0fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "Back view of the Ethereal Trench Coat.",
+      "imageHint": "woman back"
+    },
+    {
+      "id": "fabric-detail-1",
+      "imageUrl": "https://images.unsplash.com/photo-1611242319342-ed0d65b1a0f0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxmYWJyaWMlMjB0ZXh0dXJlfGVufDB8fHx8MTc2OTA0MTcxM3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "Close up of the trench coat's iridescent fabric.",
+      "imageHint": "fabric texture"
+    },
+    {
+      "id": "fabric-detail-2",
+      "imageUrl": "https://images.unsplash.com/photo-1627032578588-bd0c2bb09a7f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxmYWJyaWMlMjBzdGl0Y2hpbmd8ZW58MHx8fHwxNzY5MDQ2Mzg0fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "Detail of the stitching on the trench coat.",
+      "imageHint": "fabric stitching"
+    },
+    {
+      "id": "fabric-detail-3",
+      "imageUrl": "https://images.unsplash.com/photo-1704775983658-2773a9c0cce2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxidXR0b24lMjBjbG90aGluZ3xlbnwwfHx8fDE3NjkwNDYzODR8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "Close up of a button on the trench coat.",
+      "imageHint": "button clothing"
+    },
+    {
+      "id": "collection-hero",
+      "imageUrl": "https://images.unsplash.com/photo-1557777586-f6682739fcf3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8ZmFzaGlvbiUyMHJ1bndheXxlbnwwfHx8fDE3NjkwMjc3ODl8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "Hero image for the Autumn/Winter '24 collection.",
+      "imageHint": "fashion runway"
+    }
+  ]
 }
