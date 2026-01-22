@@ -13,34 +13,33 @@ export default function MenPage() {
 
   return (
     <div className="space-y-12">
-      <section className="grid md:grid-cols-2 gap-8 lg:gap-16 items-center">
-        <div className="flex flex-col gap-6 justify-center">
-          <div className="opacity-0 animate-float-in">
-            <p className="text-sm font-medium text-gray-500">Featured</p>
-            <h1 className="text-3xl lg:text-4xl font-bold leading-tight mt-1">New arrivals and editor picks</h1>
-          </div>
-          <p className="text-gray-600 opacity-0 animate-float-in [animation-delay:150ms]">
-            Explore structured silhouettes and utility-driven designs. Carefully selected for smart fashion that endures.
-          </p>
-          <div className="flex items-center gap-4 opacity-0 animate-float-in [animation-delay:300ms]">
-            <Button size="lg" className="rounded-full">Explore</Button>
-            <Button variant="ghost" className="flex items-center gap-2 text-gray-600">
-              Scroll <ArrowRight size={16} />
-            </Button>
-          </div>
-        </div>
-        <div className="aspect-square relative rounded-2xl overflow-hidden">
-          {heroImage && (
-            <Image
-              src={heroImage.imageUrl}
-              alt={heroImage.description}
-              fill
-              className="object-cover"
-              data-ai-hint={heroImage.imageHint}
-              sizes="(max-width: 768px) 100vw, 50vw"
-              priority
-            />
-          )}
+      <section className="relative rounded-2xl overflow-hidden aspect-video md:aspect-[16/7] flex items-center justify-center text-center">
+        {heroImage && (
+          <Image
+            src={heroImage.imageUrl}
+            alt={heroImage.description}
+            fill
+            className="object-cover"
+            data-ai-hint={heroImage.imageHint}
+            sizes="100vw"
+            priority
+          />
+        )}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-black/20" />
+        <div className="relative z-10 flex flex-col gap-6 items-center text-white p-8">
+            <div className="opacity-0 animate-float-in">
+                <p className="text-sm font-medium text-gray-300">Featured</p>
+                <h1 className="text-3xl lg:text-4xl font-bold leading-tight mt-1">New arrivals and editor picks</h1>
+            </div>
+            <p className="text-gray-200 opacity-0 animate-float-in [animation-delay:150ms] max-w-2xl">
+                Explore structured silhouettes and utility-driven designs. Carefully selected for smart fashion that endures.
+            </p>
+            <div className="flex items-center gap-4 opacity-0 animate-float-in [animation-delay:300ms]">
+                <Button size="lg" className="rounded-full bg-white text-black hover:bg-gray-200">Explore</Button>
+                <Button variant="ghost" className="flex items-center gap-2 text-white hover:bg-white/10">
+                    Scroll <ArrowRight size={16} />
+                </Button>
+            </div>
         </div>
       </section>
 
