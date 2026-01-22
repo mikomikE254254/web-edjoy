@@ -203,12 +203,6 @@
       "imageUrl": "https://images.unsplash.com/photo-1599948139712-e0f291e5c3e0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxtaW5pbWFsaXN0JTIwY2x1dGNofGVufDB8fHx8MTc2OTE2ODAwMHww&ixlib=rb-4.1.0&q=80&w=1080",
       "description": "A minimalist clutch.",
       "imageHint": "minimalist clutch"
-    },
-    {
-      "id": "generic-apparel-1",
-      "imageUrl": "https://images.pexels.com/photos/15266224/pexels-photo-15266224.jpeg",
-      "description": "Stylish apparel on a hanger.",
-      "imageHint": "apparel fashion"
     }
   ]
 }
