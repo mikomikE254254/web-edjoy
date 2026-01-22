@@ -1,21 +1,35 @@
-import Link from "next/link";
-import { Menu } from "lucide-react";
-import { Button } from "@/components/ui/button";
+'use client';
+
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 export default function Header() {
+  const path = usePathname();
+
+  const navItems = [
+    { href: '/', label: 'Home' },
+    { href: '/men', label: 'Men' },
+    { href: '/women', label: 'Women' },
+    { href: '/children', label: 'Children' },
+  ];
+
   return (
-    <header className="flex items-center gap-4 max-w-6xl mx-auto p-6 bg-gray-50">
-      <div className="text-2xl font-bold">Nextgen</div>
-      <nav className="ml-auto hidden md:flex gap-6">
-        <Link href="/men" className="hover:underline">Men</Link>
-        <Link href="/women" className="hover:underline">Women</Link>
-        <Link href="/children" className="hover:underline">Children</Link>
+    <header className="sticky top-0 z-50 flex justify-center py-4 bg-white/80 backdrop-blur-sm">
+      <nav className="flex gap-2 bg-gray-100 p-1 rounded-full">
+        {navItems.map((item) => (
+          <Link
+            key={item.href}
+            href={item.href}
+            className={`px-5 py-2 rounded-full text-sm font-medium transition-colors ${
+              path === item.href
+                ? 'bg-black text-white'
+                : 'text-gray-700 hover:bg-gray-200'
+            }`}
+          >
+            {item.label}
+          </Link>
+        ))}
       </nav>
-      <input className="ml-4 px-3 py-2 rounded-lg border hidden sm:block" placeholder="Search" />
-      <Button variant="ghost" size="icon" className="md:hidden ml-auto">
-        <Menu />
-        <span className="sr-only">Toggle Menu</span>
-      </Button>
     </header>
   );
 }
