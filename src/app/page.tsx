@@ -4,6 +4,7 @@ import ProductCard from '@/components/product/product-card';
 import { products } from '@/lib/data';
 import CollectionMarquee from '@/components/home/collection-marquee';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
+import EditorialHighlight from '@/components/home/editorial-highlight';
 
 export default function Home() {
   const heroImage = PlaceHolderImages.find(p => p.id === 'nextgen-hero');
@@ -100,6 +101,8 @@ export default function Home() {
       </div>
 
       <CollectionMarquee />
+      
+      <EditorialHighlight />
 
       <h2 className="mt-8 mb-4 text-xl font-semibold">Featured Products</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mt-6">
