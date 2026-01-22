@@ -1,3 +1,4 @@
+
 import Image from 'next/image';
 import ProductCard from '@/components/product/product-card';
 import { products } from '@/lib/data';
@@ -76,22 +77,24 @@ export default function Home() {
       </div>
 
       <h2 className="mt-8 mb-4 text-xl font-semibold">Browse by categories</h2>
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        {Object.entries(categoryImages).map(([c, img]) => (
-          <div key={c} className="bg-white p-4 rounded-lg shadow-sm text-center">
+      <div className="flex gap-4 overflow-x-auto pb-2">
+        {Object.entries(categoryImages).map(([categoryName, img]) => (
+          <div key={categoryName} className="relative shrink-0 w-48 aspect-[3/2] rounded-2xl overflow-hidden group cursor-pointer">
             {img ? (
               <Image
                 src={img.imageUrl}
-                alt={c}
-                width={160}
-                height={112}
-                className="h-28 w-full object-cover rounded-md mb-2"
+                alt={categoryName}
+                fill
+                className="object-cover transition-transform duration-200 group-hover:scale-105"
                 data-ai-hint={img.imageHint}
+                sizes="200px"
               />
             ) : (
-              <div className="h-28 bg-gray-200 rounded-md mb-2" />
+              <div className="w-full h-full bg-gray-200" />
             )}
-            <div className="font-medium">{c}</div>
+            <span className="absolute bottom-2.5 left-2.5 bg-white text-black text-xs font-medium px-3 py-1 rounded-full uppercase">
+              {categoryName}
+            </span>
           </div>
         ))}
       </div>
