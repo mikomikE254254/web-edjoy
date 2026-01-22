@@ -2,9 +2,35 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useState, useEffect } from 'react';
 
 export default function Header() {
   const path = usePathname();
+  const [visible, setVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+
+  useEffect(() => {
+    const controlNavbar = () => {
+      if (typeof window !== 'undefined') {
+        if (window.scrollY > lastScrollY && window.scrollY > 100) {
+          // If scroll down and past 100px, hide the navbar
+          setVisible(false);
+        } else {
+          // If scroll up or within 100px of top, show it
+          setVisible(true);
+        }
+        // Remember current scroll position for the next move
+        setLastScrollY(window.scrollY);
+      }
+    };
+
+    window.addEventListener('scroll', controlNavbar);
+
+    // cleanup function
+    return () => {
+      window.removeEventListener('scroll', controlNavbar);
+    };
+  }, [lastScrollY]);
 
   const navItems = [
     { href: '/', label: 'Home' },
@@ -14,8 +40,12 @@ export default function Header() {
   ];
 
   return (
-    <header className="flex justify-center py-4">
-      <nav className="flex gap-2 bg-gray-100 p-1 rounded-full">
+    <header
+      className={`sticky top-4 z-50 flex justify-center transition-transform duration-300 ease-in-out ${
+        visible ? 'translate-y-0' : '-translate-y-24'
+      }`}
+    >
+      <nav className="flex gap-2 bg-gray-100/80 backdrop-blur-sm p-1 rounded-full shadow-lg ring-1 ring-black ring-opacity-5">
         {navItems.map((item) => (
           <Link
             key={item.href}
