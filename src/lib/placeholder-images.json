@@ -185,6 +185,24 @@
       "imageUrl": "https://images.unsplash.com/photo-1577733928229-873fe88419d2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxicm93biUyMGJhY2twYWNrfGVufDB8fHx8MTY5ODg4MjYyMXww&ixlib=rb-4.1.0&q=80&w=1080",
       "description": "A stylish brown backpack.",
       "imageHint": "brown backpack"
+    },
+    {
+      "id": "stylish-crossbody-bag",
+      "imageUrl": "https://images.unsplash.com/photo-1579632879038-aed2c3d5e219?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxzdHlsaXNoJTIwY3Jvc3Nib2R5JTIwYmFnfGVufDB8fHx8MTc2OTE2ODAwMHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "A stylish crossbody bag.",
+      "imageHint": "crossbody bag"
+    },
+    {
+      "id": "leather-duffle-bag",
+      "imageUrl": "https://images.unsplash.com/photo-1582574574849-06283a3a19a7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxsZWF0aGVyJTIwZHVmZmxlJTIwYmFnfGVufDB8fHx8MTc2OTE2ODAwMHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "A leather duffle bag.",
+      "imageHint": "leather duffle"
+    },
+    {
+      "id": "minimalist-clutch",
+      "imageUrl": "https://images.unsplash.com/photo-1599948139712-e0f291e5c3e0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxtaW5pbWFsaXN0JTIwY2x1dGNofGVufDB8fHx8MTc2OTE2ODAwMHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "A minimalist clutch.",
+      "imageHint": "minimalist clutch"
     }
   ]
 }

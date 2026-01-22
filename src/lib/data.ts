@@ -76,6 +76,33 @@ export const products: Product[] = [
     category: 'children',
     images: [findImage('kids-hoodie')],
   },
+  {
+    id: '8',
+    slug: 'stylish-crossbody-bag',
+    name: 'Stylish Crossbody Bag',
+    description: 'A compact and chic crossbody bag for any occasion.',
+    price: 180,
+    category: 'bags',
+    images: [findImage('stylish-crossbody-bag')],
+  },
+  {
+    id: '9',
+    slug: 'leather-duffle-bag',
+    name: 'Leather Duffle Bag',
+    description: 'A spacious and sophisticated leather duffle for weekend getaways.',
+    price: 350,
+    category: 'bags',
+    images: [findImage('leather-duffle-bag')],
+  },
+  {
+    id: '10',
+    slug: 'minimalist-clutch',
+    name: 'Minimalist Clutch',
+    description: 'An elegant and minimalist clutch for evenings out.',
+    price: 120,
+    category: 'bags',
+    images: [findImage('minimalist-clutch')],
+  },
 ];
 
 export const getProductBySlug = (slug: string): Product | undefined => {
