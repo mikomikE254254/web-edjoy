@@ -179,6 +179,12 @@
       "imageUrl": "https://images.unsplash.com/photo-1601054704854-1a2e79dda4d3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxraWRzJTIwaG9vZGllfGVufDB8fHx8MTc2OTA2MTgwNXww&ixlib=rb-4.1.0&q=80&w=1080",
       "description": "A comfortable hoodie for kids.",
       "imageHint": "kids hoodie"
+    },
+    {
+      "id": "bag-editorial-large-replace",
+      "imageUrl": "https://images.unsplash.com/photo-1577733928229-873fe88419d2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxicm93biUyMGJhY2twYWNrfGVufDB8fHx8MTY5ODg4MjYyMXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "A stylish brown backpack.",
+      "imageHint": "brown backpack"
     }
   ]
 }
