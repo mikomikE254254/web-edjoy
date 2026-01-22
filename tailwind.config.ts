@@ -70,11 +70,16 @@ export default {
           'from': { transform: 'translateX(0)' },
           'to': { transform: 'translateX(-50%)' },
         },
+        'float-in': {
+          'from': { opacity: '0', transform: 'translateY(14px)' },
+          'to': { opacity: '1', transform: 'translateY(0)' },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
         'scroll': 'scroll 40s linear infinite',
+        'float-in': 'float-in 1.2s ease-out forwards',
       },
     },
   },

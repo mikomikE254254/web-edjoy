@@ -30,7 +30,7 @@ export default function MenPage() {
           )}
         </div>
         <div className="flex flex-col gap-6">
-          <div>
+          <div className="opacity-0 animate-float-in">
             <p className="text-sm font-medium text-gray-500">Featured</p>
             <h1 className="text-3xl lg:text-4xl font-bold leading-tight mt-1">New arrivals and editor picks</h1>
           </div>
@@ -60,10 +60,10 @@ export default function MenPage() {
               )}
             </div>
           </div>
-          <p className="text-gray-600">
+          <p className="text-gray-600 opacity-0 animate-float-in [animation-delay:150ms]">
             Explore structured silhouettes and utility-driven designs. Carefully selected for smart fashion that endures.
           </p>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 opacity-0 animate-float-in [animation-delay:300ms]">
             <Button size="lg" className="rounded-full">Explore</Button>
             <Button variant="ghost" className="flex items-center gap-2 text-gray-600">
               Scroll <ArrowRight size={16} />
