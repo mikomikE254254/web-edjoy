@@ -10,12 +10,25 @@ import CategoryTabs from '@/components/product/category-tabs';
 export default function UnisexPage() {
   const unisexProducts = getProductsByCategory('children'); // Using 'children' category data for now
   const heroImage = PlaceHolderImages.find(p => p.id === 'unisex-editorial-hero');
-  const thumb1 = PlaceHolderImages.find(p => p.id === 'unisex-editorial-thumb1');
-  const thumb2 = PlaceHolderImages.find(p => p.id === 'unisex-editorial-thumb2');
 
   return (
     <div className="space-y-12">
       <section className="grid md:grid-cols-2 gap-8 lg:gap-16 items-center">
+        <div className="flex flex-col gap-6 justify-center">
+          <div className="opacity-0 animate-float-in">
+            <p className="text-sm font-medium text-gray-500">Featured</p>
+            <h1 className="text-3xl lg:text-4xl font-bold leading-tight mt-1">New arrivals and editor picks</h1>
+          </div>
+          <p className="text-gray-600 opacity-0 animate-float-in [animation-delay:150ms]">
+            Discover versatile pieces designed for inclusive expression. A focus on shared style and modern comfort.
+          </p>
+          <div className="flex items-center gap-4 opacity-0 animate-float-in [animation-delay:300ms]">
+            <Button size="lg" className="rounded-full">Explore</Button>
+            <Button variant="ghost" className="flex items-center gap-2 text-gray-600">
+              Scroll <ArrowRight size={16} />
+            </Button>
+          </div>
+        </div>
         <div className="aspect-square relative rounded-2xl overflow-hidden">
           {heroImage && (
             <Image
@@ -28,47 +41,6 @@ export default function UnisexPage() {
               priority
             />
           )}
-        </div>
-        <div className="flex flex-col gap-6">
-          <div className="opacity-0 animate-float-in">
-            <p className="text-sm font-medium text-gray-500">Featured</p>
-            <h1 className="text-3xl lg:text-4xl font-bold leading-tight mt-1">New arrivals and editor picks</h1>
-          </div>
-          <div className="flex gap-4">
-            <div className="w-24 h-24 relative rounded-lg overflow-hidden shrink-0">
-              {thumb1 && (
-                <Image
-                  src={thumb1.imageUrl}
-                  alt={thumb1.description}
-                  fill
-                  className="object-cover"
-                  data-ai-hint={thumb1.imageHint}
-                  sizes="96px"
-                />
-              )}
-            </div>
-             <div className="w-24 h-24 relative rounded-lg overflow-hidden shrink-0 mt-4">
-               {thumb2 && (
-                <Image
-                  src={thumb2.imageUrl}
-                  alt={thumb2.description}
-                  fill
-                  className="object-cover"
-                   data-ai-hint={thumb2.imageHint}
-                   sizes="96px"
-                />
-              )}
-            </div>
-          </div>
-          <p className="text-gray-600 opacity-0 animate-float-in [animation-delay:150ms]">
-            Discover versatile pieces designed for inclusive expression. A focus on shared style and modern comfort.
-          </p>
-          <div className="flex items-center gap-4 opacity-0 animate-float-in [animation-delay:300ms]">
-            <Button size="lg" className="rounded-full">Explore</Button>
-            <Button variant="ghost" className="flex items-center gap-2 text-gray-600">
-              Scroll <ArrowRight size={16} />
-            </Button>
-          </div>
         </div>
       </section>
 
