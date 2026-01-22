@@ -2,9 +2,6 @@ import Image from 'next/image';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 export default function EditorialHighlight() {
-  const largeImage = PlaceHolderImages.find(p => p.id === 'editorial-large');
-  const tallImage = PlaceHolderImages.find(p => p.id === 'editorial-tall');
-  const smallImage = PlaceHolderImages.find(p => p.id === 'editorial-small');
   const wideImage = PlaceHolderImages.find(p => p.id === 'editorial-wide');
 
   return (
@@ -14,45 +11,39 @@ export default function EditorialHighlight() {
 
           {/* Large Image (top-left) */}
           <div className="md:col-span-2 relative h-64 md:h-auto md:aspect-[1.7/1] rounded-2xl overflow-hidden group">
-            {largeImage && (
-              <Image
-                src={largeImage.imageUrl}
-                alt={largeImage.description}
-                fill
-                className="object-cover transition-transform duration-300 group-hover:scale-105"
-                data-ai-hint={largeImage.imageHint}
-                sizes="(max-width: 768px) 100vw, 66vw"
-              />
-            )}
+            <video
+              src="https://videos.pexels.com/video-files/5985293/5985293-hd_1280_720_25fps.mp4"
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+            />
           </div>
 
           {/* Tall Image (top-right, spans 2 rows on md) */}
           <div className="md:row-span-2 relative h-96 md:h-auto rounded-2xl overflow-hidden group">
-            {tallImage && (
-              <Image
-                src={tallImage.imageUrl}
-                alt={tallImage.description}
-                fill
-                className="object-cover transition-transform duration-300 group-hover:scale-105"
-                data-ai-hint={tallImage.imageHint}
-                sizes="(max-width: 768px) 100vw, 33vw"
-              />
-            )}
+            <video
+              src="https://videos.pexels.com/video-files/8061114/8061114-sd_540_960_30fps.mp4"
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+            />
           </div>
           
           {/* Container for Small Image & Text (second row, left) */}
           <div className="md:col-span-2 flex flex-col sm:flex-row gap-6 items-center">
             <div className="relative aspect-square w-full sm:w-48 sm:h-48 shrink-0 rounded-2xl overflow-hidden group">
-              {smallImage && (
-                <Image
-                  src={smallImage.imageUrl}
-                  alt={smallImage.description}
-                  fill
-                  className="object-cover transition-transform duration-300 group-hover:scale-105"
-                  data-ai-hint={smallImage.imageHint}
-                  sizes="(max-width: 640px) 100vw, 192px"
-                />
-              )}
+              <video
+                src="https://videos.pexels.com/video-files/4434230/4434230-sd_640_640_25fps.mp4"
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+              />
             </div>
             <div className="text-left">
               <h2 className="text-2xl font-semibold mb-2">Season Highlight</h2>
