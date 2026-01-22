@@ -5,7 +5,6 @@ import ProductCard from "@/components/product/product-card";
 import { getProductsByCategory } from "@/lib/data";
 
 export default function BagsPage() {
-  const largeImage = PlaceHolderImages.find(p => p.id === 'bag-editorial-large');
   const tallImage = PlaceHolderImages.find(p => p.id === 'bag-editorial-tall');
   const smallImage = PlaceHolderImages.find(p => p.id === 'bag-editorial-small');
   const wideImage = PlaceHolderImages.find(p => p.id === 'bag-editorial-wide');
@@ -17,18 +16,16 @@ export default function BagsPage() {
             <div className="bg-white p-4 sm:p-8 rounded-3xl shadow-sm">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 
-                    {/* Large Image (top-left) */}
-                    <div className="md:col-span-2 relative h-64 md:h-auto md:aspect-[1.7/1] rounded-2xl overflow-hidden group">
-                        {largeImage && (
-                        <Image
-                            src={largeImage.imageUrl}
-                            alt={largeImage.description}
-                            fill
-                            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                            data-ai-hint={largeImage.imageHint}
-                            sizes="(max-width: 768px) 100vw, 67vw"
+                    {/* Large Video (top-left) */}
+                    <div className="md:col-span-2 relative h-64 md:h-auto md:aspect-[1.7/1] rounded-2xl overflow-hidden">
+                        <video
+                            src="https://i.postimg.cc/nc3HxcZP/bag.webp"
+                            autoPlay
+                            loop
+                            muted
+                            playsInline
+                            className="w-full h-full object-cover"
                         />
-                        )}
                     </div>
 
                     {/* Tall Image (top-right, spans 2 rows on md) */}
