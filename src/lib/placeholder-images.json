@@ -50,15 +50,69 @@
     },
     {
       "id": "silk-blouse-1",
-      "imageUrl": "https://images.unsplash.com/photo-1613891737415-be7670d21c19?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHx3b21hbiUyMGJsb3VzZXxlbnwwfHx8fDE3NjkwNDc0MTR8MA&ixlib-rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1613891737415-be7670d21c19?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHx3b21hbiUyMGJsb3VzZXxlbnwwfHx8fDE3NjkwNDc0MTR8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "description": "Woman wearing the Silk-Flow Blouse.",
       "imageHint": "woman blouse"
     },
     {
       "id": "linen-trousers-1",
-      "imageUrl": "https://images.unsplash.com/photo-1766113491725-b29c8d6d61df?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxsaW5lbiUyMHRyb3VzZXJzfGVufDB8fHx8MTc2OTA0NzQxNHww&ixlib-rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1766113491725-b29c8d6d61df?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxsaW5lbiUyMHRyb3VzZXJzfGVufDB8fHx8MTc2OTA0NzQxNHww&ixlib=rb-4.1.0&q=80&w=1080",
       "description": "Model wearing the Tailored Linen Trousers.",
       "imageHint": "linen trousers"
+    },
+    {
+      "id": "women-editorial-hero",
+      "imageUrl": "https://images.unsplash.com/photo-1572804013427-4d7ca7268211?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx3b21lbiUyMGZhc2hpb24lMjBlZGl0b3JpYWx8ZW58MHx8fHwxNzY5MDQ3NDA0fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "Editorial shot of a woman in fashionable clothing.",
+      "imageHint": "woman fashion"
+    },
+    {
+      "id": "women-editorial-thumb1",
+      "imageUrl": "https://images.unsplash.com/photo-1581044777550-4cfa6ce670c0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHx3b21lbiUyMGZhc2hpb24lMjBkZXRhaWx8ZW58MHx8fHwxNzY5MDQ3NDA0fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "Detail shot of a woman's accessory.",
+      "imageHint": "fashion accessory"
+    },
+    {
+      "id": "women-editorial-thumb2",
+      "imageUrl": "https://images.unsplash.com/photo-1551803091-e3514006c293?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHx3b21lbiUyMGZhc2hpb24lMjBvdXRmaXR8ZW58MHx8fHwxNzY5MDQ3NDA0fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "Alternative outfit for women.",
+      "imageHint": "woman outfit"
+    },
+    {
+      "id": "men-editorial-hero",
+      "imageUrl": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxtZW4lMjBmYXNoaW9uJTIwZWRpdG9yaWFsfGVufDB8fHx8MTc2OTA0NzQxNHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "Editorial shot of a man in fashionable clothing.",
+      "imageHint": "man fashion"
+    },
+    {
+      "id": "men-editorial-thumb1",
+      "imageUrl": "https://images.unsplash.com/photo-1617127365659-3c7493161423?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxtZW4lMjBmYXNoaW9uJTIwZGV0YWlsfGVufDB8fHx8MTc2OTA0NzQxNHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "Detail shot of a man's watch or shoe.",
+      "imageHint": "man accessory"
+    },
+    {
+      "id": "men-editorial-thumb2",
+      "imageUrl": "https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxtZW4lMjBmYXNoaW9uJTIwb3V0Zml0fGVufDB8fHx8MTc2OTA0NzQxNHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "Alternative outfit for men.",
+      "imageHint": "man outfit"
+    },
+    {
+      "id": "unisex-editorial-hero",
+      "imageUrl": "https://images.unsplash.com/photo-1523240795612-9a054b0db644?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx1bmlzZXglMjBmYXNoaW9ufGVufDB8fHx8MTc2OTA0NzQyNHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "Group of people in unisex fashion.",
+      "imageHint": "unisex fashion"
+    },
+    {
+      "id": "unisex-editorial-thumb1",
+      "imageUrl": "https://images.unsplash.com/photo-1579752636243-05b85437f136?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHx1bmlzZXglMjBmYXNoaW9uJTIwZGV0YWlsfGVufDB8fHx8MTc2OTA0NzQyNHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "Unisex accessory like a hat or bag.",
+      "imageHint": "neutral accessory"
+    },
+    {
+      "id": "unisex-editorial-thumb2",
+      "imageUrl": "https://images.unsplash.com/photo-1622474257451-a7d97316a345?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHx1bmlzZXglMjBmYXNoaW9uJTIwb3V0Zml0fGVufDB8fHx8MTc2OTA0NzQyNHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "Alternative unisex outfit.",
+      "imageHint": "gender-neutral outfit"
     }
   ]
 }

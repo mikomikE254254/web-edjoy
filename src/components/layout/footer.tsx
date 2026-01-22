@@ -12,7 +12,7 @@ export default function Footer() {
               <Link href="/" className="hover:underline">Home</Link>
               <Link href="/women" className="hover:underline">Women</Link>
               <Link href="/men" className="hover:underline">Men</Link>
-              <Link href="/children" className="hover:underline">Children</Link>
+              <Link href="/children" className="hover:underline">Unisex</Link>
             </nav>
           </div>
           <div>
