@@ -44,7 +44,7 @@ export default function ProductCard({ product }: { product: Product }) {
         </button>
 
         {/* Glassmorphism Info Panel */}
-        <div className="absolute bottom-4 left-4 right-4 bg-white/40 backdrop-blur-lg rounded-2xl p-3 flex items-center justify-between border border-white/30">
+        <div className="absolute bottom-4 left-4 right-4 bg-white/30 backdrop-blur-lg rounded-2xl p-3 flex items-center justify-between border-2 border-white/30">
           <div className="flex-1 truncate">
             <h3 className="text-sm font-semibold text-gray-900 truncate">{product.name}</h3>
             <div className="flex items-baseline gap-1.5 mt-1">
@@ -54,9 +54,9 @@ export default function ProductCard({ product }: { product: Product }) {
           </div>
           <button
             onClick={(e) => { e.preventDefault(); console.log('Add to cart'); }}
-            className="w-9 h-9 rounded-full bg-black text-white flex items-center justify-center flex-shrink-0 ml-3 transition-transform hover:scale-110"
+            className="w-10 h-10 rounded-full bg-black text-white flex items-center justify-center flex-shrink-0 ml-3 transition-transform hover:scale-110"
           >
-            <ShoppingBag size={20} />
+            <ShoppingBag size={22} />
           </button>
         </div>
       </Link>
