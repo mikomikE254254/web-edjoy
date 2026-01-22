@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import type { Product } from '@/lib/types';
-import { Heart, ShoppingBag } from 'lucide-react';
+import { Heart, ShoppingBag, Dot } from 'lucide-react';
 
 export default function ProductCard({ product }: { product: Product }) {
   const primaryImage = product.images[0] ?? {
@@ -15,48 +15,49 @@ export default function ProductCard({ product }: { product: Product }) {
   const oldPrice = product.price * 1.2;
 
   return (
-    <div className="w-full rounded-3xl bg-white shadow-[0_10px_30px_rgba(0,0,0,0.08)] overflow-hidden group transition-transform duration-300 ease-in-out hover:-translate-y-1">
-      <Link href={`/products/${product.slug}`} className="block cursor-pointer">
-        <div className="relative">
-          {/* Category Tag */}
-          <div className="absolute top-4 left-4 bg-white/80 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs font-semibold text-gray-800 z-10">
-            Casual
-          </div>
-
-          {/* Image with Gradient Fade */}
-          <div className="aspect-[3/4] w-full relative">
-            <Image
-                src={primaryImage.url}
-                alt={primaryImage.alt}
-                fill
-                className="w-full h-full object-cover"
-                data-ai-hint={primaryImage.hint}
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            />
-            {/* The gradient mask effect */}
-            <div className="absolute bottom-0 left-0 w-full h-1/4 bg-gradient-to-t from-white to-transparent pointer-events-none" />
-          </div>
+    <div className="relative group overflow-hidden rounded-[24px] shadow-lg transition-all duration-300 ease-in-out hover:shadow-2xl hover:-translate-y-1 bg-white">
+      <Link href={`/products/${product.slug}`} className="block">
+        {/* Image Container */}
+        <div className="aspect-[3/4] w-full relative">
+          <Image
+            src={primaryImage.url}
+            alt={primaryImage.alt}
+            fill
+            className="w-full h-full object-cover"
+            data-ai-hint={primaryImage.hint}
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          />
         </div>
 
-        {/* Info Panel below the image */}
-        <div className="p-4 pt-0 bg-white relative -mt-6">
-          <h3 className="text-base font-medium text-black truncate mb-2">
-            {product.name}
-          </h3>
-          <div className="flex justify-between items-end">
-            <div className="flex items-baseline gap-2">
-              <span className="font-bold text-lg text-black">${product.price.toFixed(2)}</span>
-              <span className="line-through text-sm text-gray-400">${oldPrice.toFixed(2)}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <button className="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-colors" onClick={(e) => { e.preventDefault(); console.log('Add to wishlist'); }}>
-                <Heart size={18} className="text-gray-700" />
-              </button>
-              <button className="w-9 h-9 rounded-full bg-black text-white flex items-center justify-center hover:bg-gray-800 transition-colors" onClick={(e) => { e.preventDefault(); console.log('Add to cart'); }}>
-                <ShoppingBag size={18} />
-              </button>
+        {/* Category Badge (Top-left) */}
+        <div className="absolute top-4 left-4 bg-gray-100 text-gray-800 text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1">
+          <Dot className="w-3 h-3 -ml-1 text-gray-500" />
+          <span>Casual</span>
+        </div>
+
+        {/* Wishlist Icon (Top-right) */}
+        <button
+          onClick={(e) => { e.preventDefault(); console.log('Add to wishlist'); }}
+          className="absolute top-4 right-4 bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center transition-transform hover:scale-110"
+        >
+          <Heart size={16} fill="white" />
+        </button>
+
+        {/* Glassmorphism Info Panel */}
+        <div className="absolute bottom-4 left-4 right-4 bg-white/60 backdrop-blur-md rounded-xl p-3 flex items-center justify-between">
+          <div className="flex-1 truncate">
+            <h3 className="text-sm font-semibold text-gray-900 truncate">{product.name}</h3>
+            <div className="flex items-baseline gap-1.5 mt-1">
+              <span className="font-bold text-base text-gray-900">${product.price.toFixed(2)}</span>
+              <span className="text-xs text-red-500 line-through">${oldPrice.toFixed(2)}</span>
             </div>
           </div>
+          <button
+            onClick={(e) => { e.preventDefault(); console.log('Add to cart'); }}
+            className="w-9 h-9 rounded-full bg-black text-white flex items-center justify-center flex-shrink-0 ml-3 transition-transform hover:scale-110"
+          >
+            <ShoppingBag size={18} />
+          </button>
         </div>
       </Link>
     </div>
