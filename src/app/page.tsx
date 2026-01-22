@@ -106,7 +106,7 @@ export default function Home() {
 
       <h2 className="mt-8 mb-4 text-xl font-semibold">Featured Products</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mt-6">
-        {products.map((product) => (
+        {products.slice(0, 7).map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}
       </div>
