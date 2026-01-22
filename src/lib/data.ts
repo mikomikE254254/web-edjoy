@@ -4,7 +4,7 @@ import { PlaceHolderImages } from '@/lib/placeholder-images';
 const findImage = (id: string) => {
   const img = PlaceHolderImages.find(p => p.id === id);
   if (!img) {
-    return { id: 'not-found', url: 'https://placehold.co/600x400', alt: 'Placeholder', hint: 'placeholder' };
+    return { id: 'not-found', url: 'https://picsum.photos/seed/notfound/600/800', alt: 'Placeholder', hint: 'placeholder' };
   }
   return { id: img.id, url: img.imageUrl, alt: img.description, hint: img.imageHint };
 };
@@ -27,6 +27,39 @@ export const products: Product[] = [
       findImage('fabric-detail-2'),
       findImage('fabric-detail-3'),
     ],
+    glbUrl: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/DamagedHelmet/glTF-BINARY/DamagedHelmet.glb',
+  },
+  {
+    id: '2',
+    slug: 'urban-nomad-jacket',
+    name: 'Urban Nomad Jacket',
+    description: 'A versatile jacket designed for the modern explorer. Crafted from a durable, yet lightweight material, it offers protection against the elements without sacrificing style. Features multiple pockets and an adjustable hood.',
+    price: 280,
+    collection: 'aw24',
+    images: [findImage('urban-nomad-1'), findImage('urban-nomad-2')],
+    fabricDetails: [findImage('fabric-detail-1'), findImage('fabric-detail-2')],
+    glbUrl: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/DamagedHelmet/glTF-BINARY/DamagedHelmet.glb',
+  },
+  {
+    id: '3',
+    slug: 'silk-flow-blouse',
+    name: 'Silk-Flow Blouse',
+    description: 'A fluid blouse made from pure mulberry silk. Its relaxed fit and elegant drape make it a perfect piece for both office and evening wear. The hidden placket and mother-of-pearl buttons add a touch of luxury.',
+    price: 190,
+    collection: 'aw24',
+    images: [findImage('silk-blouse-1'), findImage('silk-blouse-2')],
+    fabricDetails: [findImage('fabric-detail-1'), findImage('fabric-detail-2')],
+    glbUrl: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/DamagedHelmet/glTF-BINARY/DamagedHelmet.glb',
+  },
+  {
+    id: '4',
+    slug: 'tailored-linen-trousers',
+    name: 'Tailored Linen Trousers',
+    description: 'Expertly tailored from fine Italian linen, these trousers offer a sharp yet breathable option for warmer days. The straight-leg cut and precise pleats create a flattering silhouette.',
+    price: 220,
+    collection: 'aw24',
+    images: [findImage('linen-trousers-1'), findImage('linen-trousers-2')],
+    fabricDetails: [findImage('fabric-detail-1'), findImage('fabric-detail-2')],
     glbUrl: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/DamagedHelmet/glTF-BINARY/DamagedHelmet.glb',
   },
 ];
