@@ -41,8 +41,8 @@ export default function Header() {
 
   return (
     <header
-      className={`sticky top-4 z-50 flex justify-center transition-transform duration-300 ease-in-out ${
-        visible ? 'translate-y-0' : '-translate-y-24'
+      className={`sticky top-4 z-50 flex justify-center transition-all duration-500 ease-in-out ${
+        visible ? 'translate-y-0 opacity-100' : '-translate-y-24 opacity-0'
       }`}
     >
       <nav className="flex gap-2 bg-gray-100/80 backdrop-blur-sm p-1 rounded-full shadow-lg ring-1 ring-black ring-opacity-5">
