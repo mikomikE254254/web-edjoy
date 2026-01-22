@@ -21,6 +21,7 @@ export default {
         display: ['var(--font-jost)', 'sans-serif'],
       },
       colors: {
+        beige: '#f6eada',
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         card: {
@@ -99,16 +100,11 @@ export default {
           '50%': { transform: 'scale(1.2)', opacity: '0.7' },
           '100%': { transform: 'scale(1)', opacity: '1' },
         },
-        'marquee': {
-          '0%': { transform: 'translateX(0%)' },
-          '100%': { transform: 'translateX(-100%)' },
-        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
         'cart-add': 'cart-add-anim 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards',
-        'marquee': 'marquee 60s linear infinite',
       },
     },
   },

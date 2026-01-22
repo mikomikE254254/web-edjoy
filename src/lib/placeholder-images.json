@@ -1,6 +1,36 @@
 {
   "placeholderImages": [
     {
+      "id": "nextgen-hero",
+      "imageUrl": "https://images.unsplash.com/photo-1599309329365-0a9ed45a1da3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxmYXNoaW9uJTIwc3VtbWVyfGVufDB8fHx8MTc2OTA0Nzc2N3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "A stylish model in summer clothing.",
+      "imageHint": "fashion summer"
+    },
+    {
+      "id": "cat-shoes",
+      "imageUrl": "https://images.unsplash.com/photo-1543508282-6319a3e2621f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxzaG9lc3xlbnwwfHx8fDE3NjkwMDkzNTF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "A pair of shoes.",
+      "imageHint": "shoes"
+    },
+    {
+      "id": "cat-brush",
+      "imageUrl": "https://images.unsplash.com/photo-1615917063840-0b7c196e29c1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxicnVzaHxlbnwwfHx8fDE3NjkwNDc3Njh8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "A makeup brush.",
+      "imageHint": "brush"
+    },
+    {
+      "id": "cat-bag",
+      "imageUrl": "https://images.unsplash.com/photo-1559563458-527698bf5295?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxoYW5kYmFnfGVufDB8fHx8MTc2ODk3OTc0N3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "A handbag.",
+      "imageHint": "handbag"
+    },
+    {
+      "id": "cat-tshirt",
+      "imageUrl": "https://images.unsplash.com/photo-1759572095329-1dcf9522762b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHx0LXNoaXJ0fGVufDB8fHx8MTc2ODk2NjM4N3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "A t-shirt.",
+      "imageHint": "t-shirt"
+    },
+    {
       "id": "ethereal-trench-main",
       "imageUrl": "https://images.unsplash.com/photo-1563671889-7bfa8c578a7c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxmYXNoaW9uJTIwdHJlbmNoY29hdHxlbnwwfHx8fDE3NjkwNDYzODV8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "description": "Main shot of a model wearing the Ethereal Trench Coat.",

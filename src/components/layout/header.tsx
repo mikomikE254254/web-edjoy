@@ -1,33 +1,26 @@
 import Link from "next/link";
-import { ShoppingBag, Heart } from "lucide-react";
+import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Menu } from "lucide-react";
 
 export default function Header() {
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-white/10 bg-background/80 backdrop-blur-xl">
-      <div className="container flex h-20 items-center">
-        <div className="mr-auto flex items-center">
-          <Link href="/" className="mr-8 flex items-center space-x-2">
-            <span className="font-display text-2xl font-bold tracking-wide">eddjoys.ke</span>
-          </Link>
-          <nav className="hidden items-center space-x-8 text-sm font-medium md:flex">
-            <Link href="/" className="text-foreground/80 hover:text-primary transition-colors">Home</Link>
-            <Link href="/women" className="text-foreground/80 hover:text-primary transition-colors">Women</Link>
-            <Link href="/men" className="text-foreground/80 hover:text-primary transition-colors">Men</Link>
-            <Link href="/unisex" className="text-foreground/80 hover:text-primary transition-colors">Unisex</Link>
-          </nav>
+    <header className="bg-gray-50/90 backdrop-blur-lg sticky top-0 z-50 border-b">
+        <div className="flex items-center gap-4 max-w-6xl mx-auto p-4 md:px-6">
+            <Button variant="ghost" size="icon" className="md:hidden">
+                <Menu className="h-6 w-6" />
+                <span className="sr-only">Menu</span>
+            </Button>
+            <div className="text-2xl font-bold">
+                <Link href="/">Nextgen</Link>
+            </div>
+            <nav className="ml-auto hidden md:flex gap-6 items-center">
+                <Link href="/men" className="hover:underline text-sm">Men</Link>
+                <Link href="/women" className="hover:underline text-sm">Women</Link>
+                <Link href="/children" className="hover:underline text-sm">Children</Link>
+            </nav>
+            <Input className="ml-4 px-3 py-2 rounded-lg border max-w-[200px] hidden sm:block" placeholder="Search" />
         </div>
-        <div className="flex items-center justify-end space-x-2">
-          <Button variant="ghost" size="icon">
-            <Heart className="h-5 w-5" />
-            <span className="sr-only">Wishlist</span>
-          </Button>
-          <Button variant="ghost" size="icon">
-            <ShoppingBag className="h-5 w-5" />
-            <span className="sr-only">Shopping Bag</span>
-          </Button>
-        </div>
-      </div>
     </header>
   );
 }

@@ -10,8 +10,8 @@ const jost = Jost({ subsets: ['latin'], weight: ['400', '500', '600', '700'], va
 
 
 export const metadata: Metadata = {
-  title: 'eddjoys.ke',
-  description: 'Premium Kenyan fashion e-commerce.',
+  title: 'NextGen',
+  description: 'NextGen E-Commerce',
 };
 
 export default function RootLayout({
@@ -20,9 +20,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <body className={`${manrope.variable} ${jost.variable} font-sans antialiased`}>
-        <div className="flex min-h-screen flex-col">
+        <div className="flex min-h-screen flex-col bg-gray-50">
           <Header />
           <main className="flex-grow">{children}</main>
           <Footer />
