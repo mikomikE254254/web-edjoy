@@ -5,8 +5,8 @@ import { Menu } from "lucide-react";
 
 export default function Header() {
   return (
-    <header className="bg-gray-50/90 backdrop-blur-lg sticky top-0 z-50 border-b">
-        <div className="flex items-center gap-4 max-w-6xl mx-auto p-4 md:px-6">
+    <header className="p-4 md:px-6 bg-gray-50 border-b">
+        <div className="flex items-center gap-4 max-w-6xl mx-auto">
             <Button variant="ghost" size="icon" className="md:hidden">
                 <Menu className="h-6 w-6" />
                 <span className="sr-only">Menu</span>
