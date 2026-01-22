@@ -61,8 +61,7 @@ export default function CollectionMarquee() {
   const allCards = [...collections, ...collections]; // Duplicate for seamless loop
 
   return (
-    <section className="py-12 bg-transparent overflow-hidden">
-        <p className="text-center text-gray-500 mb-6">Drag to explore our collections</p>
+    <section className="py-8 bg-transparent overflow-hidden">
       <div className="overflow-hidden w-full">
         <div className="flex gap-8 w-max animate-scroll">
           {allCards.map((collection, index) => (
