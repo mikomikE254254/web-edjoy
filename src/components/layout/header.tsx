@@ -14,7 +14,7 @@ export default function Header() {
   ];
 
   return (
-    <header className="sticky top-0 z-50 flex justify-center py-4 bg-white/80 backdrop-blur-sm">
+    <header className="sticky top-0 z-50 flex justify-center py-4">
       <nav className="flex gap-2 bg-gray-100 p-1 rounded-full">
         {navItems.map((item) => (
           <Link
