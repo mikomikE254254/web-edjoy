@@ -1,8 +1,10 @@
 import { getProductBySlug } from '@/lib/data';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
+import ProductPurchaseForm from '@/components/product/product-purchase-form';
+import ProductReviews from '@/components/product/product-reviews';
 
-export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
+export default async function ProductPage({ params }: { params: Promise<{ slug:string }> }) {
   const { slug } = await params;
   const product = getProductBySlug(slug);
 
@@ -12,27 +14,49 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
 
   const primaryImage = product.images[0] ?? {
     url: 'https://placehold.co/600x800',
-    alt: 'Placeholder image'
+    alt: 'Placeholder image',
+    hint: 'placeholder',
   };
 
+  const thumbnailImages = product.images.slice(0, 4); // Show up to 4 thumbnails
+
   return (
-    <div className="container mx-auto py-12">
-      <div className="grid md:grid-cols-2 gap-12">
-        <div>
-          <div className="aspect-square relative rounded-lg bg-gray-100">
-             <Image
-                src={primaryImage.url}
-                alt={primaryImage.alt}
-                fill
-                className="object-cover rounded-lg"
-              />
-          </div>
+    <div className="container mx-auto py-12 space-y-12">
+      {/* Image Gallery */}
+      <div className="grid md:grid-cols-2 gap-6 items-start">
+        <div className="aspect-square relative rounded-2xl bg-gray-100 overflow-hidden shadow-lg">
+          <Image
+            src={primaryImage.url}
+            alt={primaryImage.alt}
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, 50vw"
+            priority
+            data-ai-hint={primaryImage.hint}
+          />
         </div>
-        <div>
-          <h1 className="text-4xl font-bold">{product.name}</h1>
-          <p className="text-2xl mt-4">${product.price.toFixed(2)}</p>
-          <p className="mt-6 text-gray-600">{product.description}</p>
-          <button className="mt-8 bg-black text-white px-8 py-3 rounded-full font-semibold">Add to Cart</button>
+        <div className="grid grid-cols-2 gap-6">
+          {thumbnailImages.slice(1,5).map((image, index) => (
+             <div key={index} className="aspect-square relative rounded-2xl bg-gray-100 overflow-hidden shadow-lg">
+                <Image 
+                  src={image.url} 
+                  alt={image.alt} 
+                  fill className="object-cover" 
+                  sizes="25vw"
+                  data-ai-hint={image.hint}
+                />
+              </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Info & Reviews */}
+      <div className="grid lg:grid-cols-2 gap-12 items-start">
+        <div className="bg-gray-50/50 p-2 rounded-2xl">
+          <ProductPurchaseForm product={product} />
+        </div>
+        <div className="bg-gray-50/50 p-2 rounded-2xl">
+          <ProductReviews />
         </div>
       </div>
     </div>
