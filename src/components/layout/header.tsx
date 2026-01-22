@@ -37,6 +37,7 @@ export default function Header() {
     { href: '/men', label: 'Men' },
     { href: '/women', label: 'Women' },
     { href: '/children', label: 'Unisex' },
+    { href: '/bags', label: 'Bags' },
   ];
 
   return (

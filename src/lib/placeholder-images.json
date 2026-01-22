@@ -137,6 +137,48 @@
       "imageUrl": "https://images.unsplash.com/photo-1523240795612-9a054b0db644?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx1bmlzZXglMjBmYXNoaW9ufGVufDB8fHx8MTc2OTA0NzQyNHww&ixlib=rb-4.1.0&q=80&w=1080",
       "description": "Wide editorial fashion banner.",
       "imageHint": "fashion group"
+    },
+    {
+      "id": "bag-editorial-large",
+      "imageUrl": "https://images.unsplash.com/photo-1590874135941-45763a1a6b09?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxiYWclMjBlZGl0b3JpYWx8ZW58MHx8fHwxNzY5MDgxMTAwfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "Large editorial shot of a handbag.",
+      "imageHint": "bag editorial"
+    },
+    {
+      "id": "bag-editorial-tall",
+      "imageUrl": "https://images.unsplash.com/photo-1584917865217-0665b13399a9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxiYWclMjBtb2RlbHxlbnwwfHx8fDE3NjkwODEyNTJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "Tall shot of a model holding a bag.",
+      "imageHint": "bag model"
+    },
+    {
+      "id": "bag-editorial-small",
+      "imageUrl": "https://images.unsplash.com/photo-1621925349419-75097b5e4f4c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxiYWclMjBkZXRhaWx8ZW58MHx8fHwxNzY5MDgxMjUyfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "Small detail shot of a bag.",
+      "imageHint": "bag detail"
+    },
+    {
+      "id": "bag-editorial-wide",
+      "imageUrl": "https://images.unsplash.com/photo-1548036328-c9fa89d12424?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxiYWclMjBjb2xsZWN0aW9ufGVufDB8fHx8fDE3NjkwODEyNTJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "Wide shot of a collection of bags.",
+      "imageHint": "bag collection"
+    },
+    {
+      "id": "leather-tote",
+      "imageUrl": "https://images.unsplash.com/photo-1594223274512-ad4803739b7c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxsZWF0aGVyJTIwdG90ZXxlbnwwfHx8fDE3NjkwODE0MzB8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "A leather tote bag.",
+      "imageHint": "leather tote"
+    },
+    {
+      "id": "canvas-backpack",
+      "imageUrl": "https://images.unsplash.com/photo-1553062407-98eeb68c6a62?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjYW52YXMlMjBiYWNrcGFja3xlbnwwfHx8fDE3NjkwODE0MzB8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "A canvas backpack.",
+      "imageHint": "canvas backpack"
+    },
+    {
+      "id": "kids-hoodie",
+      "imageUrl": "https://images.unsplash.com/photo-1601054704854-1a2e79dda4d3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxraWRzJTIwaG9vZGllfGVufDB8fHx8MTc2OTA2MTgwNXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "A comfortable hoodie for kids.",
+      "imageHint": "kids hoodie"
     }
   ]
 }

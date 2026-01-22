@@ -49,12 +49,39 @@ export const products: Product[] = [
     category: 'men',
     images: [findImage('linen-trousers-1')],
   },
+  {
+    id: '5',
+    slug: 'classic-leather-tote',
+    name: 'Classic Leather Tote',
+    description: 'A spacious and elegant tote bag crafted from genuine leather.',
+    price: 320,
+    category: 'bags',
+    images: [findImage('leather-tote')],
+  },
+  {
+    id: '6',
+    slug: 'everyday-canvas-backpack',
+    name: 'Everyday Canvas Backpack',
+    description: 'A durable and stylish backpack for your daily adventures.',
+    price: 150,
+    category: 'bags',
+    images: [findImage('canvas-backpack')],
+  },
+  {
+    id: '7',
+    slug: 'cozy-kids-hoodie',
+    name: 'Cozy Kids Hoodie',
+    description: 'A warm and comfortable hoodie for children.',
+    price: 80,
+    category: 'children',
+    images: [findImage('kids-hoodie')],
+  },
 ];
 
 export const getProductBySlug = (slug: string): Product | undefined => {
   return products.find(p => p.slug === slug);
 };
 
-export const getProductsByCategory = (category: 'women' | 'men' | 'children'): Product[] => {
+export const getProductsByCategory = (category: 'women' | 'men' | 'children' | 'bags'): Product[] => {
   return products.filter(p => p.category === category);
 }
