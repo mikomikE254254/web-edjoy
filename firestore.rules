@@ -1,0 +1,93 @@
+/**
+ * This ruleset enforces a public, read-only security model for a retail product catalog.
+ *
+ * Core Philosophy:
+ * The primary goal is to allow any user, including anonymous guests, to browse the entire
+ * product and category catalog freely. This supports the core e-commerce experience.
+ * Write access (creating, updating, or deleting products/categories) is completely
+ * disabled by default, as there is no administrative role system defined in the data model.
+ * This creates a secure "read-only" state, preventing any unauthorized modification of the
+ * public catalog data.
+ *
+ * Data Structure:
+ * The data is organized into two flat, top-level collections:
+ * - /products/{productId}: Stores individual product details.
+ * - /categories/{categoryId}: Stores category information.
+ * This flat structure is highly performant and simplifies security rules, as it avoids
+ * the need for complex, nested lookups (`get()` calls).
+ *
+ * Key Security Decisions:
+ * - Public Read Access: All documents in both `/products` and `/categories` are publicly
+ *   readable and listable (`allow get, list: if true;`). This is intentional to allow
+ *   the application's front-end to function for all visitors.
+ * - Writes Disabled: All write operations (`create`, `update`, `delete`) are explicitly
+ *   denied (`if false;`). This is the most secure posture, as the data model lacks any
+ *   'ownerId' or admin role fields to safely grant write permissions. A placeholder `TODO`
+ *   is included to guide future implementation of an admin system.
+ * - Prototyping Flexibility: In line with the prototyping philosophy, these rules do not
+ *   validate the specific shape or data types of the documents. The focus is strictly on
+ *   controlling read/write authorization.
+ */
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper Functions
+    /**
+     * Checks if a user is authenticated.
+     */
+    //function isSignedIn() {
+    //  return auth != null;
+    //}
+
+    /**
+     * @description
+     *   Rules for the top-level product catalog. Products are public and can be read by anyone,
+     *   but can only be modified by authorized administrators (currently disabled).
+     * @path
+     *   /products/{productId}
+     * @allow
+     *   An anonymous user can read a specific product's details. (get)
+     * @deny
+     *   Any user, signed-in or not, attempts to add a new product. (create)
+     * @principle
+     *   Public Read-Only Data. This rule makes the product catalog publicly accessible for
+     *   browsing while preventing any modification until a proper admin role is implemented.
+     */
+    match /products/{productId} {
+      allow get: if true;
+      allow list: if true;
+
+      // CRITICAL: Cannot implement owner-only or admin-only writes. The 'Product' entity is missing an 'ownerId' or role-based field.
+      // All write operations are disabled to prevent unauthorized data modification.
+      allow create: if false; // TODO: Add admin validation once an admin role system is implemented.
+      allow update: if false; // TODO: Add admin validation once an admin role system is implemented.
+      allow delete: if false; // TODO: Add admin validation once an admin role system is implemented.
+    }
+
+    /**
+     * @description
+     *   Rules for product categories. Categories are public information and can be read by anyone,
+     *   but can only be managed by authorized administrators (currently disabled).
+     * @path
+     *   /categories/{categoryId}
+     * @allow
+     *   Any user, including anonymous ones, can list all available categories. (list)
+     * @deny
+     *   Any user attempts to delete an existing category. (delete)
+     * @principle
+     *   Public Read-Only Data. This rule ensures that categories are viewable by all users of
+     *   the app, while writes are locked down for security.
+     */
+    match /categories/{categoryId} {
+      allow get: if true;
+      allow list: if true;
+
+      // CRITICAL: Cannot implement owner-only or admin-only writes. The 'Category' entity is missing an 'ownerId' or role-based field.
+      // All write operations are disabled to prevent unauthorized data modification.
+      allow create: if false; // TODO: Add admin validation once an admin role system is implemented.
+      allow update: if false; // TODO: Add admin validation once an admin role system is implemented.
+      allow delete: if false; // TODO: Add admin validation once an admin role system is implemented.
+    }
+  }
+}

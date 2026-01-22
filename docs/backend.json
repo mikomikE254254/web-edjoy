@@ -1,0 +1,130 @@
+{
+  "entities": {
+    "Product": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Product",
+      "type": "object",
+      "description": "Represents a product in the Runway Retail application.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the product entity."
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the product."
+        },
+        "description": {
+          "type": "string",
+          "description": "A detailed description of the product."
+        },
+        "imageUrl": {
+          "type": "string",
+          "description": "URL of the product's main image.",
+          "format": "uri"
+        },
+        "glbModelUrl": {
+          "type": "string",
+          "description": "URL of the product's 3D model (GLB format).",
+          "format": "uri"
+        },
+        "price": {
+          "type": "number",
+          "description": "The price of the product."
+        },
+        "category": {
+          "type": "string",
+          "description": "The category of the product."
+        },
+        "styleGuideSuggestion": {
+          "type": "string",
+          "description": "AI-powered style suggestion for the product."
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "description",
+        "imageUrl",
+        "glbModelUrl",
+        "price",
+        "category"
+      ]
+    },
+    "Category": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Category",
+      "type": "object",
+      "description": "Represents a category of products (e.g., Casual, Streetwear).",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the category entity."
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the category."
+        },
+        "description": {
+          "type": "string",
+          "description": "A description of the category."
+        },
+        "productIds": {
+          "type": "array",
+          "description": "References to Products. (Relationship: Category 1:N Product)",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "description"
+      ]
+    }
+  },
+  "auth": {
+    "providers": [
+      "password",
+      "anonymous"
+    ]
+  },
+  "firestore": {
+    "structure": [
+      {
+        "path": "/products/{productId}",
+        "definition": {
+          "entityName": "Product",
+          "schema": {
+            "$ref": "#/backend/entities/Product"
+          },
+          "description": "Stores product information.  The `productId` is the document ID.",
+          "params": [
+            {
+              "name": "productId",
+              "description": "The unique identifier for the product."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/categories/{categoryId}",
+        "definition": {
+          "entityName": "Category",
+          "schema": {
+            "$ref": "#/backend/entities/Category"
+          },
+          "description": "Stores category information.  The `categoryId` is the document ID.",
+          "params": [
+            {
+              "name": "categoryId",
+              "description": "The unique identifier for the category."
+            }
+          ]
+        }
+      }
+    ],
+    "reasoning": "The data structure prioritizes authorization independence and QAPs (Rules are not filters). Products are stored in a top-level `products` collection. Categories are also stored in a top-level `categories` collection. The `Category` document contains an array of product IDs. This structure avoids hierarchical `get()` calls in security rules.  The categories document `productIds` enables QAPs (listing products is secure, even when those categories have a large number of products)."
+  }
+}
