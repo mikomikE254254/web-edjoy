@@ -30,7 +30,7 @@ export default function Footer() {
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.868124233152!2d36.7997943152382!3d-1.248385635959918!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182f171094382189%3A0x13d66397554f762!2sRunda%20Mall!5e0!3m2!1sen!2ske!4v1678886000000!5m2!1sen!2ske"
                 width="100%"
                 height="100%"
-                style={{ border: 0, borderRadius: '0.375rem' }}
+                style={{ border: 0, borderRadius: '0.75rem' }}
                 allowFullScreen={false}
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"

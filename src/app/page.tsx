@@ -71,6 +71,7 @@ export default function Home() {
                 <div className="flex h-28 w-28 items-center justify-center rounded-full bg-secondary/70 backdrop-blur-sm border border-border/50 transition-all duration-300 group-hover:scale-105 group-hover:shadow-xl group-hover:bg-accent/70">
                   <category.icon className="h-12 w-12 text-foreground/80" />
                 </div>
+                <span className="font-display text-sm font-medium text-foreground transition-colors group-hover:text-primary">{category.name}</span>
               </Link>
             ))}
           </div>
