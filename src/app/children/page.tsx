@@ -5,6 +5,7 @@ import { getProductsByCategory } from "@/lib/data";
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
+import CategoryTabs from '@/components/product/category-tabs';
 
 export default function UnisexPage() {
   const unisexProducts = getProductsByCategory('children'); // Using 'children' category data for now
@@ -71,9 +72,9 @@ export default function UnisexPage() {
         </div>
       </section>
 
-      <div className="border-t pt-12">
-        <h2 className="text-2xl font-bold mb-6">Unisex Collection</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+      <div className="border-t pt-6">
+        <CategoryTabs />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 pt-6">
           {unisexProducts.length > 0 ? (
             unisexProducts.map(product => (
               <ProductCard key={product.id} product={product} />

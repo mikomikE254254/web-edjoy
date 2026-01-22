@@ -5,6 +5,7 @@ import { getProductsByCategory } from "@/lib/data";
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
+import CategoryTabs from '@/components/product/category-tabs';
 
 export default function MenPage() {
   const menProducts = getProductsByCategory('men');
@@ -71,9 +72,9 @@ export default function MenPage() {
         </div>
       </section>
 
-      <div className="border-t pt-12">
-        <h2 className="text-2xl font-bold mb-6">Men's Collection</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+      <div className="border-t pt-6">
+        <CategoryTabs />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 pt-6">
           {menProducts.map(product => (
             <ProductCard key={product.id} product={product} />
           ))}
