@@ -6,7 +6,7 @@ const collections = [
     title: 'WOMEN',
     items: ['Dresses', 'Two-Piece Sets', 'Tops', 'Sweaters'],
     href: '/women',
-    style: { background: 'linear-gradient(180deg, #8a5a44, #3c2a1e)' },
+    style: { background: 'linear-gradient(180deg, #ff3b2f, #2b0000)' },
     isImage: false,
     imageHint: '',
   },
@@ -62,6 +62,7 @@ export default function CollectionMarquee() {
 
   return (
     <section className="py-12 bg-transparent overflow-hidden">
+        <p className="text-center text-gray-500 mb-6">Drag to explore our collections</p>
       <div className="overflow-hidden w-full">
         <div className="flex gap-8 w-max animate-scroll">
           {allCards.map((collection, index) => (

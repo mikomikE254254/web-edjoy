@@ -1,66 +1,79 @@
 import Image from 'next/image';
-import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
-import CategoryIcons from '@/components/layout/category-icons';
 import ProductCard from '@/components/product/product-card';
 import { products } from '@/lib/data';
+import CollectionMarquee from '@/components/home/collection-marquee';
+import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 export default function Home() {
   const heroImage = PlaceHolderImages.find(p => p.id === 'nextgen-hero');
-  const featuredProducts = products.slice(0, 4);
+  const categoryImages = {
+    'Shoes': PlaceHolderImages.find(p => p.id === 'cat-shoes'),
+    'Brush': PlaceHolderImages.find(p => p.id === 'cat-brush'),
+    'Bag': PlaceHolderImages.find(p => p.id === 'cat-bag'),
+    'T-shirt': PlaceHolderImages.find(p => p.id === 'cat-tshirt'),
+  };
 
   return (
     <>
-      {/* Hero Section */}
-      <section className="relative w-full h-[60vh] min-h-[500px] max-h-[700px] bg-secondary/30">
+      <section className="relative rounded-2xl overflow-hidden">
         {heroImage && (
           <Image
             src={heroImage.imageUrl}
-            alt={heroImage.description}
-            fill
-            className="object-cover object-center"
+            alt="hero"
+            width={1200}
+            height={384}
+            className="w-full h-96 object-cover"
             data-ai-hint={heroImage.imageHint}
             priority
           />
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
-        <div className="relative container max-w-7xl mx-auto h-full flex flex-col justify-end pb-16 sm:pb-24 text-white">
-          <div className="max-w-xl p-8 rounded-lg bg-black/20 backdrop-blur-md border border-white/10">
-            <h1 className="text-4xl md:text-5xl font-bold font-display leading-tight tracking-tight">
-              Sophisticated Styles, Redefined.
-            </h1>
-            <p className="mt-4 max-w-lg text-lg text-white/90">
-              Discover calm and confident fashion from Kenya. Premium apparel that reflects your unique elegance.
-            </p>
-            <div className="mt-8 flex gap-4">
-              <Button asChild size="lg" className="bg-white text-black hover:bg-white/90 rounded-full px-8">
-                <Link href="/women">Shop Women</Link>
-              </Button>
-              <Button asChild size="lg" variant="outline" className="border-white/50 text-white hover:bg-white/10 rounded-full px-8">
-                <Link href="/men">Shop Men</Link>
-              </Button>
-            </div>
+        <div className="absolute left-8 top-8 text-white drop-shadow-lg">
+          <h1 className="text-4xl font-extrabold">Summer Arrival of Outfit</h1>
+          <p className="mt-2 max-w-md">Discover quality fashion that reflects your style and makes everyday enjoyable.</p>
+          <button className="mt-4 bg-white text-black px-6 py-2 rounded-full font-semibold">Explore Product</button>
+        </div>
+      </section>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+        <div className="bg-beige p-6 rounded-xl flex items-center justify-between">
+          <span className="font-medium">Where dreams meet couture</span>
+          <button className="bg-white/50 text-black px-4 py-2 rounded-full text-sm font-semibold">Shop Now</button>
+        </div>
+        <div className="bg-gray-100 p-6 rounded-xl flex items-center justify-between">
+          <span className="font-medium">Enchanting styles for every woman</span>
+          <button className="bg-white/50 text-black px-4 py-2 rounded-full text-sm font-semibold">Shop Now</button>
+        </div>
+      </div>
+
+      <h2 className="mt-8 mb-4 text-xl font-semibold">Browse by categories</h2>
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        {Object.entries(categoryImages).map(([c, img]) => (
+          <div key={c} className="bg-white p-4 rounded-lg shadow-sm text-center">
+            {img ? (
+              <Image
+                src={img.imageUrl}
+                alt={c}
+                width={160}
+                height={112}
+                className="h-28 w-full object-cover rounded-md mb-2"
+                data-ai-hint={img.imageHint}
+              />
+            ) : (
+              <div className="h-28 bg-gray-200 rounded-md mb-2" />
+            )}
+            <div className="font-medium">{c}</div>
           </div>
-        </div>
-      </section>
+        ))}
+      </div>
 
-      {/* Category Icons */}
-      <CategoryIcons />
-      
-      {/* Featured Products */}
-      <section className="py-12 sm:py-16">
-        <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-3xl font-bold tracking-tight text-center">Featured Products</h2>
-            <p className="mt-2 text-lg text-muted-foreground text-center">Handpicked styles, just for you.</p>
+      <CollectionMarquee />
 
-            <div className="mt-12 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-                {featuredProducts.map((product) => (
-                    <ProductCard key={product.id} product={product} />
-                ))}
-            </div>
-        </div>
-      </section>
+      <h2 className="mt-8 mb-4 text-xl font-semibold">Featured Products</h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mt-6">
+        {products.map((product) => (
+          <ProductCard key={product.id} product={product} />
+        ))}
+      </div>
     </>
   );
 }

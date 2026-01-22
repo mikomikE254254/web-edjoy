@@ -43,70 +43,22 @@
       "imageHint": "fashion model"
     },
     {
-      "id": "ethereal-trench-back",
-      "imageUrl": "https://images.unsplash.com/photo-1604865281382-130b8c703bb2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHx3b21hbiUyMGJhY2t8ZW58MHx8fHwxNzY5MDQ2Mzg0fDA&ixlib=rb-4.1.0&q=80&w=1080",
-      "description": "Back view of the Ethereal Trench Coat.",
-      "imageHint": "woman back"
-    },
-    {
       "id": "urban-nomad-1",
       "imageUrl": "https://images.unsplash.com/photo-1548883354-94bcfe321cbb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxtZW5zJTIwamFja2V0fGVufDB8fHx8MTc2OTA0NzQxNHww&ixlib=rb-4.1.0&q=80&w=1080",
       "description": "Front view of the Urban Nomad Jacket.",
       "imageHint": "mens jacket"
     },
     {
-      "id": "urban-nomad-2",
-      "imageUrl": "https://images.unsplash.com/photo-1768228542712-0d68063ec9a9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxqYWNrZXQlMjBkZXRhaWx8ZW58MHx8fHwxNzY5MDQ3NDE0fDA&ixlib=rb-4.1.0&q=80&w=1080",
-      "description": "Detail shot of the Urban Nomad Jacket.",
-      "imageHint": "jacket detail"
-    },
-    {
       "id": "silk-blouse-1",
-      "imageUrl": "https://images.unsplash.com/photo-1613891737415-be7670d21c19?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHx3b21hbiUyMGJsb3VzZXxlbnwwfHx8fDE3NjkwNDc0MTR8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1613891737415-be7670d21c19?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHx3b21hbiUyMGJsb3VzZXxlbnwwfHx8fDE3NjkwNDc0MTR8MA&ixlib-rb-4.1.0&q=80&w=1080",
       "description": "Woman wearing the Silk-Flow Blouse.",
       "imageHint": "woman blouse"
     },
     {
-      "id": "silk-blouse-2",
-      "imageUrl": "https://images.unsplash.com/photo-1619043518800-7f14be467dca?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxzaWxrJTIwZmFicmljfGVufDB8fHx8MTc2ODk5NDE4Nnww&ixlib=rb-4.1.0&q=80&w=1080",
-      "description": "Close-up of the Silk-Flow Blouse fabric.",
-      "imageHint": "silk fabric"
-    },
-    {
       "id": "linen-trousers-1",
-      "imageUrl": "https://images.unsplash.com/photo-1766113491725-b29c8d6d61df?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxsaW5lbiUyMHRyb3VzZXJzfGVufDB8fHx8MTc2OTA0NzQxNHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1766113491725-b29c8d6d61df?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxsaW5lbiUyMHRyb3VzZXJzfGVufDB8fHx8MTc2OTA0NzQxNHww&ixlib-rb-4.1.0&q=80&w=1080",
       "description": "Model wearing the Tailored Linen Trousers.",
       "imageHint": "linen trousers"
-    },
-    {
-      "id": "linen-trousers-2",
-      "imageUrl": "https://images.unsplash.com/photo-1754639532963-8a44deaebd87?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHx0cm91c2VycyUyMHNpZGV8ZW58MHx8fHwxNzY5MDQ3NDE0fDA&ixlib=rb-4.1.0&q=80&w=1080",
-      "description": "Side view of the Tailored Linen Trousers.",
-      "imageHint": "trousers side"
-    },
-    {
-      "id": "fabric-detail-1",
-      "imageUrl": "https://images.unsplash.com/photo-1594734415578-00fc9540929b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxmYWJyaWMlMjB0ZXh0dXJlfGVufDB8fHx8MTc2OTA0MTcxM3ww&ixlib=rb-4.1.0&q=80&w=1080",
-      "description": "Close up of iridescent fabric.",
-      "imageHint": "fabric texture"
-    },
-    {
-      "id": "fabric-detail-2",
-      "imageUrl": "https://images.unsplash.com/photo-1707914704041-38449d9832aa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxmYWJyaWMlMjBzdGl0Y2hpbmd8ZW58MHx8fHwxNzY5MDQ2Mzg0fDA&ixlib=rb-4.1.0&q=80&w=1080",
-      "description": "Detail of fabric stitching.",
-      "imageHint": "fabric stitching"
-    },
-    {
-      "id": "fabric-detail-3",
-      "imageUrl": "https://images.unsplash.com/photo-1602810319250-a663f0af2f75?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxidXR0b24lMjBjbG90aGluZ3xlbnwwfHx8fDE3NjkwNDYzODR8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "description": "Close up of a button on clothing.",
-      "imageHint": "button clothing"
-    },
-    {
-      "id": "collection-hero",
-      "imageUrl": "https://images.unsplash.com/photo-1613909671501-f9678ffc1d33?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxmYXNoaW9uJTIwcnVud2F5fGVufDB8fHx8MTc2OTAyNzc4OXww&ixlib=rb-4.1.0&q=80&w=1080",
-      "description": "Hero image for the collection.",
-      "imageHint": "fashion runway"
     }
   ]
 }
