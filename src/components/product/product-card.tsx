@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import type { Product } from '@/lib/types';
-import { Heart, ShoppingBag } from 'lucide-react';
+import { ShoppingBag } from 'lucide-react';
 import { useAppContext } from '@/context/AppContext';
 import { cn } from '@/lib/utils';
 import { useEffect, useRef } from 'react';
@@ -90,15 +90,27 @@ export default function ProductCard({ product }: { product: Product }) {
           <ShoppingBag size={20} />
         </button>
       </div>
-       <button
-            onClick={handleWishlistClick}
-            className={cn(
-              "absolute top-4 right-4 z-20 bg-black/20 backdrop-blur-sm text-white rounded-full w-8 h-8 flex items-center justify-center transition-colors hover:bg-black/40 hover:scale-110 flex-shrink-0",
-              isInWishlist && "bg-red-500 text-white"
-            )}
-          >
-            <Heart size={16} className={cn(isInWishlist && "fill-current")}/>
-          </button>
+      <button
+        onClick={handleWishlistClick}
+        aria-label="Toggle Wishlist"
+        className={cn(
+          "wishlist-btn absolute top-4 right-4 z-20",
+          isInWishlist && "active"
+        )}
+      >
+        <div className="particles">
+          <span style={{ '--i': 1 } as React.CSSProperties}></span>
+          <span style={{ '--i': 2 } as React.CSSProperties}></span>
+          <span style={{ '--i': 3 } as React.CSSProperties}></span>
+          <span style={{ '--i': 4 } as React.CSSProperties}></span>
+          <span style={{ '--i': 5 } as React.CSSProperties}></span>
+          <span style={{ '--i': 6 } as React.CSSProperties}></span>
+        </div>
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+             stroke="black" strokeWidth="1.5"/>
+        </svg>
+      </button>
       
        {product.style && 
         <div className="absolute top-4 left-4 z-20 bg-white/80 backdrop-blur-md border-white/90 text-black text-xs font-semibold px-3 py-1 rounded-full">{product.style.charAt(0).toUpperCase() + product.style.slice(1)}</div>

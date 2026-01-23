@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import type { Product } from '@/lib/types';
 import { Button } from '@/components/ui/button';
-import { Heart, Minus, Plus, Star } from 'lucide-react';
+import { Minus, Plus, Star } from 'lucide-react';
 import { useAppContext } from '@/context/AppContext';
 import { cn } from '@/lib/utils';
 
@@ -60,10 +60,27 @@ export default function ProductPurchaseForm({ product, selectedColor, setSelecte
       <div>
         <div className="flex justify-between items-start gap-4">
           <h1 className="text-3xl font-bold">{product.name}</h1>
-          <Button variant="ghost" size="icon" className={cn("text-gray-500 hover:bg-red-50 rounded-full", isInWishlist ? "text-red-500" : "hover:text-red-500")} onClick={handleToggleWishlist}>
-            <Heart className={cn("w-6 h-6", isInWishlist && "fill-current")} />
-            <span className="sr-only">Add to wishlist</span>
-          </Button>
+          <button
+            onClick={handleToggleWishlist}
+            className={cn(
+                "wishlist-btn",
+                isInWishlist && "active"
+            )}
+            aria-label="Add to wishlist"
+            >
+            <div className="particles">
+                <span style={{'--i': 1} as React.CSSProperties}></span>
+                <span style={{'--i': 2} as React.CSSProperties}></span>
+                <span style={{'--i': 3} as React.CSSProperties}></span>
+                <span style={{'--i': 4} as React.CSSProperties}></span>
+                <span style={{'--i': 5} as React.CSSProperties}></span>
+                <span style={{'--i': 6} as React.CSSProperties}></span>
+            </div>
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+                stroke="black" strokeWidth="1.5"/>
+            </svg>
+        </button>
         </div>
         <div className="flex items-center gap-2 mt-2 cursor-pointer">
           <div className="flex items-center">
