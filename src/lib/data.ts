@@ -87,6 +87,16 @@ export const products: Product[] = [
     images: [findImage('leather-tote')],
   },
   {
+    id: '27',
+    slug: 'modern-adventure-backpack',
+    name: 'Modern Adventure Backpack',
+    description: 'A stylish and functional backpack, perfect for daily commutes or weekend trips. Crafted from durable, water-resistant material with elegant strap details.',
+    price: 175,
+    category: 'bags',
+    style: 'casual',
+    images: [findImage('firebase-brown-backpack')],
+  },
+  {
     id: '6',
     slug: 'everyday-canvas-backpack',
     name: 'Everyday Canvas Backpack',

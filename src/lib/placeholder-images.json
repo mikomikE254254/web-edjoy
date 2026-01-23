@@ -353,6 +353,12 @@
       "imageUrl": "https://images.unsplash.com/photo-1589465885857-32b0a48a4c10?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxyZWQlMjBibG91c2V8ZW58MHx8fHwxNzE5Mjg0NzIyfDA&ixlib=rb-4.1.0&q=80&w=1080",
       "description": "A red silk blouse.",
       "imageHint": "red blouse"
+    },
+    {
+      "id": "firebase-brown-backpack",
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1140396316-71616.appspot.com/o/brown-backpack.jpg?alt=media&token=e8a5b1e6-2b44-4825-827a-879e6e73c374",
+      "description": "A stylish brown backpack with silver buckles.",
+      "imageHint": "brown backpack"
     }
   ]
 }
