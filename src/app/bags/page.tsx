@@ -7,7 +7,7 @@ export default function BagsPage() {
   const bagProducts = getProductsByCategory('bags');
 
   return (
-    <div className="space-y-12">
+    <div className="space-y-6">
       <BagsEditorialHighlight />
 
       <div className="border-t pt-6">

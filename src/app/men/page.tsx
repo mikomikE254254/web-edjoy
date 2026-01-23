@@ -22,7 +22,7 @@ export default function MenPage() {
   }, [activeTab, menProducts]);
 
   return (
-    <div className="space-y-12">
+    <div className="space-y-6">
       <section className="relative rounded-2xl overflow-hidden h-96 flex items-center justify-center text-center">
         {heroImage && (
           <Image

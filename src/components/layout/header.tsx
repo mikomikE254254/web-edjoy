@@ -21,7 +21,7 @@ export default function Header() {
   useEffect(() => {
     const controlNavbar = () => {
       if (typeof window !== 'undefined') {
-        if (window.scrollY > lastScrollY && window.scrollY > 100) {
+        if (window.scrollY > lastScrollY && window.scrollY > 10) {
           setVisible(false);
         } else {
           setVisible(true);
@@ -53,7 +53,7 @@ export default function Header() {
   return (
     <header
       className={cn(
-        'sticky top-8 z-50 flex justify-center transition-all duration-500 ease-in-out',
+        'sticky top-4 z-50 flex justify-center transition-all duration-300 ease-in-out',
         visible ? 'translate-y-0 opacity-100' : '-translate-y-24 opacity-0'
       )}
     >
