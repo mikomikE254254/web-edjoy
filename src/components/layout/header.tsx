@@ -4,11 +4,14 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import CartSidebar from '@/components/cart/CartSidebar';
+import { useIsMobile } from '@/hooks/use-mobile';
+import { cn } from '@/lib/utils';
 
 export default function Header() {
   const path = usePathname();
   const [visible, setVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     const controlNavbar = () => {
@@ -43,7 +46,12 @@ export default function Header() {
         visible ? 'translate-y-0 opacity-100' : '-translate-y-24 opacity-0'
       }`}
     >
-      <div className="w-auto flex items-center gap-2 bg-gray-100/80 backdrop-blur-sm p-1 rounded-full shadow-lg ring-1 ring-black ring-opacity-5 mx-4">
+      <div
+        className={cn(
+          'flex items-center gap-2 bg-gray-100/80 backdrop-blur-sm p-1 rounded-full shadow-lg ring-1 ring-black ring-opacity-5 mx-4',
+          isMobile ? 'w-full' : 'w-auto'
+        )}
+      >
         <div className="flex-grow overflow-x-auto no-scrollbar">
           <nav className="flex gap-2 px-2">
             {navItems.map((item) => (
@@ -62,7 +70,7 @@ export default function Header() {
           </nav>
         </div>
         <div className="pr-2">
-            <CartSidebar />
+          <CartSidebar />
         </div>
       </div>
     </header>
