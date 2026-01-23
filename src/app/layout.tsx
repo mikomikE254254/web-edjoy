@@ -5,6 +5,7 @@ import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
 import { AppProvider } from "@/context/AppContext";
 import { Toaster } from "@/components/ui/toaster";
+import WhatsAppChannelModal from "@/components/layout/WhatsAppChannelModal";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -30,6 +31,7 @@ export default function RootLayout({
             <Footer />
           </div>
           <Toaster />
+          <WhatsAppChannelModal />
         </AppProvider>
       </body>
     </html>
