@@ -1,14 +1,14 @@
 import BagsCategoryTabs from '@/components/product/bags-category-tabs';
 import ProductCard from "@/components/product/product-card";
 import { getProductsByCategory } from "@/lib/data";
-import EditorialHighlight from '@/components/home/editorial-highlight';
+import BagsEditorialHighlight from '@/components/product/bags-editorial-highlight';
 
 export default function BagsPage() {
   const bagProducts = getProductsByCategory('bags');
 
   return (
     <div className="space-y-12">
-      <EditorialHighlight />
+      <BagsEditorialHighlight />
 
       <div className="border-t pt-6">
         <BagsCategoryTabs />
