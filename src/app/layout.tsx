@@ -25,7 +25,7 @@ export default function RootLayout({
         <AppProvider>
           <div className="min-h-screen flex flex-col">
             <Header />
-            <main className="max-w-7xl mx-auto p-4 md:p-6 w-full flex-grow">
+            <main className="max-w-7xl mx-auto px-4 pb-4 pt-8 md:px-6 md:pb-6 md:pt-10 w-full flex-grow">
               {children}
             </main>
             <Footer />
