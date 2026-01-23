@@ -7,10 +7,11 @@ import { Heart, Minus, Plus, Star } from 'lucide-react';
 import { useAppContext } from '@/context/AppContext';
 import { cn } from '@/lib/utils';
 
-// Mock data
-const colors = ['#111827', '#f9fafb', '#4b5563', '#9ca3af'];
-const sizes = ['S', 'M', 'L', 'XL'];
-const availableSizes = ['S', 'M', 'L'];
+interface ProductPurchaseFormProps {
+  product: Product;
+  selectedColor: string | undefined;
+  setSelectedColor: (color: string) => void;
+}
 
 const WhatsAppIcon = () => (
     <svg
@@ -23,9 +24,14 @@ const WhatsAppIcon = () => (
     </svg>
   );
 
-export default function ProductPurchaseForm({ product }: { product: Product }) {
+// Mock data for products without variants
+const fallbackColors = ['#111827', '#f9fafb', '#4b5563', '#9ca3af'];
+const sizes = ['S', 'M', 'L', 'XL'];
+const availableSizes = ['S', 'M', 'L'];
+
+
+export default function ProductPurchaseForm({ product, selectedColor, setSelectedColor }: ProductPurchaseFormProps) {
   const { addToCart, toggleWishlist, isProductInWishlist } = useAppContext();
-  const [selectedColor, setSelectedColor] = useState(colors[0]);
   const [selectedSize, setSelectedSize] = useState('M');
   const [quantity, setQuantity] = useState(1);
   const isInWishlist = isProductInWishlist(product.id);
@@ -44,6 +50,8 @@ export default function ProductPurchaseForm({ product }: { product: Product }) {
     const whatsappUrl = `https://wa.me/254740685488?text=${encodedMessage}`;
     window.open(whatsappUrl, '_blank');
   };
+  
+  const colorOptions = product.availableColors || fallbackColors.map(hex => ({ name: hex, hex }));
 
 
   return (
@@ -66,21 +74,23 @@ export default function ProductPurchaseForm({ product }: { product: Product }) {
         </div>
       </div>
 
-      <div>
-        <h3 className="text-sm font-medium text-gray-900">Color</h3>
-        <div className="flex items-center gap-3 mt-2">
-          {colors.map((color) => (
-            <button
-              key={color}
-              onClick={() => setSelectedColor(color)}
-              className={`w-8 h-8 rounded-full border-2 transition-all ${selectedColor === color ? 'border-primary ring-2 ring-primary ring-offset-2' : 'border-gray-200'}`}
-              style={{ backgroundColor: color }}
-            >
-              <span className="sr-only">{color}</span>
-            </button>
-          ))}
+      {colorOptions.length > 0 && (
+        <div>
+          <h3 className="text-sm font-medium text-gray-900">Color</h3>
+          <div className="flex items-center gap-3 mt-2">
+            {colorOptions.map((color) => (
+              <button
+                key={color.name}
+                onClick={() => setSelectedColor(color.hex)}
+                className={`w-8 h-8 rounded-full border-2 transition-all ${selectedColor === color.hex ? 'border-primary ring-2 ring-primary ring-offset-2' : 'border-gray-200'}`}
+                style={{ backgroundColor: color.hex }}
+              >
+                <span className="sr-only">{color.name}</span>
+              </button>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
       
       <div className="flex justify-between items-end">
         <div>

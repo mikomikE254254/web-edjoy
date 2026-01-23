@@ -19,9 +19,15 @@ export const products: Product[] = [
     category: 'women',
     style: 'formal',
     images: [
-      findImage('ethereal-trench-main'),
-      findImage('ethereal-trench-side'),
+      { ...findImage('ethereal-trench-main'), colorName: 'Beige' },
+      { ...findImage('ethereal-trench-side'), colorName: 'Gray' },
+      { ...findImage('urban-nomad-1'), colorName: 'Black'},
     ],
+    availableColors: [
+      { name: 'Beige', hex: '#f6eada' },
+      { name: 'Gray', hex: '#9ca3af' },
+      { name: 'Black', hex: '#111827' },
+    ]
   },
   {
     id: '2',

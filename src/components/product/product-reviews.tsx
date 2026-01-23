@@ -29,15 +29,13 @@ const reviews = [
 ];
 
 const ReviewCard = ({ review, index }: { review: (typeof reviews)[0]; index: number }) => {
-    // The header is sticky at top-0, and its height is approx 5rem.
-    // We add a little margin.
-    const headerHeight = '6rem';
-    const stackingOffset = '2.5rem';
+    const headerHeight = '6rem'; // Approx height of sticky header
+    const stackingOffset = '1.5rem'; // How much each card is offset from the one above it
     const topPosition = `calc(${headerHeight} + ${index} * ${stackingOffset})`;
 
     return (
         <div 
-          className="bg-white p-6 rounded-2xl shadow-lg border sticky transition-all"
+          className="bg-white p-6 rounded-2xl shadow-lg border sticky"
           style={{ top: topPosition, zIndex: index }}
         >
             <div className="flex gap-4">
@@ -64,19 +62,16 @@ const ReviewCard = ({ review, index }: { review: (typeof reviews)[0]; index: num
 
 
 export default function ProductReviews() {
-  // Calculate padding-bottom to ensure the last review can be fully seen when it's at the top.
-  // (Number of cards - 1) * stackingOffset + cardHeight (approx)
-  const paddingBottom = `calc((${reviews.length - 1} * 2.5rem) + 200px)`;
-
   return (
     <div className="space-y-8">
         <div className="flex justify-between items-center">
             <h3 className="text-2xl font-bold">Reviews ({reviews.length})</h3>
         </div>
-        <div className="relative" style={{ paddingBottom }}>
-            {/* We add a spacer div for each card except the first one to create the initial separation before they become sticky */}
+        <div className="relative">
             {reviews.map((review, index) => (
-                <div key={review.id} style={{ height: index > 0 ? '6rem' : undefined }}>
+                // Each wrapper div creates the "track" for the sticky card to move in.
+                // Its height determines how much you scroll before the next card sticks.
+                <div key={review.id} style={{ height: index < reviews.length -1 ? '8rem' : 'auto' }}>
                     <ReviewCard review={review} index={index} />
                 </div>
             ))}

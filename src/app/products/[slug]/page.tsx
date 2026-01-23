@@ -5,7 +5,7 @@ import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import ProductPurchaseForm from '@/components/product/product-purchase-form';
 import ProductReviews from '@/components/product/product-reviews';
-import { useState, use } from 'react';
+import { useState, use, useEffect } from 'react';
 import type { Product } from '@/lib/types';
 import { cn } from '@/lib/utils';
 
@@ -18,7 +18,34 @@ export default function ProductPage({ params }: { params: { slug:string } }) {
   const [primaryImage, setPrimaryImage] = useState<ImageType | undefined>(
     product?.images[0]
   );
+  const [selectedColorHex, setSelectedColorHex] = useState<string | undefined>(
+    product?.availableColors?.[0]?.hex
+  );
 
+  useEffect(() => {
+    if (product && product.availableColors && selectedColorHex) {
+      const selectedColorName = product.availableColors.find(c => c.hex === selectedColorHex)?.name;
+      const newImage = product.images.find(img => img.colorName === selectedColorName);
+      if (newImage && newImage.url !== primaryImage?.url) {
+        setPrimaryImage(newImage);
+      } else if (!newImage) {
+        setPrimaryImage(product.images[0]);
+      }
+    } else if (product && !primaryImage) {
+      setPrimaryImage(product.images[0]);
+    }
+  }, [selectedColorHex, product, primaryImage]);
+
+  const handleThumbnailClick = (image: ImageType) => {
+    setPrimaryImage(image);
+    if (image.colorName && product?.availableColors) {
+      const newColor = product.availableColors.find(c => c.name === image.colorName);
+      if (newColor) {
+        setSelectedColorHex(newColor.hex);
+      }
+    }
+  };
+  
   if (!product) {
     notFound();
   }
@@ -54,7 +81,7 @@ export default function ProductPage({ params }: { params: { slug:string } }) {
                     "aspect-square relative rounded-lg bg-gray-100 overflow-hidden cursor-pointer transition-all",
                     primaryImage?.url === image.url ? "ring-2 ring-primary ring-offset-2" : "hover:opacity-75"
                   )}
-                  onClick={() => setPrimaryImage(image)}
+                  onClick={() => handleThumbnailClick(image)}
                 >
                   <Image 
                     src={image.url} 
@@ -72,7 +99,11 @@ export default function ProductPage({ params }: { params: { slug:string } }) {
 
         {/* Product Info */}
         <div className="bg-transparent lg:bg-gray-50/50 p-0 lg:p-2 rounded-2xl mt-6 lg:mt-0">
-          <ProductPurchaseForm product={product} />
+          <ProductPurchaseForm 
+            product={product} 
+            selectedColor={selectedColorHex} 
+            setSelectedColor={setSelectedColorHex}
+          />
         </div>
       </div>
 

@@ -10,5 +10,10 @@ export type Product = {
     url: string;
     alt: string;
     hint: string;
+    colorName?: string;
+  }[];
+  availableColors?: {
+    name: string;
+    hex: string;
   }[];
 };
