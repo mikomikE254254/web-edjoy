@@ -3,7 +3,7 @@ import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 export default function EditorialHighlight() {
   const largeImage = PlaceHolderImages.find(p => p.id === 'bag-editorial-large-replace');
-  const tallImage = PlaceHolderImages.find(p => p.id === 'black-woman-fashion');
+  const tallImage = PlaceHolderImages.find(p => p.id === 'brown-checked-bag');
   const smallImage = PlaceHolderImages.find(p => p.id === 'women-editorial-thumb2');
   const wideImage = PlaceHolderImages.find(p => p.id === 'editorial-wide');
 
