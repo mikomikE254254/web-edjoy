@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
+import CartSidebar from '@/components/cart/CartSidebar';
 
 export default function Header() {
   const path = usePathname();
@@ -46,21 +47,26 @@ export default function Header() {
         visible ? 'translate-y-0 opacity-100' : '-translate-y-24 opacity-0'
       }`}
     >
-      <nav className="flex gap-2 bg-gray-100/80 backdrop-blur-sm p-1 rounded-full shadow-lg ring-1 ring-black ring-opacity-5">
-        {navItems.map((item) => (
-          <Link
-            key={item.href}
-            href={item.href}
-            className={`px-5 py-2 rounded-full text-sm font-medium transition-colors ${
-              path === item.href
-                ? 'bg-black text-white'
-                : 'text-gray-700 hover:bg-gray-200'
-            }`}
-          >
-            {item.label}
-          </Link>
-        ))}
-      </nav>
+      <div className="flex items-center gap-2 bg-gray-100/80 backdrop-blur-sm p-1 rounded-full shadow-lg ring-1 ring-black ring-opacity-5">
+        <nav className="flex gap-2">
+          {navItems.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={`px-5 py-2 rounded-full text-sm font-medium transition-colors ${
+                path === item.href
+                  ? 'bg-black text-white'
+                  : 'text-gray-700 hover:bg-gray-200'
+              }`}
+            >
+              {item.label}
+            </Link>
+          ))}
+        </nav>
+        <div className="pr-2">
+            <CartSidebar />
+        </div>
+      </div>
     </header>
   );
 }

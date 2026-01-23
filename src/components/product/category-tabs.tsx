@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import { cn } from '@/lib/utils';
 
 const categories = [
@@ -12,9 +11,12 @@ const categories = [
   "Minimal",
 ];
 
-export default function CategoryTabs() {
-  const [activeTab, setActiveTab] = useState("All");
+interface CategoryTabsProps {
+  activeTab: string;
+  setActiveTab: (tab: string) => void;
+}
 
+export default function CategoryTabs({ activeTab, setActiveTab }: CategoryTabsProps) {
   return (
     <div className="py-4 overflow-x-auto">
       <div className="flex gap-2.5 pb-2">

@@ -1,4 +1,6 @@
+'use client';
 
+import { useState, useMemo } from 'react';
 import Image from 'next/image';
 import ProductCard from "@/components/product/product-card";
 import { getProductsByCategory } from "@/lib/data";
@@ -8,8 +10,16 @@ import { ArrowRight } from 'lucide-react';
 import CategoryTabs from '@/components/product/category-tabs';
 
 export default function MenPage() {
+  const [activeTab, setActiveTab] = useState("All");
   const menProducts = getProductsByCategory('men');
   const heroImage = PlaceHolderImages.find(p => p.id === 'men-editorial-hero');
+
+  const filteredProducts = useMemo(() => {
+    if (activeTab === "All") {
+      return menProducts;
+    }
+    return menProducts.filter(p => p.style && p.style.toLowerCase() === activeTab.toLowerCase());
+  }, [activeTab, menProducts]);
 
   return (
     <div className="space-y-12">
@@ -44,11 +54,15 @@ export default function MenPage() {
       </section>
 
       <div className="border-t pt-6">
-        <CategoryTabs />
+        <CategoryTabs activeTab={activeTab} setActiveTab={setActiveTab} />
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 pt-6">
-          {menProducts.map(product => (
-            <ProductCard key={product.id} product={product} />
-          ))}
+          {filteredProducts.length > 0 ? (
+            filteredProducts.map(product => (
+              <ProductCard key={product.id} product={product} />
+            ))
+          ) : (
+            <p>No products found in this category.</p>
+          )}
         </div>
       </div>
     </div>

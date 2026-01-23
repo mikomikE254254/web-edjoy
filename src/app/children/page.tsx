@@ -1,4 +1,6 @@
+'use client';
 
+import { useState, useMemo } from 'react';
 import Image from 'next/image';
 import ProductCard from "@/components/product/product-card";
 import { getProductsByCategory } from "@/lib/data";
@@ -8,8 +10,16 @@ import { ArrowRight } from 'lucide-react';
 import CategoryTabs from '@/components/product/category-tabs';
 
 export default function UnisexPage() {
-  const unisexProducts = getProductsByCategory('children'); // Using 'children' category data for now
+  const [activeTab, setActiveTab] = useState("All");
+  const unisexProducts = getProductsByCategory('children');
   const heroImage = PlaceHolderImages.find(p => p.id === 'unisex-editorial-hero');
+
+  const filteredProducts = useMemo(() => {
+    if (activeTab === "All") {
+      return unisexProducts;
+    }
+    return unisexProducts.filter(p => p.style && p.style.toLowerCase() === activeTab.toLowerCase());
+  }, [activeTab, unisexProducts]);
 
   return (
     <div className="space-y-12">
@@ -44,10 +54,10 @@ export default function UnisexPage() {
       </section>
 
       <div className="border-t pt-6">
-        <CategoryTabs />
+        <CategoryTabs activeTab={activeTab} setActiveTab={setActiveTab} />
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 pt-6">
-          {unisexProducts.length > 0 ? (
-            unisexProducts.map(product => (
+          {filteredProducts.length > 0 ? (
+            filteredProducts.map(product => (
               <ProductCard key={product.id} product={product} />
             ))
           ) : (

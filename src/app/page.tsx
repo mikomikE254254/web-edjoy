@@ -1,5 +1,6 @@
 
 import Image from 'next/image';
+import Link from 'next/link';
 import ProductCard from '@/components/product/product-card';
 import { products } from '@/lib/data';
 import CollectionMarquee from '@/components/home/collection-marquee';
@@ -34,12 +35,14 @@ export default function Home() {
         <div className="absolute left-8 top-8 text-white drop-shadow-lg">
           <h1 className="text-4xl font-extrabold">Summer Arrival of Outfit</h1>
           <p className="mt-2 max-w-md">Discover quality fashion that reflects your style and makes everyday enjoyable.</p>
-          <button className="mt-4 bg-white text-black px-6 py-2 rounded-full font-semibold">Explore Product</button>
+          <Link href="/men">
+            <button className="mt-4 bg-white text-black px-6 py-2 rounded-full font-semibold">Explore Product</button>
+          </Link>
         </div>
       </section>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-        <div className="relative rounded-xl overflow-hidden group h-full min-h-[140px]">
+        <Link href="/women" className="relative rounded-xl overflow-hidden group h-full min-h-[140px]">
           {promoImage1 && (
             <Image
               src={promoImage1.imageUrl}
@@ -56,8 +59,8 @@ export default function Home() {
               <button className="mt-2 bg-white/90 text-black px-4 py-2 rounded-full text-sm font-semibold w-fit backdrop-blur-sm">Shop Now</button>
             </div>
           </div>
-        </div>
-        <div className="relative rounded-xl overflow-hidden group h-full min-h-[140px]">
+        </Link>
+        <Link href="/men" className="relative rounded-xl overflow-hidden group h-full min-h-[140px]">
           {promoImage2 && (
             <Image
               src={promoImage2.imageUrl}
@@ -74,29 +77,31 @@ export default function Home() {
               <button className="mt-2 bg-white/90 text-black px-4 py-2 rounded-full text-sm font-semibold w-fit backdrop-blur-sm">Shop Now</button>
             </div>
           </div>
-        </div>
+        </Link>
       </div>
 
       <h2 className="mt-8 mb-4 text-xl font-semibold">Browse by categories</h2>
       <div className="flex gap-4 overflow-x-auto pb-2">
         {Object.entries(categoryImages).map(([categoryName, img]) => (
-          <div key={categoryName} className="relative shrink-0 w-48 aspect-[3/2] rounded-2xl overflow-hidden group cursor-pointer">
-            {img ? (
-              <Image
-                src={img.imageUrl}
-                alt={categoryName}
-                fill
-                className="object-cover transition-transform duration-200 group-hover:scale-105"
-                data-ai-hint={img.imageHint}
-                sizes="200px"
-              />
-            ) : (
-              <div className="w-full h-full bg-gray-200" />
-            )}
-            <span className="absolute bottom-2.5 left-2.5 bg-white text-black text-xs font-medium px-3 py-1 rounded-full uppercase">
-              {categoryName}
-            </span>
-          </div>
+          <Link key={categoryName} href={categoryName === 'Bag' ? '/bags' : '#'}>
+            <div className="relative shrink-0 w-48 aspect-[3/2] rounded-2xl overflow-hidden group cursor-pointer">
+              {img ? (
+                <Image
+                  src={img.imageUrl}
+                  alt={categoryName}
+                  fill
+                  className="object-cover transition-transform duration-200 group-hover:scale-105"
+                  data-ai-hint={img.imageHint}
+                  sizes="200px"
+                />
+              ) : (
+                <div className="w-full h-full bg-gray-200" />
+              )}
+              <span className="absolute bottom-2.5 left-2.5 bg-white text-black text-xs font-medium px-3 py-1 rounded-full uppercase">
+                {categoryName}
+              </span>
+            </div>
+          </Link>
         ))}
       </div>
 

@@ -4,6 +4,8 @@ import { useState } from 'react';
 import type { Product } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Heart, Minus, Plus, Star } from 'lucide-react';
+import { useAppContext } from '@/context/AppContext';
+import { cn } from '@/lib/utils';
 
 // Mock data
 const colors = ['#111827', '#f9fafb', '#4b5563', '#9ca3af'];
@@ -11,17 +13,27 @@ const sizes = ['S', 'M', 'L', 'XL'];
 const availableSizes = ['S', 'M', 'L'];
 
 export default function ProductPurchaseForm({ product }: { product: Product }) {
+  const { addToCart, toggleWishlist, isProductInWishlist } = useAppContext();
   const [selectedColor, setSelectedColor] = useState(colors[0]);
   const [selectedSize, setSelectedSize] = useState('M');
   const [quantity, setQuantity] = useState(1);
+  const isInWishlist = isProductInWishlist(product.id);
+
+  const handleAddToCart = () => {
+    addToCart(product, quantity);
+  };
+
+  const handleToggleWishlist = () => {
+    toggleWishlist(product.id);
+  };
 
   return (
     <div className="bg-white p-8 rounded-2xl shadow-sm space-y-6">
       <div>
         <div className="flex justify-between items-start gap-4">
           <h1 className="text-3xl font-bold">{product.name}</h1>
-          <Button variant="ghost" size="icon" className="text-gray-500 hover:text-red-500 hover:bg-red-50 rounded-full">
-            <Heart className="w-6 h-6" />
+          <Button variant="ghost" size="icon" className={cn("text-gray-500 hover:bg-red-50 rounded-full", isInWishlist ? "text-red-500" : "hover:text-red-500")} onClick={handleToggleWishlist}>
+            <Heart className={cn("w-6 h-6", isInWishlist && "fill-current")} />
             <span className="sr-only">Add to wishlist</span>
           </Button>
         </div>
@@ -94,7 +106,7 @@ export default function ProductPurchaseForm({ product }: { product: Product }) {
             <span className="text-lg text-gray-500">Total Price</span>
             <p className="text-3xl font-bold">${(product.price * quantity).toFixed(2)}</p>
         </div>
-        <Button size="lg" className="w-full rounded-full h-12 text-base font-bold">Add to Cart</Button>
+        <Button size="lg" className="w-full rounded-full h-12 text-base font-bold" onClick={handleAddToCart}>Add to Cart</Button>
       </div>
 
       <div>
