@@ -52,39 +52,10 @@ const reviews = [
   },
 ];
 
-const ReviewCard = ({ review, index }: { review: (typeof reviews)[0]; index: number }) => {
-    const headerHeight = '6rem'; // Approx height of sticky header
-    const topPosition = `calc(${headerHeight})`;
-
-    return (
-        <div 
-          className="bg-white p-6 shadow-lg border sticky"
-          style={{ top: topPosition, zIndex: index }}
-        >
-            <div className="flex gap-4">
-                <Avatar>
-                    <AvatarImage src={review.avatarUrl} alt={review.name} />
-                    <AvatarFallback>{review.name.charAt(0)}</AvatarFallback>
-                </Avatar>
-                <div className="flex-1">
-                    <div className="flex justify-between items-center">
-                        <h4 className="font-semibold text-gray-900">{review.name}</h4>
-                        <span className="text-xs text-gray-500">{review.date}</span>
-                    </div>
-                    <div className="flex items-center gap-0.5 mt-1">
-                         {[...Array(5)].map((_, i) => (
-                            <Star key={i} className={`w-4 h-4 ${i < review.rating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'}`} />
-                        ))}
-                    </div>
-                </div>
-            </div>
-            <p className="mt-4 text-sm text-gray-600 leading-relaxed">{review.text}</p>
-        </div>
-    )
-}
-
-
 export default function ProductReviews() {
+  const headerHeight = '6rem'; // Approx height of sticky header
+  const topPosition = `calc(${headerHeight} + 2rem)`; // Where the card "sticks"
+
   return (
     <div className="space-y-8">
         <div className="flex justify-between items-center">
@@ -92,10 +63,34 @@ export default function ProductReviews() {
         </div>
         <div className="relative">
             {reviews.map((review, index) => (
-                // Each wrapper div creates the "track" for the sticky card to move in.
-                // Its height determines how much you scroll before the next card sticks.
-                <div key={review.id} style={{ height: index < reviews.length -1 ? '8rem' : 'auto' }}>
-                    <ReviewCard review={review} index={index} />
+                <div 
+                    key={review.id}
+                    className="bg-white p-6 shadow-lg border sticky"
+                    style={{ 
+                        top: topPosition, 
+                        zIndex: index + 1,
+                        // Add margin to the bottom of all but the last card to create scroll space
+                        marginBottom: index < reviews.length - 1 ? '12rem' : '0' 
+                    }}
+                >
+                    <div className="flex gap-4">
+                        <Avatar>
+                            <AvatarImage src={review.avatarUrl} alt={review.name} />
+                            <AvatarFallback>{review.name.charAt(0)}</AvatarFallback>
+                        </Avatar>
+                        <div className="flex-1">
+                            <div className="flex justify-between items-center">
+                                <h4 className="font-semibold text-gray-900">{review.name}</h4>
+                                <span className="text-xs text-gray-500">{review.date}</span>
+                            </div>
+                            <div className="flex items-center gap-0.5 mt-1">
+                                {[...Array(5)].map((_, i) => (
+                                <Star key={i} className={`w-4 h-4 ${i < review.rating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'}`} />
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                    <p className="mt-4 text-sm text-gray-600 leading-relaxed">{review.text}</p>
                 </div>
             ))}
         </div>
