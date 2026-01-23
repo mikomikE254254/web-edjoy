@@ -1,44 +1,55 @@
 import Link from 'next/link';
+import { Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
 
 export default function Footer() {
   return (
-    <footer className="bg-white text-black py-12 px-6 sm:px-12 lg:px-20 border-t border-gray-200">
-      <div className="flex flex-col md:flex-row justify-between items-center gap-12">
-        {/* Left side */}
-        <div className="flex flex-col gap-8 text-center md:text-left">
-          <div>
-            <h4 className="font-semibold text-lg mb-3">Eddjoys.ke</h4>
-            <nav className="flex flex-wrap justify-center md:justify-start gap-x-5 gap-y-2 text-sm text-gray-800">
-              <Link href="/" className="hover:underline">Home</Link>
-              <Link href="/women" className="hover:underline">Women</Link>
-              <Link href="/men" className="hover:underline">Men</Link>
-              <Link href="/children" className="hover:underline">Unisex</Link>
-              <Link href="/bags" className="hover:underline">Bags</Link>
-            </nav>
-            <p className="text-sm text-gray-600 mt-4 max-w-md">
-              Discover curated fashion that blends timeless elegance with modern simplicity.
-              Each piece is thoughtfully designed to empower your personal style.
-              Experience quality craftsmanship and sustainable materials in every collection.
-              Join us in celebrating the art of everyday dressing.
-            </p>
+    <footer className="bg-background text-black py-12 px-6 sm:px-12 lg:px-20">
+      <div className="space-y-6 max-w-7xl mx-auto">
+
+        {/* Top Segment */}
+        <div className="bg-white p-4 flex flex-col sm:flex-row justify-between items-center border-2 border-black rounded-2xl">
+          <Link href="/" className="font-bold text-xl mb-4 sm:mb-0">Eddjoys.ke</Link>
+          <nav className="flex flex-wrap justify-center gap-x-5 text-sm">
+            <Link href="/" className="hover:underline">Home</Link>
+            <Link href="/women" className="hover:underline">Women</Link>
+            <Link href="/men" className="hover:underline">Men</Link>
+            <Link href="/children" className="hover:underline">Unisex</Link>
+            <Link href="/bags" className="hover:underline">Bags</Link>
+          </nav>
+        </div>
+
+        {/* Middle Segment */}
+        <div className="bg-white p-10 grid md:grid-cols-2 gap-10 items-center border-2 border-black rounded-2xl">
+          <div className="w-full aspect-square rounded-xl overflow-hidden border-2 border-gray-200">
+            <iframe
+              src="https://www.google.com/maps?q=Runda%20Mall,Nairobi&output=embed"
+              loading="lazy"
+              className="w-full h-full border-0"
+            ></iframe>
           </div>
-          <div>
-            <div className="flex flex-wrap justify-center md:justify-start gap-x-5 gap-y-2 text-xs text-gray-800">
-                <Link href="/privacy" className="hover:underline">Privacy Policy</Link>
-                <Link href="/terms" className="hover:underline">Terms of Service</Link>
-                <Link href="/cookies" className="hover:underline">Cookies</Link>
-            </div>
-            <p className="text-xs text-gray-500 mt-4">© 2026 Eddjoys.ke. All rights reserved.</p>
+          <div className="flex flex-col gap-6 text-center md:text-left items-center md:items-start">
+            <h4 className="font-bold text-3xl">Eddjoys.ke</h4>
+            <nav className="flex flex-col gap-y-2 text-lg">
+              <Link href="/" className="hover:underline w-fit">Homepage</Link>
+              <Link href="/men" className="hover:underline w-fit">Products</Link>
+              <Link href="#" className="hover:underline w-fit">Services</Link>
+              <Link href="#" className="hover:underline w-fit">Contact</Link>
+            </nav>
+            <p className="text-sm text-gray-600 max-w-md">
+              Discover curated fashion that blends timeless elegance with modern simplicity.
+            </p>
           </div>
         </div>
 
-        {/* Right side: Map */}
-        <div className="w-full md:w-[31rem] h-96 md:h-[22rem] rounded-2xl overflow-hidden shadow-lg flex-shrink-0">
-          <iframe
-            src="https://www.google.com/maps?q=Runda%20Mall,Nairobi&output=embed"
-            loading="lazy"
-            className="w-full h-full border-0"
-          ></iframe>
+        {/* Bottom Segment */}
+        <div className="bg-white p-4 flex flex-col sm:flex-row justify-between items-center gap-4 border-2 border-black rounded-2xl">
+          <p className="text-xs text-gray-600 order-2 sm:order-1">© 2026 Eddjoys.ke. All rights reserved.</p>
+          <div className="flex gap-4 order-1 sm:order-2">
+            <Link href="#" aria-label="Facebook" className="text-gray-600 hover:text-black"><Facebook size={20} /></Link>
+            <Link href="#" aria-label="Twitter" className="text-gray-600 hover:text-black"><Twitter size={20} /></Link>
+            <Link href="#" aria-label="Instagram" className="text-gray-600 hover:text-black"><Instagram size={20} /></Link>
+            <Link href="#" aria-label="LinkedIn" className="text-gray-600 hover:text-black"><Linkedin size={20} /></Link>
+          </div>
         </div>
       </div>
     </footer>
