@@ -45,7 +45,7 @@ export default function Header() {
     { href: '/bags', label: 'Bags' },
   ];
   
-  const getHeaderClasses = () => {
+  const getHeaderContainerClasses = () => {
     // On the server or before the component has mounted, we can't know the screen size,
     // so we default to the desktop "pill" style to avoid a hydration mismatch.
     if (!isMounted) return 'w-auto';
@@ -53,23 +53,27 @@ export default function Header() {
     return isMobile ? 'w-full' : 'w-auto';
   };
 
+  const getNavContainerClasses = () => {
+    // Default to desktop styles on server and initial client render to avoid hydration mismatch.
+    if (!isMounted) return 'flex-grow';
+    // On mobile, remove flex-grow to allow cart button to be visible.
+    return isMobile ? '' : 'flex-grow';
+  }
+
   return (
     <header
       className={cn(
         'sticky top-4 z-50 flex justify-center transition-all duration-300 ease-in-out',
-        // The visibility toggle depends on scroll events, which only happen on the client,
-        // but the initial state is `true` for both server and client, so it's safe.
         visible ? 'translate-y-0 opacity-100' : '-translate-y-24 opacity-0'
       )}
     >
       <div
         className={cn(
           'flex items-center justify-between bg-gray-100/80 backdrop-blur-sm p-1 rounded-full shadow-xl ring-1 ring-black ring-opacity-5 mx-4',
-          // Using getHeaderClasses to conditionally apply width after mount.
-          getHeaderClasses()
+          getHeaderContainerClasses()
         )}
       >
-        <div className="overflow-x-auto no-scrollbar">
+        <div className={cn("overflow-x-auto no-scrollbar", getNavContainerClasses())}>
           <nav className="flex gap-2 px-2">
             {navItems.map((item) => (
               <Link
