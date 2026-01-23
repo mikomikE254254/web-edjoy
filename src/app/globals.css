@@ -68,9 +68,9 @@
   /* Wishlist Button */
   .wishlist-btn {
     position: relative;
-    width: 40px;
-    height: 40px;
-    background: white;
+    width: 32px;
+    height: 32px;
+    background: rgba(255, 255, 255, 0.75);
     border: 1.5px solid black;
     border-radius: 50%;
     cursor: pointer;
@@ -82,19 +82,19 @@
   }
 
   .wishlist-btn svg {
-    width: 20px;
-    height: 20px;
+    width: 16px;
+    height: 16px;
     transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     z-index: 2;
   }
 
   .wishlist-btn.active {
-    border-color: #ff0000;
+    border-color: rgba(255, 0, 0, 0.75);
   }
 
   .wishlist-btn.active svg {
-    fill: #ff0000;
-    stroke: #ff0000;
+    fill: rgba(255, 0, 0, 0.75);
+    stroke: rgba(255, 0, 0, 0.75);
     transform: scale(1.2);
     animation: heartPop 0.3s forwards;
   }
@@ -112,7 +112,7 @@
     left: 50%;
     width: 2px;
     height: 10px;
-    background: #ff0000;
+    background: rgba(255, 0, 0, 0.75);
     opacity: 0;
     transform: translate(-50%, -50%) rotate(calc(var(--i) * 60deg)) translateY(-15px);
   }
