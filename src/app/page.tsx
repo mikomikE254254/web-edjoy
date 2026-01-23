@@ -6,18 +6,11 @@ import { products } from '@/lib/data';
 import CollectionMarquee from '@/components/home/collection-marquee';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import EditorialHighlight from '@/components/home/editorial-highlight';
+import { homepageCategories } from '@/lib/homepage-data';
 
 export default function Home() {
   const heroImage = PlaceHolderImages.find(p => p.id === 'nextgen-hero');
-  const categories = [
-    { name: 'Women', href: '/women', imageId: 'women-editorial-hero' },
-    { name: 'Men', href: '/men', imageId: 'men-editorial-hero' },
-    { name: 'Unisex', href: '/children', imageId: 'unisex-editorial-hero' },
-    { name: 'Bags', href: '/bags', imageId: 'cat-bag' },
-    { name: 'Streetwear', href: '/women', imageId: 'women-street-jeans' },
-    { name: 'Formal', href: '/men', imageId: 'men-formal-suit' },
-    { name: 'Vintage', href: '/men', imageId: 'men-vintage-blazer' }
-  ];
+  const categories = homepageCategories;
   const promoImage1 = PlaceHolderImages.find(p => p.id === 'cat-bag');
   const promoImage2 = PlaceHolderImages.find(p => p.id === 'ethereal-trench-side');
 
