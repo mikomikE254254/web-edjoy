@@ -64,6 +64,12 @@
   .minimal-glow-card:hover::before {
     opacity: 1;
   }
+
+  .pastel-gradient-dots {
+    background-color: #a6c1ee; /* fallback */
+    background-image: radial-gradient(circle at 10px 10px, rgba(255, 255, 255, 0.15) 1px, transparent 0), linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%);
+    background-size: 20px 20px, cover;
+  }
 }
 
 @layer utilities {

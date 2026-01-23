@@ -3,34 +3,12 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import type { Product } from '@/lib/types';
-import { Heart, ShoppingBag, Dot } from 'lucide-react';
+import { Heart, Dot } from 'lucide-react';
 import { useAppContext } from '@/context/AppContext';
 import { cn } from '@/lib/utils';
-import { useEffect, useRef } from 'react';
 
 export default function ProductCard({ product }: { product: Product }) {
   const { addToCart, toggleWishlist, isProductInWishlist } = useAppContext();
-  const cardRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const card = cardRef.current;
-    if (!card) return;
-
-    const handleMouseMove = (e: MouseEvent) => {
-      const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-
-      card.style.setProperty('--mouse-x', `${x + 20}px`);
-      card.style.setProperty('--mouse-y', `${y + 20}px`);
-    };
-
-    card.addEventListener('mousemove', handleMouseMove);
-
-    return () => {
-      card.removeEventListener('mousemove', handleMouseMove);
-    };
-  }, []);
 
   const primaryImage = product.images[0] ?? {
     url: 'https://placehold.co/600x800',
@@ -38,7 +16,6 @@ export default function ProductCard({ product }: { product: Product }) {
     hint: 'placeholder',
   };
   
-  const oldPrice = product.price * 1.2;
   const isInWishlist = isProductInWishlist(product.id);
 
   const handleWishlistClick = (e: React.MouseEvent) => {
@@ -54,54 +31,57 @@ export default function ProductCard({ product }: { product: Product }) {
   }
 
   return (
-    <div ref={cardRef} className="minimal-glow-card relative group overflow-hidden rounded-xl shadow-xl transition-all duration-300 ease-in-out hover:shadow-2xl hover:-translate-y-1 bg-white">
-      <Link href={`/products/${product.slug}`} className="block">
-        {/* Image Container */}
-        <div className="aspect-[3/4] w-full relative">
-          <Image
-            src={primaryImage.url}
-            alt={primaryImage.alt}
-            fill
-            className="w-full h-full object-cover"
-            data-ai-hint={primaryImage.hint}
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          />
+    <div className="relative group overflow-hidden rounded-xl shadow-xl transition-all duration-300 ease-in-out hover:shadow-2xl hover:-translate-y-1 pastel-gradient-dots">
+      <Link href={`/products/${product.slug}`} className="absolute inset-0 z-0" aria-label={product.name}/>
+      <div className="relative z-10 flex flex-col p-4 aspect-[3/4]">
+        
+        {/* Top Row: Category & Wishlist */}
+        <div className="flex justify-between items-center flex-shrink-0">
+          <div className="bg-white/20 backdrop-blur-sm text-white text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1">
+            <Dot className="w-3 h-3 -ml-1" />
+            <span>{product.style ? product.style.charAt(0).toUpperCase() + product.style.slice(1) : 'Casual'}</span>
+          </div>
+          <button
+            onClick={handleWishlistClick}
+            className={cn(
+              "bg-black/20 backdrop-blur-sm text-white rounded-full w-8 h-8 flex items-center justify-center transition-colors hover:bg-black/40 hover:scale-110 flex-shrink-0",
+              isInWishlist && "bg-red-500 text-white"
+            )}
+          >
+            <Heart size={16} className={cn(isInWishlist && "fill-current")}/>
+          </button>
         </div>
 
-        {/* Category Badge (Top-left) */}
-        <div className="absolute top-4 left-4 bg-gray-100 text-gray-800 text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1">
-          <Dot className="w-3 h-3 -ml-1 text-gray-500" />
-          <span>{product.style ? product.style.charAt(0).toUpperCase() + product.style.slice(1) : 'Casual'}</span>
-        </div>
-
-        {/* Wishlist Icon (Top-right) */}
-        <button
-          onClick={handleWishlistClick}
-          className={cn(
-            "absolute top-4 right-4 bg-black/20 backdrop-blur-sm text-white rounded-full w-8 h-8 flex items-center justify-center transition-colors hover:bg-black/40 hover:scale-110",
-            isInWishlist && "bg-red-500 text-white"
-          )}
-        >
-          <Heart size={16} className={cn(isInWishlist && "fill-current")}/>
-        </button>
-
-        {/* Glassmorphism Info Panel */}
-        <div className="absolute bottom-4 left-4 right-4 bg-white/50 backdrop-blur-lg rounded-2xl p-2 flex items-center justify-between border-2 border-white/40">
-          <div className="flex-1 truncate">
-            <h3 className="text-sm font-semibold text-gray-900 truncate">{product.name}</h3>
-            <div className="flex items-baseline gap-1.5 mt-1">
-              <span className="font-bold text-base text-gray-900">Ksh {product.price.toFixed(2)}</span>
-              <span className="text-xs text-red-500 line-through">Ksh {oldPrice.toFixed(2)}</span>
+        {/* Image */}
+        <div className="relative flex-grow flex items-center justify-center my-2">
+            <div className="relative w-full h-full">
+                <Image
+                    src={primaryImage.url}
+                    alt={primaryImage.alt}
+                    fill
+                    className="w-full h-full object-contain drop-shadow-lg"
+                    data-ai-hint={primaryImage.hint}
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                />
             </div>
+        </div>
+
+        {/* Bottom Content */}
+        <div className="flex-shrink-0">
+          <h3 className="font-bold text-white truncate text-lg">{product.name}</h3>
+          <p className="text-sm text-white/80 mt-1 line-clamp-2 h-10">{product.description}</p>
+          <div className="flex justify-between items-center mt-2">
+            <p className="text-xl font-bold text-white">Ksh {product.price.toFixed(2)}</p>
           </div>
           <button
             onClick={handleAddToCartClick}
-            className="w-10 h-10 rounded-full bg-black text-white flex items-center justify-center flex-shrink-0 ml-3 transition-transform hover:scale-110"
+            className="w-full mt-3 rounded-full bg-white text-black py-2.5 text-sm font-bold transition-all hover:scale-105 active:scale-100"
           >
-            <ShoppingBag size={22} />
+            Add to Cart
           </button>
         </div>
-      </Link>
+
+      </div>
     </div>
   );
 }
