@@ -45,7 +45,9 @@ export default function ProductPurchaseForm({ product, selectedColor, setSelecte
   };
   
   const handleBuyViaWhatsApp = () => {
-    const message = `Hi Eddjoys, I would like to order the ${product.name} in Size ${selectedSize}. Price: Ksh ${(product.price * quantity).toFixed(2)}.`;
+    const selectedColorName = product.availableColors?.find(c => c.hex === selectedColor)?.name;
+    const colorText = selectedColorName ? ` in color ${selectedColorName}` : '';
+    const message = `Hi Eddjoys, I would like to order ${quantity} of the ${product.name}${colorText} in Size ${selectedSize}. Price: Ksh ${(product.price * quantity).toFixed(2)}.`;
     const encodedMessage = encodeURIComponent(message);
     const whatsappUrl = `https://wa.me/254740685488?text=${encodedMessage}`;
     window.open(whatsappUrl, '_blank');

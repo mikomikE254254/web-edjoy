@@ -18,7 +18,7 @@ const reviews = [
     date: '1 month ago',
     text: 'Great hoodie, very soft. Only reason for 4 stars is that it pills a little after a few washes. Otherwise, love the design.',
   },
-    {
+  {
     id: 3,
     name: 'Michael Rodriguez',
     avatarUrl: 'https://picsum.photos/seed/rev3/40/40',
@@ -26,16 +26,39 @@ const reviews = [
     date: '3 days ago',
     text: 'Absolutely love it! The quality is amazing and it looks even better in person. Will be buying another color.',
   },
+  {
+    id: 4,
+    name: 'Emily Davis',
+    avatarUrl: 'https://picsum.photos/seed/rev4/40/40',
+    rating: 5,
+    date: '1 week ago',
+    text: 'Perfect fit and the color is exactly as shown on the website. The fabric is thick and feels very premium. Highly recommended!',
+  },
+  {
+    id: 5,
+    name: 'David Wilson',
+    avatarUrl: 'https://picsum.photos/seed/rev5/40/40',
+    rating: 3,
+    date: '1 month ago',
+    text: 'It\'s a decent product, but the sizing runs a bit small. I\'d recommend sizing up. The material is good though.',
+  },
+  {
+    id: 6,
+    name: 'Jessica Miller',
+    avatarUrl: 'https://picsum.photos/seed/rev6/40/40',
+    rating: 4,
+    date: '2 months ago',
+    text: 'I\'ve been using this for a while now and it\'s holding up great. It\'s stylish and functional. Would buy again.',
+  },
 ];
 
 const ReviewCard = ({ review, index }: { review: (typeof reviews)[0]; index: number }) => {
     const headerHeight = '6rem'; // Approx height of sticky header
-    const stackingOffset = '1.5rem'; // How much each card is offset from the one above it
-    const topPosition = `calc(${headerHeight} + ${index} * ${stackingOffset})`;
+    const topPosition = `calc(${headerHeight})`;
 
     return (
         <div 
-          className="bg-white p-6 rounded-2xl shadow-lg border sticky"
+          className="bg-white p-6 shadow-lg border sticky"
           style={{ top: topPosition, zIndex: index }}
         >
             <div className="flex gap-4">

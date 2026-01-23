@@ -18,6 +18,7 @@ export default function ProductPage({ params }: { params: { slug:string } }) {
   const [primaryImage, setPrimaryImage] = useState<ImageType | undefined>(
     product?.images[0]
   );
+  const [isImageFading, setIsImageFading] = useState(false);
   const [selectedColorHex, setSelectedColorHex] = useState<string | undefined>(
     product?.availableColors?.[0]?.hex
   );
@@ -26,24 +27,39 @@ export default function ProductPage({ params }: { params: { slug:string } }) {
     if (product && product.availableColors && selectedColorHex) {
       const selectedColorName = product.availableColors.find(c => c.hex === selectedColorHex)?.name;
       const newImage = product.images.find(img => img.colorName === selectedColorName);
+      
       if (newImage && newImage.url !== primaryImage?.url) {
-        setPrimaryImage(newImage);
-      } else if (!newImage) {
-        setPrimaryImage(product.images[0]);
+        setIsImageFading(true);
+        setTimeout(() => {
+          setPrimaryImage(newImage);
+          setIsImageFading(false);
+        }, 750);
+      } else if (!newImage && primaryImage?.url !== product.images[0].url) {
+        setIsImageFading(true);
+        setTimeout(() => {
+          setPrimaryImage(product.images[0]);
+          setIsImageFading(false);
+        }, 750);
       }
     } else if (product && !primaryImage) {
       setPrimaryImage(product.images[0]);
     }
-  }, [selectedColorHex, product, primaryImage]);
+  }, [selectedColorHex, product]);
 
   const handleThumbnailClick = (image: ImageType) => {
-    setPrimaryImage(image);
-    if (image.colorName && product?.availableColors) {
-      const newColor = product.availableColors.find(c => c.name === image.colorName);
-      if (newColor) {
-        setSelectedColorHex(newColor.hex);
-      }
-    }
+    if (primaryImage?.url === image.url) return;
+    
+    setIsImageFading(true);
+    setTimeout(() => {
+        setPrimaryImage(image);
+        if (image.colorName && product?.availableColors) {
+          const newColor = product.availableColors.find(c => c.name === image.colorName);
+          if (newColor && newColor.hex !== selectedColorHex) {
+            setSelectedColorHex(newColor.hex);
+          }
+        }
+        setIsImageFading(false);
+    }, 750);
   };
   
   if (!product) {
@@ -63,7 +79,10 @@ export default function ProductPage({ params }: { params: { slug:string } }) {
                 src={primaryImage.url}
                 alt={primaryImage.alt}
                 fill
-                className="object-cover"
+                className={cn(
+                  "object-cover transition-opacity ease-in-out duration-700",
+                  isImageFading ? "opacity-0" : "opacity-100"
+                )}
                 sizes="(max-width: 1024px) 100vw, 50vw"
                 priority
                 data-ai-hint={primaryImage.hint}
