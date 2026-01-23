@@ -46,7 +46,10 @@ export default function Header() {
   ];
   
   const getHeaderClasses = () => {
+    // On the server or before the component has mounted, we can't know the screen size,
+    // so we default to the desktop "pill" style to avoid a hydration mismatch.
     if (!isMounted) return 'w-auto';
+    // Once mounted, we can safely check if it's mobile and apply the full-width class.
     return isMobile ? 'w-full' : 'w-auto';
   };
 
@@ -54,12 +57,15 @@ export default function Header() {
     <header
       className={cn(
         'sticky top-4 z-50 flex justify-center transition-all duration-300 ease-in-out',
+        // The visibility toggle depends on scroll events, which only happen on the client,
+        // but the initial state is `true` for both server and client, so it's safe.
         visible ? 'translate-y-0 opacity-100' : '-translate-y-24 opacity-0'
       )}
     >
       <div
         className={cn(
           'flex items-center justify-between bg-gray-100/80 backdrop-blur-sm p-1 rounded-full shadow-xl ring-1 ring-black ring-opacity-5 mx-4',
+          // Using getHeaderClasses to conditionally apply width after mount.
           getHeaderClasses()
         )}
       >
