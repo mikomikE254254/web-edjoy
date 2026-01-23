@@ -74,13 +74,13 @@
     },
     {
       "id": "women-editorial-thumb2",
-      "imageUrl": "https://images.unsplash.com/photo-1551803091-e3514006c293?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHx3b21lbiUyMGZhc2hpb24lMjBvdXRmaXR8ZW58MHx8fHwxNzY5MDQ3NDA0fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1735553817396-510cfe7066e6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHx3b21hbiUyMG91dGZpdHxlbnwwfHx8fDE3NjkxNTYwNzl8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "description": "Alternative outfit for women.",
       "imageHint": "woman outfit"
     },
     {
       "id": "men-editorial-hero",
-      "imageUrl": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxtZW4lMjBmYXNoaW9uJTIwZWRpdG9yaWFsfGVufDB8fHx8MTc2OTA0NzQxNHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1512755051947-dea0029e93ad?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8bWFuJTIwZmFzaGlvbnxlbnwwfHx8fDE3NjkxNTYwODB8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "description": "Editorial shot of a man in fashionable clothing.",
       "imageHint": "man fashion"
     },
@@ -134,25 +134,25 @@
     },
     {
       "id": "editorial-wide",
-      "imageUrl": "https://images.unsplash.com/photo-1523240795612-9a054b0db644?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx1bmlzZXglMjBmYXNoaW9ufGVufDB8fHx8MTc2OTA0NzQyNHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1745962978987-010bc11e700c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxmYXNoaW9uJTIwZ3JvdXB8ZW58MHx8fHwxNzY5MTU2MDc5fDA&ixlib=rb-4.1.0&q=80&w=1080",
       "description": "Wide editorial fashion banner.",
       "imageHint": "fashion group"
     },
     {
       "id": "bag-editorial-large",
-      "imageUrl": "https://images.unsplash.com/photo-1590874135941-45763a1a6b09?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxiYWclMjBlZGl0b3JpYWx8ZW58MHx8fHwxNzY5MDgxMTAwfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1683642765688-101a16dcfcd3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxiYWclMjBlZGl0b3JpYWx8ZW58MHx8fHwxNzY5MTU2MTc5fDA&ixlib=rb-4.1.0&q=80&w=1080",
       "description": "Large editorial shot of a handbag.",
       "imageHint": "bag editorial"
     },
     {
       "id": "bag-editorial-tall",
-      "imageUrl": "https://images.unsplash.com/photo-1584917865217-0665b13399a9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxiYWclMjBtb2RlbHxlbnwwfHx8fDE3NjkwODEyNTJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1633450773503-d466262d1a99?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxiYWclMjBtb2RlbHxlbnwwfHx8fDE3NjkxNTYxNzl8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "description": "Tall shot of a model holding a bag.",
       "imageHint": "bag model"
     },
     {
       "id": "bag-editorial-small",
-      "imageUrl": "https://images.unsplash.com/photo-1630481151463-928e6f4b108b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxiYWclMjBkZXRhaWx8ZW58MHx8fHwxNzY5MTU0NDEyfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1759340832394-5e058560c1ee?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8YmFnJTIwZGV0YWlsfGVufDB8fHx8MTc2OTE1NDQxMnww&ixlib=rb-4.1.0&q=80&w=1080",
       "description": "Small detail shot of a bag.",
       "imageHint": "bag detail"
     },
@@ -164,31 +164,31 @@
     },
     {
       "id": "leather-tote",
-      "imageUrl": "https://images.unsplash.com/photo-1594223274512-ad4803739b7c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxsZWF0aGVyJTIwdG90ZXxlbnwwfHx8fDE3NjkwODE0MzB8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1760624294469-550753ec203a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxsZWF0aGVyJTIwdG90ZXxlbnwwfHx8fDE3NjkxMTA2NTd8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "description": "A leather tote bag.",
       "imageHint": "leather tote"
     },
     {
       "id": "canvas-backpack",
-      "imageUrl": "https://images.unsplash.com/photo-1754824164127-ddc561e8d918?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxjYW52YXMlMjBiYWNrcGFja3xlbnwwfHx8fDE3NjkwOTc5NTN8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1592289924034-c423dd2f1c5d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxjYW52YXMlMjBiYWNrcGFja3xlbnwwfHx8fDE3NjkwOTc5NTN8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "description": "A canvas backpack.",
       "imageHint": "canvas backpack"
     },
     {
       "id": "kids-hoodie",
-      "imageUrl": "https://images.unsplash.com/photo-1601054704854-1a2e79dda4d3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxraWRzJTIwaG9vZGllfGVufDB8fHx8MTc2OTA2MTgwNXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1763201815916-8c89923715d2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxraWRzJTIwaG9vZGllfGVufDB8fHx8MTc2OTA2MTgwNXww&ixlib=rb-4.1.0&q=80&w=1080",
       "description": "A comfortable hoodie for kids.",
       "imageHint": "kids hoodie"
     },
     {
       "id": "bag-editorial-large-replace",
-      "imageUrl": "https://images.unsplash.com/photo-1577733928229-873fe88419d2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxicm93biUyMGJhY2twYWNrfGVufDB8fHx8MTY5ODg4MjYyMXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1622560481156-01fc7e1693e6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxicm93biUyMGJhY2twYWNrfGVufDB8fHx8MTc2OTE1NjA3OXww&ixlib=rb-4.1.0&q=80&w=1080",
       "description": "A stylish brown backpack.",
       "imageHint": "brown backpack"
     },
     {
       "id": "stylish-crossbody-bag",
-      "imageUrl": "https://images.unsplash.com/photo-1709899098146-378a8057a441?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxjcm9zc2JvZHklMjBiYWd8ZW58MHx8fHwxNzY5MTU0NDExfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1709899734859-93d1f3fae7ff?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxjcm9zc2JvZHklMjBiYWd8ZW58MHx8fHwxNzY5MTU0NDExfDA&ixlib=rb-4.1.0&q=80&w=1080",
       "description": "A stylish crossbody bag.",
       "imageHint": "crossbody bag"
     },
@@ -200,7 +200,7 @@
     },
     {
       "id": "minimalist-clutch",
-      "imageUrl": "https://images.unsplash.com/photo-1749294435694-ce3c586591e6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxtaW5pbWFsaXN0JTIwY2x1dGNofGVufDB8fHx8MTc2OTE1NDQxMXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1691762523481-25956ab195e8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxtaW5pbWFsaXN0JTIwY2x1dGNofGVufDB8fHx8MTc2OTE1NDQxMXww&ixlib=rb-4.1.0&q=80&w=1080",
       "description": "A minimalist clutch.",
       "imageHint": "minimalist clutch"
     },
@@ -299,6 +299,36 @@
       "imageUrl": "https://images.pexels.com/photos/15266224/pexels-photo-15266224.jpeg",
       "description": "A minimal unisex t-shirt.",
       "imageHint": "minimal tee"
+    },
+    {
+      "id": "black-bag",
+      "imageUrl": "https://i.postimg.cc/phDzBKWK/black-bag.jpg",
+      "description": "A black bag.",
+      "imageHint": "black bag"
+    },
+    {
+      "id": "brown-checked-bag",
+      "imageUrl": "https://i.postimg.cc/KknB5tG8/broun-cheked-bag.jpg",
+      "description": "A brown checked bag.",
+      "imageHint": "checked bag"
+    },
+    {
+      "id": "luggage-bag",
+      "imageUrl": "https://i.postimg.cc/YG1YxQr0/laggage-bag.jpg",
+      "description": "A luggage bag.",
+      "imageHint": "luggage bag"
+    },
+    {
+      "id": "purse-bag",
+      "imageUrl": "https://i.postimg.cc/Ny215WZV/perse-bag.jpg",
+      "description": "A purse.",
+      "imageHint": "purse"
+    },
+    {
+      "id": "prada-bag",
+      "imageUrl": "https://i.postimg.cc/k6xKyWJR/Women-s-Bags-PRADA.jpg",
+      "description": "A women's Prada bag.",
+      "imageHint": "prada bag"
     }
   ]
 }
