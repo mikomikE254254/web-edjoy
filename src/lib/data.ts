@@ -15,7 +15,8 @@ export const products: Product[] = [
     slug: 'ethereal-trench-coat',
     name: 'Ethereal Trench Coat',
     description: 'A timeless silhouette reimagined with an iridescent, water-resistant fabric.',
-    price: 450,
+    price: 399,
+    originalPrice: 450,
     category: 'women',
     style: 'formal',
     images: [
@@ -36,7 +37,8 @@ export const products: Product[] = [
     slug: 'urban-nomad-jacket',
     name: 'Urban Nomad Jacket',
     description: 'A versatile jacket designed for the modern explorer.',
-    price: 280,
+    price: 250,
+    originalPrice: 280,
     category: 'men',
     style: 'streetwear',
     images: [
@@ -99,6 +101,7 @@ export const products: Product[] = [
     name: 'Cozy Kids Hoodie',
     description: 'A warm and comfortable hoodie for children.',
     price: 80,
+    originalPrice: 96,
     category: 'children',
     style: 'casual',
     images: [findImage('kids-hoodie')],

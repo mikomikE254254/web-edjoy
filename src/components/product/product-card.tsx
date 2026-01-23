@@ -3,11 +3,10 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import type { Product } from '@/lib/types';
-import { Heart } from 'lucide-react';
+import { Heart, ShoppingBag } from 'lucide-react';
 import { useAppContext } from '@/context/AppContext';
 import { cn } from '@/lib/utils';
 import { useEffect, useRef } from 'react';
-import { Button } from '@/components/ui/button';
 
 export default function ProductCard({ product }: { product: Product }) {
   const { addToCart, toggleWishlist, isProductInWishlist } = useAppContext();
@@ -72,19 +71,24 @@ export default function ProductCard({ product }: { product: Product }) {
       </div>
 
       <div 
-        className="absolute bottom-4 left-4 right-4 bg-white/80 backdrop-blur-md rounded-xl p-2 flex items-center justify-between border-2 border-white"
+        className="absolute bottom-4 left-4 right-4 bg-gray-300/60 backdrop-blur-md rounded-2xl p-3 flex items-center justify-between border border-white/20"
       >
         <div>
-          <h3 className="font-bold text-gray-900 truncate">{product.name}</h3>
-          <p className="text-lg font-extrabold text-gray-900">Ksh {product.price.toFixed(2)}</p>
+          <h3 className="font-normal text-gray-900 truncate">{product.name}</h3>
+          <div className="flex items-baseline gap-2">
+              <p className="text-lg font-semibold text-gray-900">Ksh {product.price.toFixed(2)}</p>
+              {product.originalPrice && (
+                  <p className="text-sm text-red-500 line-through">Ksh {product.originalPrice.toFixed(2)}</p>
+              )}
+          </div>
         </div>
-        <Button 
-          size="lg"
-          className="z-20 rounded-full"
+        <button
           onClick={handleAddToCartClick}
+          aria-label="Add to cart"
+          className="z-20 flex-shrink-0 w-11 h-11 bg-black text-white rounded-full flex items-center justify-center hover:bg-gray-800 active:scale-95 transition-all"
         >
-          Add to Cart
-        </Button>
+          <ShoppingBag size={20} />
+        </button>
       </div>
        <button
             onClick={handleWishlistClick}
