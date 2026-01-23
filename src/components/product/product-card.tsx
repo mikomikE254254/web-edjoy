@@ -20,11 +20,13 @@ export default function ProductCard({ product }: { product: Product }) {
 
   const handleWishlistClick = (e: React.MouseEvent) => {
     e.preventDefault();
+    e.stopPropagation();
     toggleWishlist(product.id);
   }
 
   const handleAddToCartClick = (e: React.MouseEvent) => {
     e.preventDefault();
+    e.stopPropagation();
     addToCart(product);
   }
 
