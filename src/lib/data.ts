@@ -22,11 +22,13 @@ export const products: Product[] = [
       { ...findImage('ethereal-trench-main'), colorName: 'Beige' },
       { ...findImage('ethereal-trench-side'), colorName: 'Gray' },
       { ...findImage('urban-nomad-1'), colorName: 'Black'},
+      { ...findImage('ethereal-trench-green'), colorName: 'Green' }
     ],
     availableColors: [
       { name: 'Beige', hex: '#f6eada' },
       { name: 'Gray', hex: '#9ca3af' },
       { name: 'Black', hex: '#111827' },
+      { name: 'Green', hex: '#22c55e' },
     ]
   },
   {
@@ -37,7 +39,14 @@ export const products: Product[] = [
     price: 280,
     category: 'men',
     style: 'streetwear',
-    images: [findImage('urban-nomad-1')],
+    images: [
+      { ...findImage('urban-nomad-1'), colorName: 'Black' },
+      { ...findImage('urban-nomad-blue'), colorName: 'Blue' }
+    ],
+     availableColors: [
+      { name: 'Black', hex: '#111827' },
+      { name: 'Blue', hex: '#3b82f6' }
+    ]
   },
   {
     id: '3',
@@ -47,7 +56,14 @@ export const products: Product[] = [
     price: 190,
     category: 'women',
     style: 'casual',
-    images: [findImage('silk-blouse-1')],
+    images: [
+      { ...findImage('silk-blouse-1'), colorName: 'White' },
+      { ...findImage('silk-blouse-red'), colorName: 'Red' }
+    ],
+    availableColors: [
+      { name: 'White', hex: '#ffffff' },
+      { name: 'Red', hex: '#ef4444' }
+    ]
   },
   {
     id: '4',

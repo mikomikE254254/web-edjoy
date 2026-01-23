@@ -33,18 +33,18 @@ export default function ProductPage({ params }: { params: { slug:string } }) {
         setTimeout(() => {
           setPrimaryImage(newImage);
           setIsImageFading(false);
-        }, 750);
+        }, 1500);
       } else if (!newImage && primaryImage?.url !== product.images[0].url) {
         setIsImageFading(true);
         setTimeout(() => {
           setPrimaryImage(product.images[0]);
           setIsImageFading(false);
-        }, 750);
+        }, 1500);
       }
     } else if (product && !primaryImage) {
       setPrimaryImage(product.images[0]);
     }
-  }, [selectedColorHex, product]);
+  }, [selectedColorHex, product, primaryImage]);
 
   const handleThumbnailClick = (image: ImageType) => {
     if (primaryImage?.url === image.url) return;
@@ -59,7 +59,7 @@ export default function ProductPage({ params }: { params: { slug:string } }) {
           }
         }
         setIsImageFading(false);
-    }, 750);
+    }, 1500);
   };
   
   if (!product) {
@@ -80,7 +80,7 @@ export default function ProductPage({ params }: { params: { slug:string } }) {
                 alt={primaryImage.alt}
                 fill
                 className={cn(
-                  "object-cover transition-opacity ease-in-out duration-700",
+                  "object-cover transition-opacity ease-in-out duration-[1500ms]",
                   isImageFading ? "opacity-0" : "opacity-100"
                 )}
                 sizes="(max-width: 1024px) 100vw, 50vw"
@@ -97,7 +97,7 @@ export default function ProductPage({ params }: { params: { slug:string } }) {
                  <div 
                   key={index} 
                   className={cn(
-                    "aspect-square relative rounded-lg bg-gray-100 overflow-hidden cursor-pointer transition-all",
+                    "aspect-square relative rounded-lg bg-black overflow-hidden cursor-pointer transition-all",
                     primaryImage?.url === image.url ? "ring-2 ring-primary ring-offset-2" : "hover:opacity-75"
                   )}
                   onClick={() => handleThumbnailClick(image)}

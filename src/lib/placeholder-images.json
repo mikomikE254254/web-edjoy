@@ -335,6 +335,24 @@
       "imageUrl": "https://i.postimg.cc/KknB5tG8/broun-cheked-bag.jpg",
       "description": "A brown checked bag.",
       "imageHint": "checked bag"
+    },
+    {
+      "id": "ethereal-trench-green",
+      "imageUrl": "https://images.unsplash.com/photo-1591548852346-13a893c5c643?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxncmVlbiUyMHRyZW5jaGNvYXR8ZW58MHx8fHwxNzE5Mjg0NzIyfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "A green trench coat.",
+      "imageHint": "green trenchcoat"
+    },
+    {
+      "id": "urban-nomad-blue",
+      "imageUrl": "https://images.unsplash.com/photo-1610450949022-99c2c134a4d6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxibHVlJTIwamFja2V0fGVufDB8fHx8MTcxOTI4NDcyMnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "A blue jacket.",
+      "imageHint": "blue jacket"
+    },
+    {
+      "id": "silk-blouse-red",
+      "imageUrl": "https://images.unsplash.com/photo-1589465885857-32b0a48a4c10?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxyZWQlMjBibG91c2V8ZW58MHx8fHwxNzE5Mjg0NzIyfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "A red silk blouse.",
+      "imageHint": "red blouse"
     }
   ]
 }
