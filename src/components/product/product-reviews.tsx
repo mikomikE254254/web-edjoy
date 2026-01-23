@@ -28,9 +28,18 @@ const reviews = [
   },
 ];
 
-const ReviewCard = ({ review }: { review: (typeof reviews)[0] }) => {
+const ReviewCard = ({ review, index }: { review: (typeof reviews)[0]; index: number }) => {
+    // The header is sticky at top-0, and its height is approx 5rem.
+    // We add a little margin.
+    const headerHeight = '6rem';
+    const stackingOffset = '2.5rem';
+    const topPosition = `calc(${headerHeight} + ${index} * ${stackingOffset})`;
+
     return (
-        <div className="bg-white p-6 rounded-xl shadow-md border">
+        <div 
+          className="bg-white p-6 rounded-2xl shadow-lg border sticky transition-all"
+          style={{ top: topPosition, zIndex: index }}
+        >
             <div className="flex gap-4">
                 <Avatar>
                     <AvatarImage src={review.avatarUrl} alt={review.name} />
@@ -55,15 +64,21 @@ const ReviewCard = ({ review }: { review: (typeof reviews)[0] }) => {
 
 
 export default function ProductReviews() {
+  // Calculate padding-bottom to ensure the last review can be fully seen when it's at the top.
+  // (Number of cards - 1) * stackingOffset + cardHeight (approx)
+  const paddingBottom = `calc((${reviews.length - 1} * 2.5rem) + 200px)`;
+
   return (
     <div className="space-y-8">
         <div className="flex justify-between items-center">
             <h3 className="text-2xl font-bold">Reviews ({reviews.length})</h3>
-            {/* Sort Dropdown can go here */}
         </div>
-        <div className="space-y-8">
-            {reviews.map(review => (
-                <ReviewCard key={review.id} review={review} />
+        <div className="relative" style={{ paddingBottom }}>
+            {/* We add a spacer div for each card except the first one to create the initial separation before they become sticky */}
+            {reviews.map((review, index) => (
+                <div key={review.id} style={{ height: index > 0 ? '6rem' : undefined }}>
+                    <ReviewCard review={review} index={index} />
+                </div>
             ))}
         </div>
     </div>

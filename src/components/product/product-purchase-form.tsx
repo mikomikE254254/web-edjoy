@@ -47,7 +47,7 @@ export default function ProductPurchaseForm({ product }: { product: Product }) {
 
 
   return (
-    <div className="bg-white p-8 rounded-2xl shadow-sm space-y-6">
+    <div className="bg-white p-4 sm:p-8 rounded-2xl shadow-sm space-y-6">
       <div>
         <div className="flex justify-between items-start gap-4">
           <h1 className="text-3xl font-bold">{product.name}</h1>

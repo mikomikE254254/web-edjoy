@@ -26,7 +26,7 @@ export default function ProductPage({ params }: { params: { slug:string } }) {
   const thumbnailImages = product.images.slice(0, 5);
 
   return (
-    <div className="container mx-auto py-8 lg:py-12 space-y-12">
+    <div className="py-2 md:py-8 lg:py-12 space-y-12">
       <div className="grid lg:grid-cols-2 lg:gap-12 items-start">
         {/* Image Gallery */}
         <div className="space-y-4 lg:sticky lg:top-24">
@@ -71,7 +71,7 @@ export default function ProductPage({ params }: { params: { slug:string } }) {
         </div>
 
         {/* Product Info */}
-        <div className="bg-gray-50/50 p-2 rounded-2xl mt-6 lg:mt-0">
+        <div className="bg-transparent lg:bg-gray-50/50 p-0 lg:p-2 rounded-2xl mt-6 lg:mt-0">
           <ProductPurchaseForm product={product} />
         </div>
       </div>

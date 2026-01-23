@@ -14,20 +14,16 @@ export default function Header() {
     const controlNavbar = () => {
       if (typeof window !== 'undefined') {
         if (window.scrollY > lastScrollY && window.scrollY > 100) {
-          // If scroll down and past 100px, hide the navbar
           setVisible(false);
         } else {
-          // If scroll up or within 100px of top, show it
           setVisible(true);
         }
-        // Remember current scroll position for the next move
         setLastScrollY(window.scrollY);
       }
     };
 
     window.addEventListener('scroll', controlNavbar);
 
-    // cleanup function
     return () => {
       window.removeEventListener('scroll', controlNavbar);
     };
@@ -43,13 +39,13 @@ export default function Header() {
 
   return (
     <header
-      className={`sticky top-4 z-50 flex justify-center transition-all duration-500 ease-in-out ${
+      className={`sticky top-0 z-50 flex justify-center transition-all duration-500 ease-in-out ${
         visible ? 'translate-y-0 opacity-100' : '-translate-y-24 opacity-0'
       }`}
     >
-      <div className="flex items-center gap-2 bg-gray-100/80 backdrop-blur-sm p-1 rounded-full shadow-lg ring-1 ring-black ring-opacity-5 mx-4">
-        <div className="overflow-x-auto no-scrollbar">
-          <nav className="flex gap-2">
+      <div className="w-full md:w-auto flex items-center gap-2 bg-gray-100/80 backdrop-blur-sm p-1 md:rounded-full shadow-lg md:ring-1 md:ring-black md:ring-opacity-5 md:mx-4">
+        <div className="flex-grow overflow-x-auto no-scrollbar">
+          <nav className="flex gap-2 px-2">
             {navItems.map((item) => (
               <Link
                 key={item.href}
