@@ -8,9 +8,34 @@ import Image from 'next/image';
 import { Minus, Plus, ShoppingBag, X } from 'lucide-react';
 import Link from 'next/link';
 
+const WhatsAppIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 448 512"
+    className="h-5 w-5"
+    fill="currentColor"
+  >
+    <path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 .2c54.9 0 105.8 21.2 144.2 59.5 38.2 38.3 59.5 89.4 59.5 144.2 0 112.2-91.5 203.7-203.7 203.7-35.1 0-69.2-9-98.7-25.9l-7.1-4.2-73.3 19.3 19.7-71.5-4.5-7.4c-18.4-30.6-28.2-66.2-28.2-103.5 0-112.2 91.5-203.7 203.7-203.7zM223.9 150.1c-12.2 0-22.1 9.9-22.1 22.1v.1c0 12.2 9.9 22.1 22.1 22.1 6.1 0 11.6-2.5 15.6-6.5 3.9-3.9 6.5-9.4 6.5-15.6-.1-12.2-10-22.1-22.1-22.1zm53.8 141.2c-4.4-2.2-26.2-12.9-30.3-14.4-4.1-1.5-7.1-2.2-10.1 2.2s-11.4 14.4-14 17.3c-2.6 3-5.2 3.3-9.6 1.1-4.4-2.2-18.6-6.9-35.4-21.8-13-11.7-21.8-26.2-24.4-30.6-2.6-4.4-.3-6.9 1.9-9.1 2-2 4.4-5.2 6.6-7.8 2.2-2.6 3-4.4 1.5-7.4-1.5-3-10.1-24.3-13.8-33.3-3.7-8.9-7.5-7.7-10.1-7.8h-9.1c-2.6 0-7.1.3-10.9 4.4-3.8 4.1-14.6 14.3-14.6 34.9 0 20.6 15 40.5 17.1 43.5 2.1 3 29.5 44.9 71.9 62.8 10.4 4.4 18.5 7.1 24.8 9.1 6.3 2 12.1 1.7 16.7.7 5.2-.9 26.2-10.7 29.9-21.1 3.7-10.4 3.7-19.3 2.6-21.1-1.1-1.9-4.1-3-8.5-5.2z" />
+  </svg>
+);
+
 export default function CartSidebar() {
   const { cart, removeFromCart, updateQuantity, cartCount, cartTotal, clearCart } = useAppContext();
   const [open, setOpen] = React.useState(false);
+
+  const handleCheckoutViaWhatsApp = () => {
+    if (cart.length === 0) return;
+
+    let message = "Hi Eddjoys, I would like to order the following items:\n\n";
+    cart.forEach(item => {
+      message += `- ${item.name} (Quantity: ${item.quantity})\n`;
+    });
+    message += `\nTotal Price: Ksh ${cartTotal.toFixed(2)}`;
+
+    const encodedMessage = encodeURIComponent(message);
+    const whatsappUrl = `https://wa.me/254740685488?text=${encodedMessage}`;
+    window.open(whatsappUrl, '_blank');
+  };
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -67,7 +92,13 @@ export default function CartSidebar() {
                     <span>Subtotal</span>
                     <span>Ksh {cartTotal.toFixed(2)}</span>
                 </div>
-                <Button className="w-full" size="lg">Checkout</Button>
+                <div className="space-y-2">
+                  <Button className="w-full" size="lg">Checkout</Button>
+                  <Button size="lg" className="w-full bg-[#25D366] hover:bg-[#128C7E] text-white" onClick={handleCheckoutViaWhatsApp}>
+                      <WhatsAppIcon />
+                      Checkout via WhatsApp
+                  </Button>
+                </div>
                 <Button variant="outline" className="w-full" onClick={clearCart}>Clear Cart</Button>
             </SheetFooter>
           </>

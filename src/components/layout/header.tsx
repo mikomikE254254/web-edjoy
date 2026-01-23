@@ -43,7 +43,7 @@ export default function Header() {
         visible ? 'translate-y-0 opacity-100' : '-translate-y-24 opacity-0'
       }`}
     >
-      <div className="w-full md:w-auto flex items-center gap-2 bg-gray-100/80 backdrop-blur-sm p-1 md:rounded-full shadow-lg md:ring-1 md:ring-black md:ring-opacity-5 md:mx-4">
+      <div className="w-auto flex items-center gap-2 bg-gray-100/80 backdrop-blur-sm p-1 rounded-full shadow-lg ring-1 ring-black ring-opacity-5 mx-4">
         <div className="flex-grow overflow-x-auto no-scrollbar">
           <nav className="flex gap-2 px-2">
             {navItems.map((item) => (
