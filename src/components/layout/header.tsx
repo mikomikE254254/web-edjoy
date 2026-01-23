@@ -12,6 +12,11 @@ export default function Header() {
   const [visible, setVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const isMobile = useIsMobile();
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   useEffect(() => {
     const controlNavbar = () => {
@@ -39,6 +44,11 @@ export default function Header() {
     { href: '/children', label: 'Unisex' },
     { href: '/bags', label: 'Bags' },
   ];
+  
+  const getHeaderClasses = () => {
+    if (!isMounted) return 'w-auto';
+    return isMobile ? 'w-full' : 'w-auto';
+  };
 
   return (
     <header
@@ -48,11 +58,11 @@ export default function Header() {
     >
       <div
         className={cn(
-          'flex items-center gap-2 bg-gray-100/80 backdrop-blur-sm p-1 rounded-full shadow-lg ring-1 ring-black ring-opacity-5 mx-4',
-          isMobile ? 'w-full' : 'w-auto'
+          'flex items-center justify-between bg-gray-100/80 backdrop-blur-sm p-1 rounded-full shadow-xl ring-1 ring-black ring-opacity-5 mx-4',
+          getHeaderClasses()
         )}
       >
-        <div className="flex-grow overflow-x-auto no-scrollbar">
+        <div className="overflow-x-auto no-scrollbar">
           <nav className="flex gap-2 px-2">
             {navItems.map((item) => (
               <Link
@@ -69,7 +79,7 @@ export default function Header() {
             ))}
           </nav>
         </div>
-        <div className="pr-2">
+        <div className="pr-2 flex-shrink-0">
           <CartSidebar />
         </div>
       </div>
