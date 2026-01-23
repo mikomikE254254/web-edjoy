@@ -101,15 +101,21 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   }
 
   const toggleWishlist = (productId: string) => {
+    const wasInWishlist = wishlist.includes(productId);
+
     setWishlist(prevWishlist => {
       if (prevWishlist.includes(productId)) {
-        toast({ title: "Removed from wishlist" });
         return prevWishlist.filter(id => id !== productId);
       } else {
-        toast({ title: "Added to wishlist" });
         return [...prevWishlist, productId];
       }
     });
+
+    if (wasInWishlist) {
+      toast({ title: "Removed from wishlist" });
+    } else {
+      toast({ title: "Added to wishlist" });
+    }
   };
 
   const isProductInWishlist = (productId: string) => {
