@@ -30,23 +30,25 @@ const reviews = [
 
 const ReviewCard = ({ review }: { review: (typeof reviews)[0] }) => {
     return (
-        <div className="flex gap-4 py-6">
-            <Avatar>
-                <AvatarImage src={review.avatarUrl} alt={review.name} />
-                <AvatarFallback>{review.name.charAt(0)}</AvatarFallback>
-            </Avatar>
-            <div className="flex-1">
-                <div className="flex justify-between items-center">
-                    <h4 className="font-semibold text-gray-900">{review.name}</h4>
-                    <span className="text-xs text-gray-500">{review.date}</span>
+        <div className="bg-white p-6 rounded-xl shadow-md border">
+            <div className="flex gap-4">
+                <Avatar>
+                    <AvatarImage src={review.avatarUrl} alt={review.name} />
+                    <AvatarFallback>{review.name.charAt(0)}</AvatarFallback>
+                </Avatar>
+                <div className="flex-1">
+                    <div className="flex justify-between items-center">
+                        <h4 className="font-semibold text-gray-900">{review.name}</h4>
+                        <span className="text-xs text-gray-500">{review.date}</span>
+                    </div>
+                    <div className="flex items-center gap-0.5 mt-1">
+                         {[...Array(5)].map((_, i) => (
+                            <Star key={i} className={`w-4 h-4 ${i < review.rating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'}`} />
+                        ))}
+                    </div>
                 </div>
-                <div className="flex items-center gap-0.5 mt-1">
-                     {[...Array(5)].map((_, i) => (
-                        <Star key={i} className={`w-4 h-4 ${i < review.rating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'}`} />
-                    ))}
-                </div>
-                <p className="mt-3 text-sm text-gray-600 leading-relaxed">{review.text}</p>
             </div>
+            <p className="mt-4 text-sm text-gray-600 leading-relaxed">{review.text}</p>
         </div>
     )
 }
@@ -54,12 +56,12 @@ const ReviewCard = ({ review }: { review: (typeof reviews)[0] }) => {
 
 export default function ProductReviews() {
   return (
-    <div className="bg-white p-8 rounded-2xl shadow-sm h-full">
-        <div className="flex justify-between items-center mb-2">
-            <h3 className="text-xl font-bold">Reviews ({reviews.length})</h3>
+    <div className="space-y-8">
+        <div className="flex justify-between items-center">
+            <h3 className="text-2xl font-bold">Reviews ({reviews.length})</h3>
             {/* Sort Dropdown can go here */}
         </div>
-        <div className="max-h-[600px] overflow-y-auto -mx-8 px-8 divide-y divide-gray-100">
+        <div className="space-y-8">
             {reviews.map(review => (
                 <ReviewCard key={review.id} review={review} />
             ))}

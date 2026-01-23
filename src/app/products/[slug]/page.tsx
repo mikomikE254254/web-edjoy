@@ -1,63 +1,84 @@
+'use client';
+
 import { getProductBySlug } from '@/lib/data';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import ProductPurchaseForm from '@/components/product/product-purchase-form';
 import ProductReviews from '@/components/product/product-reviews';
+import { useState } from 'react';
+import type { Product } from '@/lib/types';
+import { cn } from '@/lib/utils';
 
-export default async function ProductPage({ params }: { params: Promise<{ slug:string }> }) {
-  const { slug } = await params;
+type ImageType = Product['images'][0];
+
+export default function ProductPage({ params }: { params: { slug:string } }) {
+  const { slug } = params;
   const product = getProductBySlug(slug);
+
+  const [primaryImage, setPrimaryImage] = useState<ImageType | undefined>(
+    product?.images[0]
+  );
 
   if (!product) {
     notFound();
   }
-
-  const primaryImage = product.images[0] ?? {
-    url: 'https://placehold.co/600x800',
-    alt: 'Placeholder image',
-    hint: 'placeholder',
-  };
-
-  const thumbnailImages = product.images.slice(0, 4); // Show up to 4 thumbnails
+  
+  const thumbnailImages = product.images.slice(0, 5);
 
   return (
-    <div className="container mx-auto py-12 space-y-12">
-      {/* Image Gallery */}
-      <div className="grid md:grid-cols-2 gap-6 items-start">
-        <div className="aspect-square relative rounded-2xl bg-gray-100 overflow-hidden shadow-lg">
-          <Image
-            src={primaryImage.url}
-            alt={primaryImage.alt}
-            fill
-            className="object-cover"
-            sizes="(max-width: 768px) 100vw, 50vw"
-            priority
-            data-ai-hint={primaryImage.hint}
-          />
+    <div className="container mx-auto py-8 lg:py-12 space-y-12">
+      <div className="grid lg:grid-cols-2 lg:gap-12 items-start">
+        {/* Image Gallery */}
+        <div className="space-y-4 lg:sticky lg:top-24">
+          <div className="aspect-square relative rounded-2xl bg-gray-100 overflow-hidden shadow-lg">
+            {primaryImage ? (
+              <Image
+                src={primaryImage.url}
+                alt={primaryImage.alt}
+                fill
+                className="object-cover"
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                priority
+                data-ai-hint={primaryImage.hint}
+              />
+            ) : (
+              <div className="w-full h-full bg-gray-200 flex items-center justify-center text-muted-foreground">No Image</div>
+            )}
+          </div>
+          {thumbnailImages.length > 1 && (
+            <div className="grid grid-cols-5 gap-2">
+              {thumbnailImages.map((image, index) => (
+                 <div 
+                  key={index} 
+                  className={cn(
+                    "aspect-square relative rounded-lg bg-gray-100 overflow-hidden cursor-pointer transition-all",
+                    primaryImage?.url === image.url ? "ring-2 ring-primary ring-offset-2" : "hover:opacity-75"
+                  )}
+                  onClick={() => setPrimaryImage(image)}
+                >
+                  <Image 
+                    src={image.url} 
+                    alt={image.alt} 
+                    fill 
+                    className="object-cover" 
+                    sizes="20vw"
+                    data-ai-hint={image.hint}
+                  />
+                </div>
+              ))}
+            </div>
+          )}
         </div>
-        <div className="grid grid-cols-2 gap-6">
-          {thumbnailImages.slice(1,5).map((image, index) => (
-             <div key={index} className="aspect-square relative rounded-2xl bg-gray-100 overflow-hidden shadow-lg">
-                <Image 
-                  src={image.url} 
-                  alt={image.alt} 
-                  fill className="object-cover" 
-                  sizes="25vw"
-                  data-ai-hint={image.hint}
-                />
-              </div>
-          ))}
+
+        {/* Product Info */}
+        <div className="bg-gray-50/50 p-2 rounded-2xl mt-6 lg:mt-0">
+          <ProductPurchaseForm product={product} />
         </div>
       </div>
 
-      {/* Info & Reviews */}
-      <div className="grid lg:grid-cols-2 gap-12 items-start">
-        <div className="bg-gray-50/50 p-2 rounded-2xl">
-          <ProductPurchaseForm product={product} />
-        </div>
-        <div className="bg-gray-50/50 p-2 rounded-2xl">
-          <ProductReviews />
-        </div>
+      {/* Reviews */}
+      <div className="pt-12 border-t">
+        <ProductReviews />
       </div>
     </div>
   );
