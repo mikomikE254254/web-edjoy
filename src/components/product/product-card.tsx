@@ -86,7 +86,7 @@ export default function ProductCard({ product }: { product: Product }) {
         </button>
 
         {/* Glassmorphism Info Panel */}
-        <div className="absolute bottom-4 left-4 right-4 bg-white/50 backdrop-blur-lg rounded-2xl p-3 flex items-center justify-between border-2 border-white/20">
+        <div className="absolute bottom-4 left-4 right-4 bg-white/50 backdrop-blur-lg rounded-2xl p-2 flex items-center justify-between border-2 border-white/40">
           <div className="flex-1 truncate">
             <h3 className="text-sm font-semibold text-gray-900 truncate">{product.name}</h3>
             <div className="flex items-baseline gap-1.5 mt-1">
