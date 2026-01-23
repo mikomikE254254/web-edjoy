@@ -42,7 +42,7 @@ export default function Header() {
 
   return (
     <header
-      className={`sticky top-0 z-50 flex justify-center transition-all duration-500 ease-in-out ${
+      className={`sticky top-4 z-50 flex justify-center transition-all duration-500 ease-in-out ${
         visible ? 'translate-y-0 opacity-100' : '-translate-y-24 opacity-0'
       }`}
     >
