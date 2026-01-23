@@ -7,6 +7,7 @@ import CollectionMarquee from '@/components/home/collection-marquee';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import EditorialHighlight from '@/components/home/editorial-highlight';
 import { homepageCategories } from '@/lib/homepage-data';
+import { Button } from '@/components/ui/button';
 
 export default function Home() {
   const heroImage = PlaceHolderImages.find(p => p.id === 'nextgen-hero');
@@ -32,7 +33,7 @@ export default function Home() {
           <h1 className="text-4xl font-extrabold">Summer Arrival of Outfit</h1>
           <p className="mt-2 max-w-md">Discover quality fashion that reflects your style and makes everyday enjoyable.</p>
           <Link href="/men">
-            <button className="mt-4 bg-white text-black px-6 py-2 rounded-full font-semibold">Explore Product</button>
+            <Button variant="secondary" size="lg" className="mt-4 rounded-full">Explore Product</Button>
           </Link>
         </div>
         <div className="absolute bottom-8 right-8 text-white drop-shadow-lg text-right max-w-xs text-sm hidden md:block">
@@ -60,7 +61,7 @@ export default function Home() {
           <div className="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent p-6 flex items-center">
             <div>
               <h3 className="text-white font-medium text-lg">Where dreams meet couture</h3>
-              <button className="mt-2 bg-white/90 text-black px-4 py-2 rounded-full text-sm font-semibold w-fit backdrop-blur-sm">Shop Now</button>
+              <Button variant="secondary" className="mt-2 rounded-full backdrop-blur-sm bg-white/90 border-transparent hover:bg-gray-100/90">Shop Now</Button>
             </div>
           </div>
         </Link>
@@ -78,7 +79,7 @@ export default function Home() {
           <div className="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent p-6 flex items-center">
             <div>
               <h3 className="text-white font-medium text-lg">Enchanting styles for every woman</h3>
-              <button className="mt-2 bg-white/90 text-black px-4 py-2 rounded-full text-sm font-semibold w-fit backdrop-blur-sm">Shop Now</button>
+              <Button variant="secondary" className="mt-2 rounded-full backdrop-blur-sm bg-white/90 border-transparent hover:bg-gray-100/90">Shop Now</Button>
             </div>
           </div>
         </Link>

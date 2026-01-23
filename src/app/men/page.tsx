@@ -45,7 +45,7 @@ export default function MenPage() {
                 Explore structured silhouettes and utility-driven designs. Carefully selected for smart fashion that endures.
             </p>
             <div className="flex items-center gap-4 opacity-0 animate-float-in [animation-delay:300ms]">
-                <Button size="lg" className="rounded-full bg-white text-black hover:bg-gray-200">Explore</Button>
+                <Button size="lg" variant="secondary" className="rounded-full">Explore</Button>
                 <Button variant="ghost" className="flex items-center gap-2 text-white hover:bg-white/10">
                     Scroll <ArrowRight size={16} />
                 </Button>

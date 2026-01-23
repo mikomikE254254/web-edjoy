@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { Button } from '@/components/ui/button';
 
 const collections = [
   {
@@ -48,9 +49,9 @@ const CollectionCard = ({ title, items, href, style, imageHint, isImage }: Colle
         </ul>
       </div>
       <Link href={href} passHref>
-        <button className="bg-white text-black border-none rounded-full py-2 px-4 font-semibold cursor-pointer w-full text-center hover:bg-gray-200 transition-colors text-sm">
+        <Button variant="secondary" className="rounded-full w-full">
           Explore {title}
-        </button>
+        </Button>
       </Link>
     </div>
   );
