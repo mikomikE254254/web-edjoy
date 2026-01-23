@@ -39,7 +39,7 @@ export default function ProductPurchaseForm({ product }: { product: Product }) {
   };
   
   const handleBuyViaWhatsApp = () => {
-    const message = `Hi Eddjoys, I would like to order the ${product.name} in Size ${selectedSize}. Price: $${(product.price * quantity).toFixed(2)}.`;
+    const message = `Hi Eddjoys, I would like to order the ${product.name} in Size ${selectedSize}. Price: Ksh ${(product.price * quantity).toFixed(2)}.`;
     const encodedMessage = encodeURIComponent(message);
     const whatsappUrl = `https://wa.me/254740685488?text=${encodedMessage}`;
     window.open(whatsappUrl, '_blank');
@@ -123,7 +123,7 @@ export default function ProductPurchaseForm({ product }: { product: Product }) {
       <div className="border-t pt-6 space-y-4">
         <div className="flex justify-between items-center">
             <span className="text-lg text-gray-500">Total Price</span>
-            <p className="text-3xl font-bold">${(product.price * quantity).toFixed(2)}</p>
+            <p className="text-3xl font-bold">Ksh {(product.price * quantity).toFixed(2)}</p>
         </div>
         <div className="grid grid-cols-1 gap-2">
             <Button size="lg" className="w-full rounded-full h-12 text-base font-bold" onClick={handleAddToCart}>Add to Cart</Button>

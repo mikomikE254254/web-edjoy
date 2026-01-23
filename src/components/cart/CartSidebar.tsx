@@ -45,7 +45,7 @@ export default function CartSidebar() {
                   </div>
                   <div className="flex-grow">
                     <Link href={`/products/${item.slug}`} className="font-semibold hover:underline" onClick={() => setOpen(false)}>{item.name}</Link>
-                    <p className="text-sm text-muted-foreground">${item.price.toFixed(2)}</p>
+                    <p className="text-sm text-muted-foreground">Ksh {item.price.toFixed(2)}</p>
                     <div className="flex items-center gap-2 mt-2">
                         <Button variant="outline" size="icon" className="h-7 w-7" onClick={() => updateQuantity(item.id, item.quantity - 1)}>
                             <Minus className="h-4 w-4" />
@@ -65,7 +65,7 @@ export default function CartSidebar() {
             <SheetFooter className="mt-auto border-t pt-4 space-y-4">
                 <div className="flex justify-between font-semibold">
                     <span>Subtotal</span>
-                    <span>${cartTotal.toFixed(2)}</span>
+                    <span>Ksh {cartTotal.toFixed(2)}</span>
                 </div>
                 <Button className="w-full" size="lg">Checkout</Button>
                 <Button variant="outline" className="w-full" onClick={clearCart}>Clear Cart</Button>

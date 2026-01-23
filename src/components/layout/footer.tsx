@@ -33,7 +33,7 @@ export default function Footer() {
         </div>
 
         {/* Right side: Map */}
-        <div className="w-[31rem] h-[22rem] rounded-2xl overflow-hidden shadow-lg flex-shrink-0">
+        <div className="w-full md:w-[31rem] h-96 md:h-[22rem] rounded-2xl overflow-hidden shadow-lg flex-shrink-0">
           <iframe
             src="https://www.google.com/maps?q=Runda%20Mall,Nairobi&output=embed"
             loading="lazy"

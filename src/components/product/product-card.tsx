@@ -65,8 +65,8 @@ export default function ProductCard({ product }: { product: Product }) {
           <div className="flex-1 truncate">
             <h3 className="text-sm font-semibold text-gray-900 truncate">{product.name}</h3>
             <div className="flex items-baseline gap-1.5 mt-1">
-              <span className="font-bold text-base text-gray-900">${product.price.toFixed(2)}</span>
-              <span className="text-xs text-red-500 line-through">${oldPrice.toFixed(2)}</span>
+              <span className="font-bold text-base text-gray-900">Ksh {product.price.toFixed(2)}</span>
+              <span className="text-xs text-red-500 line-through">Ksh {oldPrice.toFixed(2)}</span>
             </div>
           </div>
           <button

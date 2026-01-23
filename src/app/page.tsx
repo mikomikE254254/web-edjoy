@@ -39,6 +39,14 @@ export default function Home() {
             <button className="mt-4 bg-white text-black px-6 py-2 rounded-full font-semibold">Explore Product</button>
           </Link>
         </div>
+        <div className="absolute bottom-8 right-8 text-white drop-shadow-lg text-right max-w-xs text-sm hidden md:block">
+          <p>
+            Discover curated fashion that blends timeless elegance with modern simplicity.
+            Each piece is thoughtfully designed to empower your personal style.
+            Experience quality craftsmanship and sustainable materials in every collection.
+            Join us in celebrating the art of everyday dressing.
+          </p>
+        </div>
       </section>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
