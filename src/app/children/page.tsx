@@ -23,7 +23,7 @@ export default function UnisexPage() {
 
   return (
     <div className="space-y-12">
-      <section className="relative rounded-2xl overflow-hidden aspect-video md:aspect-[16/7] flex items-center justify-center text-center">
+      <section className="relative rounded-2xl overflow-hidden h-96 flex items-center justify-center text-center">
         {heroImage && (
           <Image
             src={heroImage.imageUrl}
