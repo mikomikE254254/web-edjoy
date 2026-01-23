@@ -12,14 +12,14 @@ export default function EditorialHighlight() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 
           {/* Large Video (top-left) */}
-          <div className="md:col-span-2 relative h-64 md:h-auto md:aspect-[1.7/1] rounded-2xl overflow-hidden">
+          <div className="md:col-span-2 relative h-64 md:h-auto md:aspect-[1.7/1] rounded-2xl overflow-hidden group">
             <video
                 src="https://i.postimg.cc/nc3HxcZP/bag.webp"
                 autoPlay
                 loop
                 muted
                 playsInline
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
             />
           </div>
 
