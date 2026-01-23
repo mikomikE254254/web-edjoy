@@ -1,85 +1,38 @@
 import Image from 'next/image';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
 import BagsCategoryTabs from '@/components/product/bags-category-tabs';
 import ProductCard from "@/components/product/product-card";
 import { getProductsByCategory } from "@/lib/data";
 
+const newBagImages = [
+    { src: 'https://i.postimg.cc/phDzBKWK/black-bag.jpg', alt: 'Black Bag' },
+    { src: 'https://i.postimg.cc/KknB5tG8/broun-cheked-bag.jpg', alt: 'Brown Checked Bag' },
+    { src: 'https://i.postimg.cc/YG1YxQr0/laggage-bag.jpg', alt: 'Luggage Bag' },
+    { src: 'https://i.postimg.cc/Ny215WZV/perse-bag.jpg', alt: 'Purse Bag' },
+    { src: 'https://i.postimg.cc/k6xKyWJR/Women-s-Bags-PRADA.jpg', alt: 'PRADA Bag' },
+];
+
 export default function BagsPage() {
-  const largeBagImage = PlaceHolderImages.find(p => p.id === 'bag-editorial-large-replace');
-  const tallImage = PlaceHolderImages.find(p => p.id === 'bag-editorial-tall');
-  const smallImage = PlaceHolderImages.find(p => p.id === 'bag-editorial-small');
-  const wideImage = PlaceHolderImages.find(p => p.id === 'bag-editorial-wide');
   const bagProducts = getProductsByCategory('bags');
 
   return (
     <div className="space-y-12">
         <section className="my-12">
             <div className="bg-white p-4 sm:p-8 rounded-3xl shadow-sm">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-
-                    {/* Large Image (top-left) */}
-                    <div className="md:col-span-2 relative h-64 md:h-auto md:aspect-[1.7/1] rounded-2xl overflow-hidden group">
-                        {largeBagImage && (
-                            <Image
-                                src={largeBagImage.imageUrl}
-                                alt={largeBagImage.description}
-                                fill
-                                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                                data-ai-hint={largeBagImage.imageHint}
-                                sizes="(max-width: 768px) 100vw, 67vw"
-                            />
-                        )}
+                <div className="grid grid-cols-6 grid-rows-2 gap-4" style={{ height: '600px' }}>
+                    <div className="relative col-span-3 row-span-2 rounded-2xl overflow-hidden group">
+                        <Image src={newBagImages[0].src} alt={newBagImages[0].alt} fill className="object-cover group-hover:scale-105 transition-transform" sizes="(max-width: 768px) 100vw, 50vw" />
                     </div>
-
-                    {/* Tall Image (top-right, spans 2 rows on md) */}
-                    <div className="md:row-span-2 relative h-96 md:h-auto rounded-2xl overflow-hidden group">
-                        {tallImage && (
-                        <Image
-                            src={tallImage.imageUrl}
-                            alt={tallImage.description}
-                            fill
-                            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                            data-ai-hint={tallImage.imageHint}
-                            sizes="(max-width: 768px) 100vw, 33vw"
-                        />
-                        )}
+                    <div className="relative col-span-2 row-span-1 rounded-2xl overflow-hidden group">
+                        <Image src={newBagImages[1].src} alt={newBagImages[1].alt} fill className="object-cover group-hover:scale-105 transition-transform" sizes="(max-width: 768px) 80vw, 33vw" />
                     </div>
-                    
-                    {/* Container for Small Image & Text (second row, left) */}
-                    <div className="md:col-span-2 flex flex-col sm:flex-row gap-6 items-center">
-                        <div className="relative aspect-square w-full sm:w-48 sm:h-48 shrink-0 rounded-2xl overflow-hidden group">
-                        {smallImage && (
-                            <Image
-                            src={smallImage.imageUrl}
-                            alt={smallImage.description}
-                            fill
-                            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                            data-ai-hint={smallImage.imageHint}
-                            sizes="(max-width: 640px) 100vw, 192px"
-                            />
-                        )}
-                        </div>
-                        <div className="text-left">
-                        <h2 className="text-2xl font-semibold mb-2">Season Highlight</h2>
-                        <p className="text-gray-600 leading-relaxed max-w-md">
-                            Carefully curated fashion pieces designed with elegance,
-                            simplicity, and modern style in mind.
-                        </p>
-                        </div>
+                    <div className="relative col-span-1 row-span-1 rounded-2xl overflow-hidden group">
+                        <Image src={newBagImages[2].src} alt={newBagImages[2].alt} fill className="object-cover group-hover:scale-105 transition-transform" sizes="(max-width: 768px) 20vw, 17vw" />
                     </div>
-
-                    {/* Wide Image (bottom) */}
-                    <div className="md:col-span-3 relative h-56 rounded-2xl overflow-hidden group">
-                        {wideImage && (
-                        <Image
-                            src={wideImage.imageUrl}
-                            alt={wideImage.description}
-                            fill
-                            className="object-cover transition-transform duration-300 group-hover:scale-105"
-                            data-ai-hint={wideImage.imageHint}
-                            sizes="100vw"
-                        />
-                        )}
+                    <div className="relative col-span-1 row-span-1 rounded-2xl overflow-hidden group">
+                        <Image src={newBagImages[3].src} alt={newBagImages[3].alt} fill className="object-cover group-hover:scale-105 transition-transform" sizes="(max-width: 768px) 20vw, 17vw" />
+                    </div>
+                    <div className="relative col-span-2 row-span-1 rounded-2xl overflow-hidden group">
+                        <Image src={newBagImages[4].src} alt={newBagImages[4].alt} fill className="object-cover group-hover:scale-105 transition-transform" sizes="(max-width: 768px) 80vw, 33vw" />
                     </div>
                 </div>
             </div>
