@@ -5,14 +5,14 @@ import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import ProductPurchaseForm from '@/components/product/product-purchase-form';
 import ProductReviews from '@/components/product/product-reviews';
-import { useState } from 'react';
+import { useState, use } from 'react';
 import type { Product } from '@/lib/types';
 import { cn } from '@/lib/utils';
 
 type ImageType = Product['images'][0];
 
 export default function ProductPage({ params }: { params: { slug:string } }) {
-  const { slug } = params;
+  const { slug } = use(params);
   const product = getProductBySlug(slug);
 
   const [primaryImage, setPrimaryImage] = useState<ImageType | undefined>(
