@@ -1,7 +1,32 @@
+'use client';
+
 import Image from 'next/image';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { useEffect, useRef } from 'react';
 
 export default function BagsEditorialHighlight() {
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const card = cardRef.current;
+    if (!card) return;
+
+    const handleMouseMove = (e: MouseEvent) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      card.style.setProperty('--mouse-x', `${x}px`);
+      card.style.setProperty('--mouse-y', `${y}px`);
+    };
+
+    card.addEventListener('mousemove', handleMouseMove);
+
+    return () => {
+      card.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, []);
+
   const largeImage = PlaceHolderImages.find(p => p.id === 'bag-editorial-large-replace');
   const tallImage = PlaceHolderImages.find(p => p.id === 'bag-white-background');
   const smallImage = PlaceHolderImages.find(p => p.id === 'black-woman-fashion');
@@ -9,7 +34,11 @@ export default function BagsEditorialHighlight() {
 
   return (
     <section className="my-12">
-      <div className="bg-white p-4 sm:p-8 rounded-3xl shadow-sm">
+      <div
+        ref={cardRef}
+        className="minimal-glow-card bg-white p-4 sm:p-8 rounded-3xl shadow-sm overflow-hidden"
+        style={{ '--glow-card-radius': '1.5rem' } as React.CSSProperties}
+      >
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 
           {/* Large Image (top-left) */}

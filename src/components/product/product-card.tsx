@@ -6,9 +6,32 @@ import type { Product } from '@/lib/types';
 import { Heart, ShoppingBag, Dot } from 'lucide-react';
 import { useAppContext } from '@/context/AppContext';
 import { cn } from '@/lib/utils';
+import { useEffect, useRef } from 'react';
 
 export default function ProductCard({ product }: { product: Product }) {
   const { addToCart, toggleWishlist, isProductInWishlist } = useAppContext();
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const card = cardRef.current;
+    if (!card) return;
+
+    const handleMouseMove = (e: MouseEvent) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      card.style.setProperty('--mouse-x', `${x}px`);
+      card.style.setProperty('--mouse-y', `${y}px`);
+    };
+
+    card.addEventListener('mousemove', handleMouseMove);
+
+    return () => {
+      card.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, []);
+
   const primaryImage = product.images[0] ?? {
     url: 'https://placehold.co/600x800',
     alt: 'Placeholder image',
@@ -31,7 +54,7 @@ export default function ProductCard({ product }: { product: Product }) {
   }
 
   return (
-    <div className="relative group overflow-hidden rounded-xl shadow-xl transition-all duration-300 ease-in-out hover:shadow-2xl hover:-translate-y-1 bg-white">
+    <div ref={cardRef} className="minimal-glow-card relative group overflow-hidden rounded-xl shadow-xl transition-all duration-300 ease-in-out hover:shadow-2xl hover:-translate-y-1 bg-white">
       <Link href={`/products/${product.slug}`} className="block">
         {/* Image Container */}
         <div className="aspect-[3/4] w-full relative">
