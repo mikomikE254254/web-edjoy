@@ -52,9 +52,10 @@ export default function Header() {
 
   return (
     <header
-      className={`sticky top-4 z-50 flex justify-center transition-all duration-500 ease-in-out ${
+      className={cn(
+        'sticky top-8 z-50 flex justify-center transition-all duration-500 ease-in-out',
         visible ? 'translate-y-0 opacity-100' : '-translate-y-24 opacity-0'
-      }`}
+      )}
     >
       <div
         className={cn(
@@ -68,11 +69,12 @@ export default function Header() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`px-5 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap ${
+                className={cn(
+                  'px-5 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap',
                   path === item.href
-                    ? 'bg-black text-white'
+                    ? 'bg-black text-white underline underline-offset-4'
                     : 'text-gray-700 hover:bg-gray-200'
-                }`}
+                )}
               >
                 {item.label}
               </Link>
