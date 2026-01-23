@@ -88,11 +88,13 @@ export default function CartSidebar() {
             </div>
             <SheetFooter className="mt-auto border-t pt-4 space-y-4">
                 <div className="flex justify-between font-semibold">
-                    <span>Subtotal</span>
+                    <span>Total</span>
                     <span>Ksh {cartTotal.toFixed(2)}</span>
                 </div>
                 <div className="space-y-2">
-                  <Button className="w-full" size="lg">Checkout</Button>
+                  <Button className="w-full" size="lg">
+                    Checkout (Ksh {cartTotal.toFixed(2)})
+                  </Button>
                   <Button size="lg" variant="tactile-green" className="w-full" onClick={handleCheckoutViaWhatsApp}>
                       <WhatsAppIcon />
                       Checkout via WhatsApp
