@@ -19,25 +19,13 @@ export default function Footer() {
         </div>
 
         {/* Middle Segment */}
-        <div className="bg-white p-10 grid md:grid-cols-2 gap-10 items-center border-2 border-black rounded-2xl">
+        <div className="bg-white p-4 border-2 border-black rounded-2xl">
           <div className="w-full aspect-square rounded-xl overflow-hidden border-2 border-gray-200">
             <iframe
               src="https://www.google.com/maps?q=Runda%20Mall,Nairobi&output=embed"
               loading="lazy"
               className="w-full h-full border-0"
             ></iframe>
-          </div>
-          <div className="flex flex-col gap-6 text-center md:text-left items-center md:items-start">
-            <h4 className="font-bold text-3xl">Eddjoys.ke</h4>
-            <nav className="flex flex-col gap-y-2 text-lg">
-              <Link href="/" className="hover:underline w-fit">Homepage</Link>
-              <Link href="/men" className="hover:underline w-fit">Products</Link>
-              <Link href="#" className="hover:underline w-fit">Services</Link>
-              <Link href="#" className="hover:underline w-fit">Contact</Link>
-            </nav>
-            <p className="text-sm text-gray-600 max-w-md">
-              Discover curated fashion that blends timeless elegance with modern simplicity.
-            </p>
           </div>
         </div>
 
