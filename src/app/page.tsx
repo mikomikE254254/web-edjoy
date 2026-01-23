@@ -9,12 +9,15 @@ import EditorialHighlight from '@/components/home/editorial-highlight';
 
 export default function Home() {
   const heroImage = PlaceHolderImages.find(p => p.id === 'nextgen-hero');
-  const categoryImages = {
-    'Shoes': PlaceHolderImages.find(p => p.id === 'cat-shoes'),
-    'Brush': PlaceHolderImages.find(p => p.id === 'cat-brush'),
-    'Bag': PlaceHolderImages.find(p => p.id === 'cat-bag'),
-    'T-shirt': PlaceHolderImages.find(p => p.id === 'cat-tshirt'),
-  };
+  const categories = [
+    { name: 'Women', href: '/women', imageId: 'women-editorial-hero' },
+    { name: 'Men', href: '/men', imageId: 'men-editorial-hero' },
+    { name: 'Unisex', href: '/children', imageId: 'unisex-editorial-hero' },
+    { name: 'Bags', href: '/bags', imageId: 'cat-bag' },
+    { name: 'Streetwear', href: '/women', imageId: 'women-street-jeans' },
+    { name: 'Formal', href: '/men', imageId: 'men-formal-suit' },
+    { name: 'Vintage', href: '/men', imageId: 'men-vintage-blazer' }
+  ];
   const promoImage1 = PlaceHolderImages.find(p => p.id === 'cat-bag');
   const promoImage2 = PlaceHolderImages.find(p => p.id === 'ethereal-trench-side');
 
@@ -90,27 +93,30 @@ export default function Home() {
 
       <h2 className="mt-8 mb-4 text-xl font-semibold">Browse by categories</h2>
       <div className="flex gap-4 overflow-x-auto pb-2">
-        {Object.entries(categoryImages).map(([categoryName, img]) => (
-          <Link key={categoryName} href={categoryName === 'Bag' ? '/bags' : '#'}>
-            <div className="relative shrink-0 w-48 aspect-[3/2] rounded-2xl overflow-hidden group cursor-pointer">
-              {img ? (
-                <Image
-                  src={img.imageUrl}
-                  alt={categoryName}
-                  fill
-                  className="object-cover transition-transform duration-200 group-hover:scale-105"
-                  data-ai-hint={img.imageHint}
-                  sizes="200px"
-                />
-              ) : (
-                <div className="w-full h-full bg-gray-200" />
-              )}
-              <span className="absolute bottom-2.5 left-2.5 bg-white text-black text-xs font-medium px-3 py-1 rounded-full uppercase">
-                {categoryName}
-              </span>
-            </div>
-          </Link>
-        ))}
+        {categories.map((category) => {
+            const img = PlaceHolderImages.find(p => p.id === category.imageId);
+            return (
+              <Link key={category.name} href={category.href}>
+                <div className="relative shrink-0 w-48 aspect-[3/2] rounded-2xl overflow-hidden group cursor-pointer">
+                  {img ? (
+                    <Image
+                      src={img.imageUrl}
+                      alt={category.name}
+                      fill
+                      className="object-cover transition-transform duration-200 group-hover:scale-105"
+                      data-ai-hint={img.imageHint}
+                      sizes="200px"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-gray-200" />
+                  )}
+                  <span className="absolute bottom-2.5 left-2.5 bg-white text-black text-xs font-medium px-3 py-1 rounded-full uppercase">
+                    {category.name}
+                  </span>
+                </div>
+              </Link>
+            );
+        })}
       </div>
 
       <CollectionMarquee />
