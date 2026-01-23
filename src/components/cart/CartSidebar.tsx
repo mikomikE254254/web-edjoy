@@ -93,7 +93,7 @@ export default function CartSidebar() {
                 </div>
                 <div className="space-y-2">
                   <Button className="w-full" size="lg">Checkout</Button>
-                  <Button size="lg" className="w-full bg-[#25D366] hover:bg-[#128C7E] text-white" onClick={handleCheckoutViaWhatsApp}>
+                  <Button size="lg" variant="tactile-green" className="w-full" onClick={handleCheckoutViaWhatsApp}>
                       <WhatsAppIcon />
                       Checkout via WhatsApp
                   </Button>

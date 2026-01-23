@@ -49,7 +49,7 @@ export default function WhatsAppChannelModal() {
           <p>Stay in the loop with the latest trends from Eddjoys.ke. Join our channel for a first look at everything new!</p>
         </div>
         <DialogFooter className="sm:justify-start">
-          <Button asChild className="w-full sm:w-auto bg-[#25D366] hover:bg-[#128C7E] text-white">
+          <Button asChild variant="tactile-green" className="w-full sm:w-auto">
             <Link href="https://www.whatsapp.com/channel/0029Vb6qjHpCHDyiWBPyKO2y" target="_blank">
               Join Now
             </Link>

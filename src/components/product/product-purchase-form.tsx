@@ -138,7 +138,7 @@ export default function ProductPurchaseForm({ product, selectedColor, setSelecte
         </div>
         <div className="grid grid-cols-1 gap-2">
             <Button size="lg" className="w-full rounded-full h-12 text-base font-bold" onClick={handleAddToCart}>Add to Cart</Button>
-            <Button size="lg" className="w-full rounded-full h-12 text-base font-bold bg-[#25D366] hover:bg-[#128C7E] text-white" onClick={handleBuyViaWhatsApp}>
+            <Button size="lg" variant="tactile-green" className="w-full rounded-full h-12 text-base font-bold" onClick={handleBuyViaWhatsApp}>
                 <WhatsAppIcon />
                 Buy via WhatsApp
             </Button>
