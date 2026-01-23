@@ -34,14 +34,14 @@ export default function ProductPage({ params }: { params: { slug:string } }) {
           setPrimaryImage(newImage);
           setIsImageFading(false);
         }, 1500);
-      } else if (!newImage && primaryImage?.url !== product.images[0].url) {
+      } else if (!newImage && product.images[0] && primaryImage?.url !== product.images[0].url) {
         setIsImageFading(true);
         setTimeout(() => {
           setPrimaryImage(product.images[0]);
           setIsImageFading(false);
         }, 1500);
       }
-    } else if (product && !primaryImage) {
+    } else if (product && !primaryImage && product.images[0]) {
       setPrimaryImage(product.images[0]);
     }
   }, [selectedColorHex, product, primaryImage]);
@@ -66,7 +66,19 @@ export default function ProductPage({ params }: { params: { slug:string } }) {
     notFound();
   }
   
-  const thumbnailImages = product.images.slice(0, 5);
+  const thumbnailSlots: (ImageType | null)[] = new Array(4).fill(null);
+  if (product && product.images) {
+    const uniqueImages = product.images.reduce((acc, current) => {
+      if (!acc.find(item => item.url === current.url)) {
+        acc.push(current);
+      }
+      return acc;
+    }, [] as ImageType[]);
+
+    uniqueImages.slice(0, 4).forEach((image, index) => {
+      thumbnailSlots[index] = image;
+    });
+  }
 
   return (
     <div className="py-2 md:py-8 lg:py-12 space-y-12">
@@ -91,29 +103,37 @@ export default function ProductPage({ params }: { params: { slug:string } }) {
               <div className="w-full h-full bg-gray-200 flex items-center justify-center text-muted-foreground">No Image</div>
             )}
           </div>
-          {thumbnailImages.length > 1 && (
-            <div className="grid grid-cols-5 gap-2">
-              {thumbnailImages.map((image, index) => (
-                 <div 
-                  key={index} 
+          
+          <div className="grid grid-cols-4 gap-2">
+            {thumbnailSlots.map((image, index) =>
+              image ? (
+                <div
+                  key={index}
                   className={cn(
-                    "aspect-square relative rounded-lg bg-black overflow-hidden cursor-pointer transition-all",
-                    primaryImage?.url === image.url ? "ring-2 ring-primary ring-offset-2" : "hover:opacity-75"
+                    'aspect-square relative rounded-lg bg-black overflow-hidden cursor-pointer transition-all',
+                    primaryImage?.url === image.url
+                      ? 'ring-2 ring-primary ring-offset-2'
+                      : 'hover:opacity-75'
                   )}
                   onClick={() => handleThumbnailClick(image)}
                 >
-                  <Image 
-                    src={image.url} 
-                    alt={image.alt} 
-                    fill 
-                    className="object-cover" 
+                  <Image
+                    src={image.url}
+                    alt={image.alt}
+                    fill
+                    className="object-cover"
                     sizes="20vw"
                     data-ai-hint={image.hint}
                   />
                 </div>
-              ))}
-            </div>
-          )}
+              ) : (
+                <div
+                  key={`placeholder-${index}`}
+                  className="aspect-square rounded-lg bg-gray-100 border-2 border-dashed border-gray-300"
+                />
+              )
+            )}
+          </div>
         </div>
 
         {/* Product Info */}
