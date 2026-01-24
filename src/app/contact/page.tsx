@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
@@ -11,18 +12,61 @@ import {
   SiGo,
   SiPhp,
 } from 'react-icons/si';
+import { cn } from '@/lib/utils';
 
-const StatItem = ({ value, label }: { value: string; label: string }) => (
-  <div className="text-right sm:text-left">
-    <p className="text-4xl font-serif text-black">{value}</p>
-    <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500">{label}</p>
-  </div>
-);
+const AnimatedStat = ({ finalValue, label, suffix = '' }: { finalValue: number, label: string, suffix?: string }) => {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    const animate = () => {
+      let start = 0;
+      const end = finalValue;
+      if (start === end) return;
+
+      const duration = 1500; // ms
+      const range = end - start;
+      let startTime: number | null = null;
+
+      const step = (timestamp: number) => {
+        if (!startTime) startTime = timestamp;
+        const progress = Math.min((timestamp - startTime) / duration, 1);
+        const current = Math.floor(progress * range + start);
+        setCount(current);
+        if (progress < 1) {
+          requestAnimationFrame(step);
+        }
+      };
+
+      requestAnimationFrame(step);
+    };
+
+    animate(); // Initial animation
+    const interval = setInterval(() => {
+        setCount(0); // Reset for re-animation
+        animate();
+    }, 5000); // Loop every 5 seconds
+
+    return () => clearInterval(interval);
+  }, [finalValue]);
+
+  return (
+    <div className="bg-gray-50 p-6 rounded-2xl text-center shadow-inner">
+      <p className="text-5xl font-serif font-bold text-black">{count}{suffix}</p>
+      <p className="text-xs uppercase tracking-wider text-gray-500 mt-2">{label}</p>
+    </div>
+  );
+};
+
 
 export default function ContactPage() {
   const devImage = PlaceHolderImages.find(p => p.id === 'developer-portrait-new');
-
   const services = ["Website Sorcery", "Pixel Perfecting", "Shopping Cart Herding", "Animation"];
+  const stats = [
+    { value: 5, suffix: '+', label: 'Years of Experience' },
+    { value: 99, suffix: '%', label: 'Satisfaction Clients' },
+    { value: 80, suffix: '+', label: 'Clients on Worldwide' },
+    { value: 100, suffix: '+', label: 'Projects Done' },
+  ];
 
   return (
     <div className="bg-white max-w-4xl mx-auto w-full rounded-3xl shadow-lg p-6 sm:p-12 relative">
@@ -75,13 +119,16 @@ export default function ContactPage() {
               </div>
           </div>
 
-          <div className="space-y-6">
-              <StatItem value="5+" label="Years of Experience" />
-              <StatItem value="99%" label="Satisfaction Clients" />
-              <StatItem value="80+" label="Clients on Worldwide" />
-              <StatItem value="100+" label="Projects Done" />
-          </div>
+          {/* This empty div is for spacing on md+ screens */}
+          <div className="hidden md:block"></div>
       </div>
+      
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-16">
+        {stats.map(stat => (
+          <AnimatedStat key={stat.label} finalValue={stat.value} suffix={stat.suffix} label={stat.label} />
+        ))}
+      </div>
+
 
       <div className="mt-20 flex justify-center gap-x-8 md:gap-x-12 border-t border-gray-100 pt-10 text-zinc-400 grayscale hover:grayscale-0 transition-all duration-300">
           <SiJavascript size={32} title="JavaScript" className="hover:text-yellow-400" />
