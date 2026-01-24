@@ -1,27 +1,39 @@
 'use client';
 
-import { getProductBySlug } from '@/lib/data';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import ProductPurchaseForm from '@/components/product/product-purchase-form';
 import ProductReviews from '@/components/product/product-reviews';
-import { useState, use, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import type { Product } from '@/lib/types';
 import { cn } from '@/lib/utils';
+import { useCollection, useFirestore, useMemoFirebase } from '@/firebase';
+import { collection, query, where, limit } from 'firebase/firestore';
+import { Skeleton } from '@/components/ui/skeleton';
 
 type ImageType = Product['images'][0];
 
 export default function ProductPage({ params }: { params: { slug:string } }) {
-  const { slug } = use(params);
-  const product = getProductBySlug(slug);
+  const { slug } = params;
+  
+  const firestore = useFirestore();
+  const productQuery = useMemoFirebase(
+    () => firestore ? query(collection(firestore, 'products'), where('slug', '==', slug), limit(1)) : null,
+    [firestore, slug]
+  );
+  const { data: products, isLoading } = useCollection<Product>(productQuery);
+  const product = products?.[0];
 
-  const [primaryImage, setPrimaryImage] = useState<ImageType | undefined>(
-    product?.images[0]
-  );
+  const [primaryImage, setPrimaryImage] = useState<ImageType | undefined>(undefined);
   const [isImageFading, setIsImageFading] = useState(false);
-  const [selectedColorHex, setSelectedColorHex] = useState<string | undefined>(
-    product?.availableColors?.[0]?.hex
-  );
+  const [selectedColorHex, setSelectedColorHex] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    if (product && !primaryImage) {
+        setPrimaryImage(product.images[0]);
+        setSelectedColorHex(product.availableColors?.[0]?.hex);
+    }
+  }, [product, primaryImage]);
 
   useEffect(() => {
     if (product && product.availableColors && selectedColorHex) {
@@ -62,6 +74,31 @@ export default function ProductPage({ params }: { params: { slug:string } }) {
     }, 1500);
   };
   
+  if (isLoading) {
+    return (
+        <div className="py-2 md:py-8 lg:py-12 space-y-12">
+            <div className="grid lg:grid-cols-2 lg:gap-12 items-start">
+                <div className="space-y-4 lg:sticky lg:top-24">
+                    <Skeleton className="aspect-square w-full rounded-2xl" />
+                    <div className="grid grid-cols-4 gap-2">
+                        <Skeleton className="aspect-square w-full rounded-lg" />
+                        <Skeleton className="aspect-square w-full rounded-lg" />
+                        <Skeleton className="aspect-square w-full rounded-lg" />
+                        <Skeleton className="aspect-square w-full rounded-lg" />
+                    </div>
+                </div>
+                <div className="space-y-6">
+                    <Skeleton className="h-10 w-3/4" />
+                    <Skeleton className="h-6 w-1/4" />
+                    <Skeleton className="h-24 w-full" />
+                    <Skeleton className="h-12 w-full rounded-full" />
+                    <Skeleton className="h-12 w-full rounded-full" />
+                </div>
+            </div>
+        </div>
+    )
+  }
+
   if (!product) {
     notFound();
   }

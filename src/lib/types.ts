@@ -17,4 +17,5 @@ export type Product = {
     name: string;
     hex: string;
   }[];
+  sizes?: string[];
 };

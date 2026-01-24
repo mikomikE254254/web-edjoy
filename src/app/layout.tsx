@@ -6,6 +6,7 @@ import Footer from "@/components/layout/footer";
 import { AppProvider } from "@/context/AppContext";
 import { Toaster } from "@/components/ui/toaster";
 import WhatsAppChannelModal from "@/components/layout/WhatsAppChannelModal";
+import { FirebaseClientProvider } from "@/firebase";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,15 +24,17 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${inter.className} bg-gray-50`}>
         <AppProvider>
-          <div className="min-h-screen flex flex-col">
-            <Header />
-            <main className="max-w-7xl mx-auto px-4 pb-4 pt-8 md:px-6 md:pb-6 md:pt-10 w-full flex-grow">
-              {children}
-            </main>
-            <Footer />
-          </div>
-          <Toaster />
-          <WhatsAppChannelModal />
+          <FirebaseClientProvider>
+            <div className="min-h-screen flex flex-col">
+              <Header />
+              <main className="max-w-7xl mx-auto px-4 pb-4 pt-8 md:px-6 md:pb-6 md:pt-10 w-full flex-grow">
+                {children}
+              </main>
+              <Footer />
+            </div>
+            <Toaster />
+            <WhatsAppChannelModal />
+          </FirebaseClientProvider>
         </AppProvider>
       </body>
     </html>

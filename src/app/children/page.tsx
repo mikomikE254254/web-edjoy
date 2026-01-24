@@ -3,23 +3,31 @@
 import { useState, useMemo } from 'react';
 import Image from 'next/image';
 import ProductCard from "@/components/product/product-card";
-import { getProductsByCategory } from "@/lib/data";
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
 import CategoryTabs from '@/components/product/category-tabs';
+import { useCollection, useFirestore, useMemoFirebase } from '@/firebase';
+import { Product } from '@/lib/types';
+import { collection, query, where } from 'firebase/firestore';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export default function UnisexPage() {
   const [activeTab, setActiveTab] = useState("All");
-  const unisexProducts = getProductsByCategory('children');
   const heroImage = PlaceHolderImages.find(p => p.id === 'unisex-editorial-hero');
+  
+  const firestore = useFirestore();
 
-  const filteredProducts = useMemo(() => {
-    if (activeTab === "All") {
-      return unisexProducts;
+  const productsQuery = useMemoFirebase(() => {
+    if (!firestore) return null;
+    const q = query(collection(firestore, 'products'), where('category', '==', 'children'));
+     if (activeTab.toLowerCase() !== 'all') {
+        return query(q, where('style', '==', activeTab.toLowerCase()));
     }
-    return unisexProducts.filter(p => p.style && p.style.toLowerCase() === activeTab.toLowerCase());
-  }, [activeTab, unisexProducts]);
+    return q;
+  }, [firestore, activeTab]);
+
+  const { data: unisexProducts, isLoading } = useCollection<Product>(productsQuery);
 
   return (
     <div className="space-y-6">
@@ -56,12 +64,13 @@ export default function UnisexPage() {
       <div className="border-t pt-6">
         <CategoryTabs activeTab={activeTab} setActiveTab={setActiveTab} />
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 pt-6">
-          {filteredProducts.length > 0 ? (
-            filteredProducts.map(product => (
+          {isLoading && Array.from({ length: 8 }).map((_, i) => <Skeleton key={i} className="h-[400px] w-full rounded-2xl" />)}
+          {!isLoading && unisexProducts && unisexProducts.length > 0 ? (
+            unisexProducts.map(product => (
               <ProductCard key={product.id} product={product} />
             ))
           ) : (
-            <p>No products found in this category.</p>
+            !isLoading && <p>No products found in this category.</p>
           )}
         </div>
       </div>

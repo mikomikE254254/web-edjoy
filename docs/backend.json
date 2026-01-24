@@ -8,7 +8,11 @@
       "properties": {
         "id": {
           "type": "string",
-          "description": "Unique identifier for the product entity."
+          "description": "Unique identifier for the product."
+        },
+        "slug": {
+          "type": "string",
+          "description": "URL-friendly slug for the product."
         },
         "name": {
           "type": "string",
@@ -18,38 +22,57 @@
           "type": "string",
           "description": "A detailed description of the product."
         },
-        "imageUrl": {
-          "type": "string",
-          "description": "URL of the product's main image.",
-          "format": "uri"
-        },
-        "glbModelUrl": {
-          "type": "string",
-          "description": "URL of the product's 3D model (GLB format).",
-          "format": "uri"
-        },
         "price": {
           "type": "number",
           "description": "The price of the product."
         },
+        "originalPrice": {
+          "type": "number",
+          "description": "The original price before a discount."
+        },
         "category": {
           "type": "string",
-          "description": "The category of the product."
+          "description": "The category of the product.",
+          "enum": ["men", "women", "bags", "children"]
         },
-        "styleGuideSuggestion": {
+        "style": {
           "type": "string",
-          "description": "AI-powered style suggestion for the product."
+          "description": "The style of the product.",
+          "enum": ["casual", "streetwear", "formal", "vintage", "minimal"]
+        },
+        "images": {
+          "type": "array",
+          "description": "Product images. The first image is the main image.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "url": { "type": "string", "format": "uri" },
+              "alt": { "type": "string" },
+              "hint": { "type": "string" },
+              "colorName": { "type": "string" }
+            },
+            "required": ["url", "alt"]
+          }
+        },
+        "availableColors": {
+          "type": "array",
+          "description": "Available product colors.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "hex": { "type": "string" }
+            },
+            "required": ["name", "hex"]
+          }
+        },
+        "sizes": {
+          "type": "array",
+          "description": "Available product sizes.",
+          "items": { "type": "string" }
         }
       },
-      "required": [
-        "id",
-        "name",
-        "description",
-        "imageUrl",
-        "glbModelUrl",
-        "price",
-        "category"
-      ]
+      "required": ["id", "slug", "name", "price", "category", "images"]
     },
     "Category": {
       "$schema": "http://json-schema.org/draft-07/schema#",

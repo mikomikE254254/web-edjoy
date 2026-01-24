@@ -1,19 +1,30 @@
+'use client';
 
 import Image from 'next/image';
 import Link from 'next/link';
 import ProductCard from '@/components/product/product-card';
-import { products } from '@/lib/data';
 import CollectionMarquee from '@/components/home/collection-marquee';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import EditorialHighlight from '@/components/home/editorial-highlight';
 import { homepageCategories } from '@/lib/homepage-data';
 import { Button } from '@/components/ui/button';
+import { useCollection, useFirestore, useMemoFirebase } from '@/firebase';
+import { collection, query, limit } from 'firebase/firestore';
+import type { Product } from '@/lib/types';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export default function Home() {
   const heroImage = PlaceHolderImages.find(p => p.id === 'nextgen-hero');
   const categories = homepageCategories;
   const promoImage1 = PlaceHolderImages.find(p => p.id === 'cat-bag');
   const promoImage2 = PlaceHolderImages.find(p => p.id === 'ethereal-trench-side');
+
+  const firestore = useFirestore();
+  const productsQuery = useMemoFirebase(
+    () => firestore ? query(collection(firestore, 'products'), limit(8)) : null,
+    [firestore]
+  );
+  const { data: products, isLoading } = useCollection<Product>(productsQuery);
 
   return (
     <>
@@ -119,7 +130,8 @@ export default function Home() {
 
       <h2 className="mt-8 mb-4 text-xl font-semibold">Featured Products</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mt-6">
-        {products.slice(0, 7).map((product) => (
+        {isLoading && Array.from({ length: 8 }).map((_, i) => <Skeleton key={i} className="h-[400px] rounded-2xl" />)}
+        {products?.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}
       </div>
