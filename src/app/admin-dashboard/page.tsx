@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState } from 'react';
@@ -90,6 +91,20 @@ export default function AdminDashboard() {
       availableColors: [],
     },
   });
+
+  const nameValue = form.watch('name');
+  React.useEffect(() => {
+    if (!editingProduct && nameValue) {
+      const generatedSlug = nameValue
+        .toLowerCase()
+        .trim()
+        .replace(/&/g, 'and')
+        .replace(/[^a-z0-9\s-]/g, '')
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-');
+      form.setValue('slug', generatedSlug, { shouldValidate: true });
+    }
+  }, [nameValue, editingProduct, form.setValue]);
   
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -120,10 +135,23 @@ export default function AdminDashboard() {
             getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
                 setUploadedUrl(downloadURL);
                 setUploading(false);
-                toast({
-                    title: "Upload Complete!",
-                    description: "You can now copy the URL.",
-                });
+
+                const imageFields: ('imageUrl1' | 'imageUrl2' | 'imageUrl3' | 'imageUrl4')[] = ['imageUrl1', 'imageUrl2', 'imageUrl3', 'imageUrl4'];
+                const currentValues = form.getValues();
+                const firstEmptyField = imageFields.find(field => !currentValues[field] || currentValues[field] === '');
+                
+                if (firstEmptyField) {
+                    form.setValue(firstEmptyField, downloadURL, { shouldValidate: true });
+                    toast({
+                        title: "Upload Complete!",
+                        description: `Image URL has been auto-filled. You can also copy it.`,
+                    });
+                } else {
+                    toast({
+                        title: "Upload Complete!",
+                        description: "All image fields are full. You can copy the URL manually.",
+                    });
+                }
             });
         }
     );
@@ -465,3 +493,5 @@ export default function AdminDashboard() {
     </div>
   );
 }
+
+    
