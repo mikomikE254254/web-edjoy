@@ -163,7 +163,7 @@ export default function ContactPage() {
                 <div>
                     <h2 className="text-xs font-bold uppercase tracking-widest text-zinc-500 mb-4">Biography</h2>
                     <p className="text-zinc-600 leading-relaxed">
-                        A passionate developer with a knack for creating elegant solutions in the least amount of time. I specialize in full-stack development, turning complex problems into beautiful, intuitive designs.
+                        A digital wizard who turns caffeine into code. I specialize in wrangling rogue semicolons and convincing computers to do my bidding. When I'm not building beautiful websites, I'm probably arguing with my linter or searching for the perfect GIF.
                     </p>
                 </div>
                 <div>
@@ -178,9 +178,9 @@ export default function ContactPage() {
                  <div>
                     <h2 className="text-xs font-bold uppercase tracking-widest text-zinc-500 mb-4">Services</h2>
                     <div className="space-y-6">
-                        <ServiceItem title="Website Development" description="Creating responsive and high-performing websites from scratch." />
-                        <ServiceItem title="UI/UX Design" description="Designing user-friendly interfaces that are both beautiful and functional." />
-                        <ServiceItem title="E-commerce Solutions" description="Building online stores that drive sales and provide a seamless customer experience." />
+                        <ServiceItem title="Website Sorcery" description="Summoning responsive and blazing-fast websites out of thin air (and a lot of code)." />
+                        <ServiceItem title="Pixel Perfecting" description="Obsessively aligning pixels until your UI is so beautiful it makes grown designers weep." />
+                        <ServiceItem title="Shopping Cart Herding" description="Taming wild e-commerce platforms to boost sales and make checkout a breeze." />
                     </div>
                 </div>
             </div>
