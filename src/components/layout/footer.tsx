@@ -34,7 +34,7 @@ export default function Footer() {
         <div className="bg-white p-4 flex flex-col sm:flex-row justify-between items-center gap-4 border-2 border-black rounded-2xl">
           <p className="text-xs text-gray-600">© 2026 Eddjoys.ke. All rights reserved.</p>
           
-          <Button asChild variant="default" size="icon" className="rounded-full">
+          <Button asChild variant="secondary" size="icon" className="rounded-full">
               <Link href="/contact" aria-label="Contact page">
                 <Phone size={20} />
               </Link>
