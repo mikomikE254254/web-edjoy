@@ -90,7 +90,7 @@ export default function ContactPage() {
                 <div className="space-y-1 mt-2 font-normal normal-case">
                     <p className="text-gray-600">Nairobi, Kenya</p>
                     <Link href="mailto:contact@eddjoys.ke" className="text-black font-medium hover:underline block">contact@eddjoys.ke</Link>
-                    <Link href="tel:+254793832286" className="text-black font-medium hover:underline block">+254 793 832286</Link>
+                    <Link href="tel:+254793832286" className="text-lg font-semibold text-black hover:underline block">+254 793 832286</Link>
                 </div>
             </div>
             <div>
@@ -102,21 +102,23 @@ export default function ContactPage() {
           </div>
           
           <div className="flex justify-center order-first md:order-none">
-              <div className="w-64 h-80 rounded-full overflow-hidden flex items-end border-2 border-gray-100 shadow-inner">
-                  {devImage ? (
-                      <Image
-                          src={devImage.imageUrl}
-                          alt={devImage.description || 'Developer Portrait'}
-                          width={256}
-                          height={320}
-                          className="w-full h-full object-cover object-top"
-                          data-ai-hint={devImage.imageHint}
-                          priority
-                      />
-                  ) : (
-                      <div className="w-full h-full bg-gray-200" />
-                  )}
-              </div>
+              <Link href="tel:+254793832286" className="group" aria-label="Call the developer">
+                <div className="w-64 h-80 rounded-full overflow-hidden flex items-end border-2 border-gray-100 shadow-inner transition-all duration-300 group-hover:shadow-lg group-hover:border-primary group-hover:scale-105">
+                    {devImage ? (
+                        <Image
+                            src={devImage.imageUrl}
+                            alt={devImage.description || 'Developer Portrait'}
+                            width={256}
+                            height={320}
+                            className="w-full h-full object-cover object-top"
+                            data-ai-hint={devImage.imageHint}
+                            priority
+                        />
+                    ) : (
+                        <div className="w-full h-full bg-gray-200" />
+                    )}
+                </div>
+              </Link>
           </div>
 
           {/* This empty div is for spacing on md+ screens */}
