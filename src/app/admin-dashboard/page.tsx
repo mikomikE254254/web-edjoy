@@ -12,15 +12,16 @@ import { Product } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Trash, Edit, Copy } from 'lucide-react';
+import { Trash, Edit, Copy, Star } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Separator } from '@/components/ui/separator';
 import { Progress } from '@/components/ui/progress';
 import { useToast } from '@/hooks/use-toast';
+import { Switch } from '@/components/ui/switch';
 
 const PRESET_COLORS = [
     { name: 'Black', hex: '#111827' }, { name: 'White', hex: '#FFFFFF' },
@@ -53,6 +54,7 @@ const productSchema = z.object({
   
   sizes: z.array(z.string()).optional(),
   availableColors: z.array(z.object({ name: z.string(), hex: z.string() })).optional(),
+  isFeatured: z.boolean().optional(),
 });
 
 type ProductFormData = z.infer<typeof productSchema>;
@@ -89,6 +91,7 @@ export default function AdminDashboard() {
       imageUrl4: '',
       sizes: [],
       availableColors: [],
+      isFeatured: false,
     },
   });
 
@@ -181,6 +184,7 @@ export default function AdminDashboard() {
         imageUrl4: editingProduct.images?.[3]?.url || '',
         sizes: editingProduct.sizes || [],
         availableColors: editingProduct.availableColors || [],
+        isFeatured: editingProduct.isFeatured || false,
       });
     } else {
       form.reset();
@@ -205,6 +209,7 @@ export default function AdminDashboard() {
       sizes: data.sizes,
       availableColors: data.availableColors,
       images: images,
+      isFeatured: data.isFeatured ?? false,
       updatedAt: serverTimestamp(),
     };
 
@@ -269,6 +274,27 @@ export default function AdminDashboard() {
                 </FormItem>
               )}/>
 
+              <FormField
+                control={form.control}
+                name="isFeatured"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                    <div className="space-y-0.5">
+                      <FormLabel className="text-base">Feature on Homepage</FormLabel>
+                      <FormDescription>
+                        Show this product in the "Featured Products" section on the homepage.
+                      </FormDescription>
+                    </div>
+                    <FormControl>
+                      <Switch
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+
               <Separator />
 
               <div>
@@ -316,14 +342,14 @@ export default function AdminDashboard() {
                     <FormField control={form.control} name="originalPrice" render={({ field }) => (
                       <FormItem>
                         <FormLabel>Original Price (Optional)</FormLabel>
-                        <FormControl><Input type="number" {...field} value={isNaN(field.value as number) ? '' : field.value ?? ''} onChange={e => field.onChange(e.target.value === '' ? null : parseFloat(e.target.value))} placeholder="e.g., 2000" /></FormControl>
+                        <FormControl><Input type="number" {...field} value={field.value ?? ''} onChange={e => field.onChange(e.target.value === '' ? null : parseFloat(e.target.value))} placeholder="e.g., 2000" /></FormControl>
                         <FormMessage />
                       </FormItem>
                     )}/>
                     <FormField control={form.control} name="price" render={({ field }) => (
                       <FormItem>
                         <FormLabel>Sale Price</FormLabel>
-                        <FormControl><Input type="number" {...field} value={isNaN(field.value) ? '' : field.value} onChange={e => field.onChange(parseFloat(e.target.value))} /></FormControl>
+                        <FormControl><Input type="number" {...field} value={field.value ?? ''} onChange={e => field.onChange(parseFloat(e.target.value))} /></FormControl>
                         <FormMessage />
                       </FormItem>
                     )}/>
@@ -471,7 +497,10 @@ export default function AdminDashboard() {
           <Card key={product.id}>
             <CardHeader>
               <CardTitle className="flex justify-between items-start">
-                <span className="truncate pr-2">{product.name}</span>
+                <span className="truncate pr-2 flex items-center gap-2">
+                  {product.isFeatured && <Star className="h-4 w-4 text-yellow-400 fill-yellow-400 flex-shrink-0" />}
+                  {product.name}
+                </span>
                  <div className="flex gap-2 flex-shrink-0">
                     <Button variant="ghost" size="icon" onClick={() => openEditDialog(product)}>
                         <Edit className="h-4 w-4" />

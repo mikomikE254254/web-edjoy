@@ -5,6 +5,7 @@ export type Product = {
   description: string;
   price: number;
   originalPrice?: number;
+  isFeatured?: boolean;
   category: 'women' | 'men' | 'children' | 'bags';
   style?: 'casual' | 'streetwear' | 'formal' | 'vintage' | 'minimal';
   images: {

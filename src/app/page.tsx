@@ -9,7 +9,7 @@ import EditorialHighlight from '@/components/home/editorial-highlight';
 import { homepageCategories } from '@/lib/homepage-data';
 import { Button } from '@/components/ui/button';
 import { useCollection, useFirestore, useMemoFirebase } from '@/firebase';
-import { collection, query, limit } from 'firebase/firestore';
+import { collection, query, limit, where } from 'firebase/firestore';
 import type { Product } from '@/lib/types';
 import { Skeleton } from '@/components/ui/skeleton';
 
@@ -21,7 +21,7 @@ export default function Home() {
 
   const firestore = useFirestore();
   const productsQuery = useMemoFirebase(
-    () => firestore ? query(collection(firestore, 'products'), limit(8)) : null,
+    () => firestore ? query(collection(firestore, 'products'), where('isFeatured', '==', true), limit(8)) : null,
     [firestore]
   );
   const { data: products, isLoading } = useCollection<Product>(productsQuery);
