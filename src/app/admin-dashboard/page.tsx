@@ -14,16 +14,41 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Trash, Edit } from 'lucide-react';
-import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Separator } from '@/components/ui/separator';
+
+const PRESET_COLORS = [
+    { name: 'Black', hex: '#111827' }, { name: 'White', hex: '#FFFFFF' },
+    { name: 'Stone', hex: '#A8A29E' }, { name: 'Gray', hex: '#6B7280' },
+    { name: 'Red', hex: '#EF4444' }, { name: 'Pink', hex: '#EC4899' },
+    { name: 'Blue', hex: '#3B82F6' }, { name: 'Sky', hex: '#0EA5E9' },
+    { name: 'Green', hex: '#22C55E' }, { name: 'Lime', hex: '#84CC16' },
+    { name: 'Yellow', hex: '#EAB308' }, { name: 'Orange', hex: '#F97316' },
+    { name: 'Brown', hex: '#78350F' }, { name: 'Beige', hex: '#F5F5DC' },
+    { name: 'Purple', hex: '#8B5CF6' }, { name: 'Indigo', hex: '#6366F1' },
+];
+
+const AVAILABLE_SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
 
 const productSchema = z.object({
   name: z.string().min(1, 'Name is required'),
   slug: z.string().min(1, 'Slug is required'),
-  price: z.number().min(0, 'Price must be positive'),
   description: z.string().min(1, 'Description is required'),
+  
   category: z.enum(['women', 'men', 'children', 'bags']),
-  style: z.enum(['casual', 'streetwear', 'formal', 'vintage', 'minimal']).optional(),
-  imageUrl: z.string().url('Must be a valid URL'),
+  style: z.enum(['casual', 'streetwear', 'formal', 'vintage', 'minimal']),
+  
+  price: z.coerce.number().min(0, 'Price must be positive'),
+  originalPrice: z.coerce.number().optional().nullable(),
+
+  imageUrl1: z.string().url('Must be a valid URL').optional().or(z.literal('')),
+  imageUrl2: z.string().url('Must be a valid URL').optional().or(z.literal('')),
+  imageUrl3: z.string().url('Must be a valid URL').optional().or(z.literal('')),
+  imageUrl4: z.string().url('Must be a valid URL').optional().or(z.literal('')),
+  
+  sizes: z.array(z.string()).optional(),
+  availableColors: z.array(z.object({ name: z.string(), hex: z.string() })).optional(),
 });
 
 type ProductFormData = z.infer<typeof productSchema>;
@@ -43,11 +68,17 @@ export default function AdminDashboard() {
     defaultValues: {
       name: '',
       slug: '',
-      price: 0,
       description: '',
       category: 'women',
       style: 'casual',
-      imageUrl: ''
+      price: 0,
+      originalPrice: null,
+      imageUrl1: '',
+      imageUrl2: '',
+      imageUrl3: '',
+      imageUrl4: '',
+      sizes: [],
+      availableColors: [],
     },
   });
 
@@ -56,11 +87,17 @@ export default function AdminDashboard() {
       form.reset({
         name: editingProduct.name,
         slug: editingProduct.slug,
-        price: editingProduct.price,
         description: editingProduct.description,
         category: editingProduct.category,
         style: editingProduct.style,
-        imageUrl: editingProduct.images[0]?.url || ''
+        price: editingProduct.price,
+        originalPrice: editingProduct.originalPrice,
+        imageUrl1: editingProduct.images?.[0]?.url || '',
+        imageUrl2: editingProduct.images?.[1]?.url || '',
+        imageUrl3: editingProduct.images?.[2]?.url || '',
+        imageUrl4: editingProduct.images?.[3]?.url || '',
+        sizes: editingProduct.sizes || [],
+        availableColors: editingProduct.availableColors || [],
       });
     } else {
       form.reset();
@@ -70,24 +107,29 @@ export default function AdminDashboard() {
   const onSubmit = async (data: ProductFormData) => {
     if (!firestore) return;
     
+    const images = [data.imageUrl1, data.imageUrl2, data.imageUrl3, data.imageUrl4]
+        .filter((url): url is string => !!url)
+        .map(url => ({ url, alt: data.name, hint: 'product image' }));
+    
     const productData = {
       name: data.name,
       slug: data.slug,
       price: data.price,
+      originalPrice: data.originalPrice || null,
       description: data.description,
       category: data.category,
       style: data.style,
-      images: [{ url: data.imageUrl, alt: data.name, hint: 'product image' }],
-      // Add other fields with defaults if necessary
-      createdAt: serverTimestamp(),
+      sizes: data.sizes,
+      availableColors: data.availableColors,
+      images: images,
       updatedAt: serverTimestamp(),
     };
 
     if (editingProduct) {
       const productRef = doc(firestore, 'products', editingProduct.id);
-      await updateDoc(productRef, { ...productData, updatedAt: serverTimestamp() });
+      await updateDoc(productRef, productData);
     } else {
-      await addDoc(collection(firestore, 'products'), productData);
+      await addDoc(collection(firestore, 'products'), { ...productData, createdAt: serverTimestamp() });
     }
     
     setIsDialogOpen(false);
@@ -120,92 +162,196 @@ export default function AdminDashboard() {
       </div>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent>
+        <DialogContent className="max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>{editingProduct ? 'Edit Product' : 'Add New Product'}</DialogTitle>
+            <DialogTitle>{editingProduct ? 'Edit Product Wizard' : 'New Product Wizard'}</DialogTitle>
           </DialogHeader>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 py-4">
+              
+              <FormField control={form.control} name="name" render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Product Name</FormLabel>
+                  <FormControl><Input {...field} /></FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}/>
+              
+              <FormField control={form.control} name="slug" render={({ field }) => (
+                <FormItem>
+                  <FormLabel>URL Slug</FormLabel>
+                  <FormControl><Input {...field} /></FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}/>
+
+              <Separator />
+
+              <div>
+                <h3 className="text-lg font-semibold mb-4">Classification</h3>
+                <div className="space-y-4">
+                  <FormField control={form.control} name="category" render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Page / Category</FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl><SelectTrigger><SelectValue /></SelectTrigger></FormControl>
+                        <SelectContent>
+                          <SelectItem value="men">Men</SelectItem>
+                          <SelectItem value="women">Women</SelectItem>
+                          <SelectItem value="children">Unisex</SelectItem>
+                          <SelectItem value="bags">Bags</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}/>
+                  <FormField control={form.control} name="style" render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Style / Sub-category</FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl><SelectTrigger><SelectValue /></SelectTrigger></FormControl>
+                        <SelectContent>
+                          <SelectItem value="casual">Casual</SelectItem>
+                          <SelectItem value="streetwear">Streetwear</SelectItem>
+                          <SelectItem value="formal">Formal</SelectItem>
+                          <SelectItem value="vintage">Vintage</SelectItem>
+                          <SelectItem value="minimal">Minimal</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}/>
+                </div>
+              </div>
+
+              <Separator />
+
+               <div>
+                <h3 className="text-lg font-semibold mb-4">Pricing</h3>
+                <div className="grid grid-cols-2 gap-4">
+                    <FormField control={form.control} name="originalPrice" render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Original Price (Optional)</FormLabel>
+                        <FormControl><Input type="number" {...field} value={field.value ?? ''} onChange={e => field.onChange(e.target.value === '' ? null : parseFloat(e.target.value))} placeholder="e.g., 2000" /></FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}/>
+                    <FormField control={form.control} name="price" render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Sale Price</FormLabel>
+                        <FormControl><Input type="number" {...field} onChange={e => field.onChange(parseFloat(e.target.value))} /></FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}/>
+                </div>
+              </div>
+
+               <Separator />
+              
+               <div>
+                <h3 className="text-lg font-semibold mb-4">Media</h3>
+                 <p className="text-xs text-muted-foreground mb-4">Use external URLs for images. The first image is the main one. File uploads can be added later.</p>
+                <div className="space-y-2">
+                    <FormField control={form.control} name="imageUrl1" render={({ field }) => ( <FormItem><FormControl><Input {...field} placeholder="Main Image URL" /></FormControl><FormMessage /></FormItem> )}/>
+                    <FormField control={form.control} name="imageUrl2" render={({ field }) => ( <FormItem><FormControl><Input {...field} placeholder="Gallery Image 2 URL" /></FormControl><FormMessage /></FormItem> )}/>
+                    <FormField control={form.control} name="imageUrl3" render={({ field }) => ( <FormItem><FormControl><Input {...field} placeholder="Gallery Image 3 URL" /></FormControl><FormMessage /></FormItem> )}/>
+                    <FormField control={form.control} name="imageUrl4" render={({ field }) => ( <FormItem><FormControl><Input {...field} placeholder="Gallery Image 4 URL" /></FormControl><FormMessage /></FormItem> )}/>
+                </div>
+              </div>
+
+              <Separator />
+
+              <div>
+                 <h3 className="text-lg font-semibold mb-4">Details</h3>
+                 <div className='space-y-4'>
+                    <FormField control={form.control} name="description" render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Description</FormLabel>
+                        <FormControl><Textarea {...field} rows={5} /></FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}/>
+                    <FormField control={form.control} name="sizes" render={() => (
+                      <FormItem>
+                          <FormLabel>Available Sizes</FormLabel>
+                          <div className="flex flex-wrap gap-x-4 gap-y-2">
+                          {AVAILABLE_SIZES.map((size) => (
+                              <FormField key={size} control={form.control} name="sizes" render={({ field }) => (
+                                <FormItem key={size} className="flex flex-row items-center space-x-2 space-y-0">
+                                  <FormControl>
+                                    <Checkbox
+                                      checked={field.value?.includes(size)}
+                                      onCheckedChange={(checked) => {
+                                        const updatedSizes = field.value || [];
+                                        return checked
+                                          ? field.onChange([...updatedSizes, size])
+                                          : field.onChange(updatedSizes.filter(value => value !== size));
+                                      }}
+                                    />
+                                  </FormControl>
+                                  <FormLabel className="font-normal text-sm">{size}</FormLabel>
+                                </FormItem>
+                              )}/>
+                          ))}
+                          </div>
+                        <FormMessage />
+                      </FormItem>
+                    )}/>
+                 </div>
+              </div>
+
+               <Separator />
+              
+              <div>
+                <h3 className="text-lg font-semibold mb-4">Color Palette</h3>
+                 <FormField control={form.control} name="availableColors" render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Name</FormLabel>
                     <FormControl>
-                      <Input {...field} />
+                      <div className="grid grid-cols-6 sm:grid-cols-8 gap-3">
+                        {PRESET_COLORS.map((color) => {
+                          const isSelected = field.value?.some(c => c.hex === color.hex);
+                          return (
+                            <button
+                              type="button"
+                              key={color.hex}
+                              onClick={() => {
+                                const currentColors = field.value || [];
+                                const newColors = isSelected
+                                  ? currentColors.filter(c => c.hex !== color.hex)
+                                  : [...currentColors, color];
+                                field.onChange(newColors);
+                              }}
+                              className={`w-9 h-9 rounded-full border-2 transition-all ${isSelected ? 'ring-2 ring-offset-2 ring-primary' : 'border-gray-300'}`}
+                              style={{ backgroundColor: color.hex }}
+                              title={color.name}
+                            >
+                              <span className="sr-only">{color.name}</span>
+                            </button>
+                          );
+                        })}
+                      </div>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="slug"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Slug</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-               <FormField
-                control={form.control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Description</FormLabel>
-                    <FormControl>
-                      <Textarea {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="price"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Price</FormLabel>
-                    <FormControl>
-                      <Input type="number" {...field} onChange={e => field.onChange(parseFloat(e.target.value))} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-               <FormField
-                control={form.control}
-                name="imageUrl"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Image URL</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                     <p className="text-xs text-muted-foreground">File upload can be added later.</p>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <Button type="submit">Save Product</Button>
+                )}/>
+              </div>
+
+              <Button type="submit" size="lg" className="w-full">
+                {editingProduct ? 'Save Changes' : 'Finish & Add Product'}
+              </Button>
             </form>
           </Form>
         </DialogContent>
       </Dialog>
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {isLoading && <p>Loading products...</p>}
+        {isLoading && Array.from({ length: 6 }).map((_, i) => <Card key={i}><CardHeader><CardTitle><div className="h-6 bg-gray-200 rounded w-3/4 animate-pulse" /></CardTitle></CardHeader><CardContent><div className="h-4 bg-gray-200 rounded w-1/2 mb-2 animate-pulse" /><div className="h-4 bg-gray-200 rounded w-full animate-pulse" /></CardContent></Card>)}
         {products?.map(product => (
           <Card key={product.id}>
             <CardHeader>
               <CardTitle className="flex justify-between items-start">
-                {product.name}
-                 <div className="flex gap-2">
+                <span className="truncate pr-2">{product.name}</span>
+                 <div className="flex gap-2 flex-shrink-0">
                     <Button variant="ghost" size="icon" onClick={() => openEditDialog(product)}>
                         <Edit className="h-4 w-4" />
                     </Button>
