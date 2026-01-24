@@ -3,7 +3,6 @@
 import { notFound, useParams } from 'next/navigation';
 import Image from 'next/image';
 import ProductPurchaseForm from '@/components/product/product-purchase-form';
-import ProductReviews from '@/components/product/product-reviews';
 import { useState, useEffect } from 'react';
 import type { Product } from '@/lib/types';
 import { cn } from '@/lib/utils';
@@ -181,11 +180,6 @@ export default function ProductPage() {
             setSelectedColor={setSelectedColorHex}
           />
         </div>
-      </div>
-
-      {/* Reviews */}
-      <div className="pt-12 border-t">
-        <ProductReviews />
       </div>
     </div>
   );

@@ -3,9 +3,10 @@
 import { useState } from 'react';
 import type { Product } from '@/lib/types';
 import { Button } from '@/components/ui/button';
-import { Minus, Plus, Star } from 'lucide-react';
+import { Minus, Plus } from 'lucide-react';
 import { useAppContext } from '@/context/AppContext';
 import { cn } from '@/lib/utils';
+import ProductStarRating from './ProductStarRating';
 
 interface ProductPurchaseFormProps {
   product: Product;
@@ -82,13 +83,8 @@ export default function ProductPurchaseForm({ product, selectedColor, setSelecte
             </svg>
         </button>
         </div>
-        <div className="flex items-center gap-2 mt-2 cursor-pointer">
-          <div className="flex items-center">
-            {[...Array(5)].map((_, i) => (
-              <Star key={i} className={`w-5 h-5 ${i < 4 ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'}`} />
-            ))}
-          </div>
-          <span className="text-sm text-gray-500 hover:underline">(41 Reviews)</span>
+        <div className="mt-2">
+            <ProductStarRating productId={product.id} />
         </div>
       </div>
 
