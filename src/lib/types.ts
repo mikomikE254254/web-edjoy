@@ -1,3 +1,5 @@
+import type { Timestamp } from 'firebase/firestore';
+
 export type Product = {
   id: string;
   slug: string;
@@ -19,4 +21,13 @@ export type Product = {
     hex: string;
   }[];
   sizes?: string[];
+};
+
+export type Review = {
+  id: string;
+  userId: string;
+  userName: string;
+  rating: number;
+  comment: string;
+  createdAt: Timestamp;
 };

@@ -113,23 +113,31 @@
     "Review": {
       "title": "Review",
       "type": "object",
-      "description": "Represents a user's rating for a product.",
+      "description": "Represents a user's review for a product, including a star rating and a text comment.",
       "properties": {
         "userId": {
           "type": "string",
           "description": "The UID of the user who left the review."
         },
+        "userName": {
+          "type": "string",
+          "description": "The display name of the user who left the review."
+        },
         "rating": {
           "type": "number",
           "description": "The star rating from 1 to 5."
         },
-        "updatedAt": {
+        "comment": {
+          "type": "string",
+          "description": "The text content of the review."
+        },
+        "createdAt": {
           "type": "string",
           "format": "date-time",
-          "description": "The timestamp when the review was last updated."
+          "description": "The timestamp when the review was created."
         }
       },
-      "required": ["userId", "rating"]
+      "required": ["userId", "userName", "rating", "comment", "createdAt"]
     }
   },
   "auth": {
