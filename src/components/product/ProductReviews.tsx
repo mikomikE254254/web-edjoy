@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useCollection, useFirestore, useUser, useMemoFirebase, setDocumentNonBlocking } from '@/firebase';
-import { collection, doc, serverTimestamp } from 'firebase/firestore';
+import { collection, doc, serverTimestamp, Timestamp } from 'firebase/firestore';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
@@ -16,6 +16,7 @@ import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 import type { Review } from '@/lib/types';
 import { formatDistanceToNow } from 'date-fns';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const reviewSchema = z.object({
   rating: z.number().min(1, 'Please select a rating'),
@@ -27,6 +28,30 @@ type ReviewFormData = z.infer<typeof reviewSchema>;
 interface ProductReviewsProps {
   productId: string;
 }
+
+const mockReviews: Omit<Review, 'id'>[] = [
+    {
+      userId: 'mockuser1',
+      userName: 'Jane D.',
+      rating: 5,
+      comment: 'Absolutely love this! The quality is amazing and it looks even better in person. Highly recommend.',
+      createdAt: Timestamp.fromDate(new Date(Date.now() - 2 * 24 * 60 * 60 * 1000)),
+    },
+    {
+      userId: 'mockuser2',
+      userName: 'John S.',
+      rating: 4,
+      comment: 'Great product, very stylish and comfortable. The color is slightly different than pictured but I still like it.',
+      createdAt: Timestamp.fromDate(new Date(Date.now() - 5 * 24 * 60 * 60 * 1000)),
+    },
+    {
+      userId: 'mockuser3',
+      userName: 'Emily R.',
+      rating: 5,
+      comment: "Exceeded my expectations. I've been getting so many compliments. Will definitely be shopping here again!",
+      createdAt: Timestamp.fromDate(new Date(Date.now() - 10 * 24 * 60 * 60 * 1000)),
+    },
+  ];
 
 const StarRatingInput = ({ field }: { field: any }) => {
   const [hoverRating, setHoverRating] = useState(0);
@@ -123,6 +148,33 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
     });
   };
 
+  const ReviewItem = ({ review }: { review: Omit<Review, 'id'> & { id?: string } }) => (
+    <div key={review.id || review.userId} className="flex gap-4">
+      <Avatar>
+        <AvatarFallback>{(review.userName || 'A').charAt(0)}</AvatarFallback>
+      </Avatar>
+      <div className="flex-1">
+        <div className="flex items-center justify-between">
+          <p className="font-semibold">{review.userName || 'Anonymous'}</p>
+          {review.createdAt && (
+            <p className="text-xs text-muted-foreground">
+              {formatDistanceToNow(review.createdAt.toDate(), { addSuffix: true })}
+            </p>
+          )}
+        </div>
+        <div className="flex items-center my-1">
+          {[...Array(5)].map((_, i) => (
+            <Star
+              key={i}
+              className={cn('w-4 h-4', i < review.rating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300')}
+            />
+          ))}
+        </div>
+        <p className="text-sm text-gray-700 leading-relaxed">{review.comment}</p>
+      </div>
+    </div>
+  );
+
   return (
     <div className="mt-12">
       <h2 className="text-2xl font-bold tracking-tight">Customer Reviews</h2>
@@ -168,34 +220,29 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
       ) : null }
 
       <div className="space-y-8">
-        {isLoadingReviews && <p>Loading reviews...</p>}
-        {!isLoadingReviews && sortedReviews.length === 0 && <p className="text-muted-foreground">No reviews yet. Be the first to write one!</p>}
-        {sortedReviews.map(review => (
-          <div key={review.id} className="flex gap-4">
-            <Avatar>
-              <AvatarFallback>{(review.userName || 'A').charAt(0)}</AvatarFallback>
-            </Avatar>
-            <div className="flex-1">
-              <div className="flex items-center justify-between">
-                <p className="font-semibold">{review.userName || 'Anonymous'}</p>
-                {review.createdAt && (
-                  <p className="text-xs text-muted-foreground">
-                    {formatDistanceToNow(review.createdAt.toDate(), { addSuffix: true })}
-                  </p>
-                )}
-              </div>
-              <div className="flex items-center my-1">
-                {[...Array(5)].map((_, i) => (
-                  <Star
-                    key={i}
-                    className={cn('w-4 h-4', i < review.rating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300')}
-                  />
-                ))}
-              </div>
-              <p className="text-sm text-gray-700 leading-relaxed">{review.comment}</p>
+        {isLoadingReviews && Array.from({ length: 3 }).map((_, i) => (
+          <div key={i} className="flex gap-4">
+            <Skeleton className="h-10 w-10 rounded-full" />
+            <div className="flex-1 space-y-2">
+              <Skeleton className="h-4 w-24" />
+              <Skeleton className="h-4 w-32" />
+              <Skeleton className="h-4 w-full" />
             </div>
           </div>
         ))}
+
+        {!isLoadingReviews && sortedReviews.length > 0 && sortedReviews.map(review => (
+          <ReviewItem key={review.id} review={review} />
+        ))}
+        
+        {!isLoadingReviews && sortedReviews.length === 0 && (
+          <div className='space-y-8'>
+            <p className="text-muted-foreground">No real reviews yet. Here are some examples:</p>
+            {mockReviews.map((review, index) => (
+              <ReviewItem key={index} review={review} />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
