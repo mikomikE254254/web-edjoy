@@ -50,8 +50,8 @@ export function useDoc<T = any>(
   useEffect(() => {
     if (!memoizedDocRef) {
       setData(null);
-      setIsLoading(false);
       setError(null);
+      // Do not set loading to false here to avoid hydration mismatch
       return;
     }
 
