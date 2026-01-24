@@ -60,7 +60,25 @@ const AnimatedStat = ({ finalValue, label, suffix = '' }: { finalValue: number, 
 
 export default function ContactPage() {
   const devImage = PlaceHolderImages.find(p => p.id === 'developer-portrait-new');
-  const services = ["Website Sorcery", "Pixel Perfecting", "Shopping Cart Herding", "Animation"];
+  const services = [
+    "Custom Web Application Development",
+    "iOS & Android Mobile App Development",
+    "Database Architecture & Integration",
+    "API Design & Third-Party Integration",
+    "Full-Stack Software Engineering",
+    "UI/UX Strategy & Interactive Prototyping",
+    "Responsive & Mobile-First Design",
+    "SaaS Product Development",
+    "E-commerce & Payment Gateway Integration",
+    "Headless CMS Implementation",
+    "AI & Machine Learning Model Integration",
+    "Performance Optimization & Speed Audits",
+    "Technical SEO & Web Vitals Management",
+    "Cloud Infrastructure & DevOps (AWS/Vercel)",
+    "Progressive Web App (PWA) Development",
+    "Cybersecurity & Data Encryption Services",
+    "Real-time WebSockets & Dashboard Analytics"
+  ];
   const stats = [
     { value: 5, suffix: '+', label: 'Years of Experience' },
     { value: 99, suffix: '%', label: 'Satisfaction Clients' },
