@@ -1,4 +1,6 @@
+'use client';
 
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
@@ -28,14 +30,31 @@ const ServiceItem = ({ title, description }: { title: string; description: strin
 
 export default function ContactPage() {
   const devImage = PlaceHolderImages.find(p => p.id === 'developer-portrait');
+  const fullText = "Creative Developer";
+  const [typedText, setTypedText] = useState('');
+
+  useEffect(() => {
+    let index = 0;
+    const intervalId = setInterval(() => {
+      if (index < fullText.length) {
+        setTypedText((prev) => prev + fullText.charAt(index));
+        index++;
+      } else {
+        clearInterval(intervalId);
+      }
+    }, 120);
+
+    return () => clearInterval(intervalId);
+  }, []);
 
   return (
     <div className="bg-white text-zinc-800 font-sans w-full py-16 px-4 md:px-8">
       <div className="max-w-5xl mx-auto flex flex-col items-center text-center">
         
         {/* Hero Section */}
-        <h1 className="text-5xl md:text-7xl font-serif font-bold text-black">
-          Creative Developer
+        <h1 className="text-5xl md:text-7xl font-serif font-bold text-black min-h-[48px] md:min-h-[72px]">
+          {typedText}
+          <span className="typing-cursor">|</span>
         </h1>
         <p className="mt-2 text-lg text-zinc-600">Based in Nairobi, Kenya</p>
         

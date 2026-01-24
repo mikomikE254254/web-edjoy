@@ -133,6 +133,9 @@
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;  /* Firefox */
   }
+  .typing-cursor {
+    animation: blink 0.75s step-end infinite;
+  }
 }
 
 @keyframes heartPop {
@@ -144,4 +147,14 @@
 @keyframes burst {
   0% { opacity: 1; transform: translate(-50%, -50%) rotate(calc(var(--i) * 60deg)) translateY(-10px); height: 10px; }
   100% { opacity: 0; transform: translate(-50%, -50%) rotate(calc(var(--i) * 60deg)) translateY(-30px); height: 2px; }
+}
+
+@keyframes blink {
+  from,
+  to {
+    color: transparent;
+  }
+  50% {
+    color: black;
+  }
 }
