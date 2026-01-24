@@ -173,11 +173,11 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
         {sortedReviews.map(review => (
           <div key={review.id} className="flex gap-4">
             <Avatar>
-              <AvatarFallback>{review.userName.charAt(0)}</AvatarFallback>
+              <AvatarFallback>{(review.userName || 'A').charAt(0)}</AvatarFallback>
             </Avatar>
             <div className="flex-1">
               <div className="flex items-center justify-between">
-                <p className="font-semibold">{review.userName}</p>
+                <p className="font-semibold">{review.userName || 'Anonymous'}</p>
                 {review.createdAt && (
                   <p className="text-xs text-muted-foreground">
                     {formatDistanceToNow(review.createdAt.toDate(), { addSuffix: true })}
