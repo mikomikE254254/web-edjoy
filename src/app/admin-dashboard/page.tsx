@@ -4,8 +4,8 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { useCollection, useFirestore, useMemoFirebase } from '@/firebase';
-import { collection, addDoc, doc, updateDoc, deleteDoc, serverTimestamp } from 'firebase/firestore';
+import { useCollection, useFirestore, useMemoFirebase, addDocumentNonBlocking, updateDocumentNonBlocking, deleteDocumentNonBlocking } from '@/firebase';
+import { collection, doc, serverTimestamp } from 'firebase/firestore';
 import { Product } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -104,7 +104,7 @@ export default function AdminDashboard() {
     }
   }, [editingProduct, form]);
 
-  const onSubmit = async (data: ProductFormData) => {
+  const onSubmit = (data: ProductFormData) => {
     if (!firestore) return;
     
     const images = [data.imageUrl1, data.imageUrl2, data.imageUrl3, data.imageUrl4]
@@ -127,19 +127,20 @@ export default function AdminDashboard() {
 
     if (editingProduct) {
       const productRef = doc(firestore, 'products', editingProduct.id);
-      await updateDoc(productRef, productData);
+      updateDocumentNonBlocking(productRef, productData);
     } else {
-      await addDoc(collection(firestore, 'products'), { ...productData, createdAt: serverTimestamp() });
+      addDocumentNonBlocking(collection(firestore, 'products'), { ...productData, createdAt: serverTimestamp() });
     }
     
     setIsDialogOpen(false);
     setEditingProduct(null);
   };
   
-  const handleDelete = async (productId: string) => {
+  const handleDelete = (productId: string) => {
     if (!firestore) return;
     if (window.confirm('Are you sure you want to delete this product?')) {
-        await deleteDoc(doc(firestore, 'products', productId));
+        const productRef = doc(firestore, 'products', productId);
+        deleteDocumentNonBlocking(productRef);
     }
   }
 
