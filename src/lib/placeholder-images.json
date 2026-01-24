@@ -359,6 +359,12 @@
       "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-1140396316-71616.appspot.com/o/brown-backpack.jpg?alt=media&token=e8a5b1e6-2b44-4825-827a-879e6e73c374",
       "description": "A stylish brown backpack with silver buckles.",
       "imageHint": "brown backpack"
+    },
+    {
+      "id": "developer-portrait",
+      "imageUrl": "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxtYW4lMjBwb3J0cmFpdHxlbnwwfHx8fDE3MjE0MjU4ODd8MA&ixlib=rb-4.0.3&q=80&w=1080",
+      "description": "Portrait of the developer.",
+      "imageHint": "man portrait"
     }
   ]
 }
