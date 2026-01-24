@@ -118,71 +118,73 @@ export default function ProductPage() {
   }
 
   return (
-    <div className="py-2 md:py-8 lg:py-12 space-y-12">
-      <div className="grid lg:grid-cols-2 lg:gap-12 items-start">
-        {/* Image Gallery */}
-        <div className="space-y-4 lg:sticky lg:top-24">
-          <div className="aspect-square relative rounded-2xl bg-gray-100 overflow-hidden shadow-lg">
-            {primaryImage ? (
-              <Image
-                src={primaryImage.url}
-                alt={primaryImage.alt}
-                fill
-                className={cn(
-                  "object-cover transition-opacity ease-in-out duration-[1500ms]",
-                  isImageFading ? "opacity-0" : "opacity-100"
-                )}
-                sizes="(max-width: 1024px) 100vw, 50vw"
-                priority
-                data-ai-hint={primaryImage.hint}
-              />
-            ) : (
-              <div className="w-full h-full bg-gray-200 flex items-center justify-center text-muted-foreground">No Image</div>
-            )}
-          </div>
-          
-          <div className="grid grid-cols-4 gap-2">
-            {thumbnailSlots.map((image, index) =>
-              image ? (
-                <div
-                  key={index}
+    <>
+      <div className="py-2 md:py-8 lg:py-12 space-y-12">
+        <div className="grid lg:grid-cols-2 lg:gap-12 items-start">
+          {/* Image Gallery */}
+          <div className="space-y-4 lg:sticky lg:top-24">
+            <div className="aspect-square relative rounded-2xl bg-gray-100 overflow-hidden shadow-lg">
+              {primaryImage ? (
+                <Image
+                  src={primaryImage.url}
+                  alt={primaryImage.alt}
+                  fill
                   className={cn(
-                    'aspect-square relative rounded-lg bg-black overflow-hidden cursor-pointer transition-all',
-                    primaryImage?.url === image.url
-                      ? 'ring-2 ring-primary ring-offset-2'
-                      : 'hover:opacity-75'
+                    "object-cover transition-opacity ease-in-out duration-[1500ms]",
+                    isImageFading ? "opacity-0" : "opacity-100"
                   )}
-                  onClick={() => handleThumbnailClick(image)}
-                >
-                  <Image
-                    src={image.url}
-                    alt={image.alt}
-                    fill
-                    className="object-cover"
-                    sizes="20vw"
-                    data-ai-hint={image.hint}
-                  />
-                </div>
-              ) : (
-                <div
-                  key={`placeholder-${index}`}
-                  className="aspect-square rounded-lg bg-gray-100 border-2 border-dashed border-gray-300"
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  priority
+                  data-ai-hint={primaryImage.hint}
                 />
-              )
-            )}
+              ) : (
+                <div className="w-full h-full bg-gray-200 flex items-center justify-center text-muted-foreground">No Image</div>
+              )}
+            </div>
+            
+            <div className="grid grid-cols-4 gap-2">
+              {thumbnailSlots.map((image, index) =>
+                image ? (
+                  <div
+                    key={index}
+                    className={cn(
+                      'aspect-square relative rounded-lg bg-black overflow-hidden cursor-pointer transition-all',
+                      primaryImage?.url === image.url
+                        ? 'ring-2 ring-primary ring-offset-2'
+                        : 'hover:opacity-75'
+                    )}
+                    onClick={() => handleThumbnailClick(image)}
+                  >
+                    <Image
+                      src={image.url}
+                      alt={image.alt}
+                      fill
+                      className="object-cover"
+                      sizes="20vw"
+                      data-ai-hint={image.hint}
+                    />
+                  </div>
+                ) : (
+                  <div
+                    key={`placeholder-${index}`}
+                    className="aspect-square rounded-lg bg-gray-100 border-2 border-dashed border-gray-300"
+                  />
+                )
+              )}
+            </div>
           </div>
-        </div>
 
-        {/* Product Info */}
-        <div className="bg-transparent lg:bg-gray-50/50 p-0 lg:p-2 rounded-2xl mt-6 lg:mt-0">
-          <ProductPurchaseForm 
-            product={product} 
-            selectedColor={selectedColorHex} 
-            setSelectedColor={setSelectedColorHex}
-          />
+          {/* Product Info */}
+          <div className="bg-transparent lg:bg-gray-50/50 p-0 lg:p-2 rounded-2xl mt-6 lg:mt-0">
+            <ProductPurchaseForm 
+              product={product} 
+              selectedColor={selectedColorHex} 
+              setSelectedColor={setSelectedColorHex}
+            />
+          </div>
         </div>
       </div>
       <ProductReviews />
-    </div>
+    </>
   );
 }
