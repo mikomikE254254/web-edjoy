@@ -14,7 +14,7 @@ const collections = [
   {
     title: 'UNISEX',
     items: ['Sweaters', 'Accessories', 'Casual Wear', 'Outerwear'],
-    href: '/unisex',
+    href: '/children',
     style: {},
     imageHint: 'cat-bag',
     isImage: true,
@@ -64,9 +64,11 @@ export default function CollectionMarquee() {
   return (
     <section className="py-8 bg-transparent overflow-hidden">
       <div className="overflow-hidden w-full">
-        <div className="flex gap-8 w-max animate-scroll">
+        <div className="flex w-max animate-scroll">
           {allCards.map((collection, index) => (
-            <CollectionCard key={`${collection.title}-${index}`} {...collection} />
+            <div key={`${collection.title}-${index}`} className="px-4">
+                <CollectionCard {...collection} />
+            </div>
           ))}
         </div>
       </div>
