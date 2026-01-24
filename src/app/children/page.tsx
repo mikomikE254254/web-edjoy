@@ -1,16 +1,18 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import ProductCard from "@/components/product/product-card";
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
 import CategoryTabs from '@/components/product/category-tabs';
-import { useCollection, useFirestore, useMemoFirebase } from '@/firebase';
-import { Product } from '@/lib/types';
-import { collection, query, where } from 'firebase/firestore';
+import { useFirestore } from '@/firebase';
+import type { Product } from '@/lib/types';
+import { collection, query, where, getDocs, limit, startAfter, orderBy, DocumentData, DocumentSnapshot, Query } from 'firebase/firestore';
 import { Skeleton } from '@/components/ui/skeleton';
+
+const PAGE_SIZE = 8;
 
 export default function UnisexPage() {
   const [activeTab, setActiveTab] = useState("All");
@@ -18,16 +20,58 @@ export default function UnisexPage() {
   
   const firestore = useFirestore();
 
-  const productsQuery = useMemoFirebase(() => {
-    if (!firestore) return null;
-    const q = query(collection(firestore, 'products'), where('category', '==', 'children'));
-     if (activeTab.toLowerCase() !== 'all') {
-        return query(q, where('style', '==', activeTab.toLowerCase()));
-    }
-    return q;
-  }, [firestore, activeTab]);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [lastVisible, setLastVisible] = useState<DocumentSnapshot | null>(null);
+  const [hasMore, setHasMore] = useState(true);
 
-  const { data: unisexProducts, isLoading } = useCollection<Product>(productsQuery);
+  const fetchProducts = async (isNewQuery = false) => {
+    if (!firestore) return;
+
+    if (isNewQuery) {
+      setIsLoading(true);
+      setProducts([]);
+      setLastVisible(null);
+      setHasMore(true);
+    } else {
+      setIsLoading(true);
+    }
+
+    try {
+      let q: Query<DocumentData> = query(collection(firestore, 'products'), where('category', '==', 'Children'), orderBy('name'));
+
+      if (activeTab.toLowerCase() !== 'all') {
+        q = query(q, where('style', '==', activeTab.toLowerCase()));
+      }
+      
+      const cursor = isNewQuery ? null : lastVisible;
+      if (cursor) {
+        q = query(q, startAfter(cursor));
+      }
+      
+      q = query(q, limit(PAGE_SIZE));
+
+      const documentSnapshots = await getDocs(q);
+      
+      const newProducts = documentSnapshots.docs.map(doc => ({ ...(doc.data() as Product), id: doc.id }));
+      const lastDoc = documentSnapshots.docs[documentSnapshots.docs.length - 1];
+
+      setHasMore(newProducts.length === PAGE_SIZE);
+      setLastVisible(lastDoc || null);
+      setProducts(currentProducts => isNewQuery ? newProducts : [...currentProducts, ...newProducts]);
+    } catch (error) {
+      console.error("Error fetching products: ", error);
+      setHasMore(false);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  
+  useEffect(() => {
+    if (firestore) {
+      fetchProducts(true);
+    }
+  }, [firestore, activeTab]);
 
   return (
     <div className="space-y-6">
@@ -64,13 +108,17 @@ export default function UnisexPage() {
       <div className="border-t pt-6">
         <CategoryTabs activeTab={activeTab} setActiveTab={setActiveTab} />
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 pt-6">
-          {isLoading && Array.from({ length: 8 }).map((_, i) => <Skeleton key={i} className="h-[400px] w-full rounded-2xl" />)}
-          {!isLoading && unisexProducts && unisexProducts.length > 0 ? (
-            unisexProducts.map(product => (
-              <ProductCard key={product.id} product={product} />
-            ))
-          ) : (
-            !isLoading && <p>No products found in this category.</p>
+          {isLoading && products.length === 0 && Array.from({ length: 8 }).map((_, i) => <Skeleton key={i} className="h-[400px] w-full rounded-2xl" />)}
+          {products.map(product => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+          {!isLoading && products.length === 0 && <p>No products found in this category.</p>}
+        </div>
+         <div className="flex justify-center mt-10">
+          {hasMore && (
+            <Button onClick={() => fetchProducts()} disabled={isLoading}>
+              {isLoading ? 'Loading...' : 'Load More'}
+            </Button>
           )}
         </div>
       </div>

@@ -89,24 +89,31 @@ export default function AdminDashboard() {
   const sortedCategories = useMemo(() => categories?.sort((a, b) => a.name.localeCompare(b.name)) || [], [categories]);
   const sortedStyles = useMemo(() => styles?.sort((a, b) => a.name.localeCompare(b.name)) || [], [styles]);
 
-  // Seed initial data if collections are empty
+  // Seed initial data
   useEffect(() => {
     if (!firestore || isLoadingCategories || isLoadingStyles) return;
 
-    if (categories && categories.length === 0) {
+    if (categories) {
         const defaultCategories = ['Women', 'Men', 'Children', 'Bags'];
+        const existingCategoryNames = new Set(categories.map(c => c.name.toLowerCase()));
         defaultCategories.forEach(name => {
-            addDocumentNonBlocking(collection(firestore, 'categories'), { name });
+            if (!existingCategoryNames.has(name.toLowerCase())) {
+                addDocumentNonBlocking(collection(firestore, 'categories'), { name });
+            }
         });
     }
 
-    if (styles && styles.length === 0) {
-        const defaultStyles = ['Casual', 'Streetwear', 'Formal', 'Vintage', 'Minimal'];
+    if (styles) {
+        const defaultStyles = ['Casual', 'Streetwear', 'Formal', 'Vintage', 'Minimal', 'Small', 'Big', 'Luggage'];
+        const existingStyleNames = new Set(styles.map(s => s.name.toLowerCase()));
         defaultStyles.forEach(name => {
-            addDocumentNonBlocking(collection(firestore, 'styles'), { name });
+            if (!existingStyleNames.has(name.toLowerCase())) {
+                addDocumentNonBlocking(collection(firestore, 'styles'), { name });
+            }
         });
     }
   }, [firestore, categories, styles, isLoadingCategories, isLoadingStyles]);
+
 
   const form = useForm<ProductFormData>({
     resolver: zodResolver(productSchema),
