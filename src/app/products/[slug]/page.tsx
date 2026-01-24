@@ -9,7 +9,6 @@ import { cn } from '@/lib/utils';
 import { useCollection, useFirestore, useMemoFirebase } from '@/firebase';
 import { collection, query, where, limit } from 'firebase/firestore';
 import { Skeleton } from '@/components/ui/skeleton';
-import ProductReviews from '@/components/product/ProductReviews';
 
 type ImageType = Product['images'][0];
 
@@ -184,7 +183,6 @@ export default function ProductPage() {
           </div>
         </div>
       </div>
-      <ProductReviews />
     </>
   );
 }
