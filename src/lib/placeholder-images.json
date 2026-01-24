@@ -365,6 +365,12 @@
       "imageUrl": "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxtYW4lMjBwb3J0cmFpdHxlbnwwfHx8fDE3MjE0MjU4ODd8MA&ixlib=rb-4.0.3&q=80&w=1080",
       "description": "Portrait of the developer.",
       "imageHint": "man portrait"
+    },
+    {
+      "id": "developer-portrait-new",
+      "imageUrl": "https://i.postimg.cc/QC4rLk9B/Whats-App-Image-2026-01-24-at-23-51-56.jpg",
+      "description": "Portrait of the developer, Michael Muchemi.",
+      "imageHint": "man portrait"
     }
   ]
 }
