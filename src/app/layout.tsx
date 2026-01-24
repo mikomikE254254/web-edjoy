@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { PT_Sans, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
@@ -7,8 +7,19 @@ import { AppProvider } from "@/context/AppContext";
 import { Toaster } from "@/components/ui/toaster";
 import WhatsAppChannelModal from "@/components/layout/WhatsAppChannelModal";
 import { FirebaseClientProvider } from "@/firebase";
+import { cn } from "@/lib/utils";
 
-const inter = Inter({ subsets: ["latin"] });
+const ptSans = PT_Sans({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  variable: "--font-pt-sans",
+});
+
+const playfairDisplay = Playfair_Display({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  variable: "--font-playfair-display",
+});
 
 export const metadata: Metadata = {
   title: "Nextgen",
@@ -22,7 +33,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.className} bg-gray-50`}>
+      <body
+        className={cn(
+          "bg-gray-50 font-sans",
+          ptSans.variable,
+          playfairDisplay.variable
+        )}
+      >
         <AppProvider>
           <FirebaseClientProvider>
             <div className="min-h-screen flex flex-col">
