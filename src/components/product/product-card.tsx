@@ -5,7 +5,7 @@ import Link from 'next/link';
 import type { Product } from '@/lib/types';
 import { ShoppingBag } from 'lucide-react';
 import { useAppContext } from '@/context/AppContext';
-import { cn } from '@/lib/utils';
+import { cn, shimmer, toBase64 } from '@/lib/utils';
 import { useEffect, useRef } from 'react';
 
 export default function ProductCard({ product }: { product: Product }) {
@@ -64,9 +64,11 @@ export default function ProductCard({ product }: { product: Product }) {
           src={primaryImage.url}
           alt={primaryImage.alt}
           fill
-          className="object-cover transition-transform duration-300 group-hover:scale-105"
+          className="object-cover transition-opacity duration-500 group-hover:scale-105"
           data-ai-hint={primaryImage.hint}
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          placeholder="blur"
+          blurDataURL={`data:image/svg+xml;base64,${toBase64(shimmer(300, 400))}`}
         />
       </div>
 
