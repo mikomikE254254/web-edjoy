@@ -38,7 +38,7 @@ export default function UnisexPage() {
     }
 
     try {
-      let q: Query<DocumentData> = query(collection(firestore, 'products'), where('category', '==', 'Children'), orderBy('name'));
+      let q: Query<DocumentData> = query(collection(firestore, 'products'), where('category', '==', 'Children'));
 
       if (activeTab.toLowerCase() !== 'all') {
         q = query(q, where('style', '==', activeTab.toLowerCase()));
@@ -58,7 +58,11 @@ export default function UnisexPage() {
 
       setHasMore(newProducts.length === PAGE_SIZE);
       setLastVisible(lastDoc || null);
-      setProducts(currentProducts => isNewQuery ? newProducts : [...currentProducts, ...newProducts]);
+      setProducts(currentProducts => {
+        const combined = isNewQuery ? newProducts : [...currentProducts, ...newProducts];
+        combined.sort((a, b) => a.name.localeCompare(b.name));
+        return combined;
+      });
     } catch (error) {
       console.error("Error fetching products: ", error);
       setHasMore(false);
