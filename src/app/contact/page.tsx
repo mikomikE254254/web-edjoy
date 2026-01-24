@@ -12,6 +12,7 @@ import {
   SiGo,
   SiPhp,
 } from 'react-icons/si';
+import { cn } from '@/lib/utils';
 
 const StatItem = ({ value, label }: { value: string; label: string }) => (
   <div className="text-center md:text-left">
@@ -30,21 +31,98 @@ const ServiceItem = ({ title, description }: { title: string; description: strin
 
 export default function ContactPage() {
   const devImage = PlaceHolderImages.find(p => p.id === 'developer-portrait');
-  const fullText = "Creative Developer";
-  const [typedText, setTypedText] = useState('');
+  
+  const line1Text = "Creative Developer";
+  const line2Text = "MICHAEL MUCHEMI";
+  const colors = [
+    'text-blue-500', 
+    'text-green-500', 
+    'text-purple-500', 
+    'text-pink-500', 
+    'text-orange-500'
+  ];
+
+  const [typedText1, setTypedText1] = useState('');
+  const [typedText2, setTypedText2] = useState('');
+  const [showCursor1, setShowCursor1] = useState(true);
+  const [showCursor2, setShowCursor2] = useState(false);
+  const [nameColorClass, setNameColorClass] = useState('text-black');
 
   useEffect(() => {
-    let index = 0;
-    const intervalId = setInterval(() => {
-      if (index < fullText.length) {
-        setTypedText((prev) => prev + fullText.charAt(index));
-        index++;
-      } else {
-        clearInterval(intervalId);
-      }
-    }, 120);
+    let isMounted = true;
+    const typeDelay = 100;
+    const eraseDelay = 50;
+    const pauseDelay = 2000;
 
-    return () => clearInterval(intervalId);
+    const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
+
+    const runAnimation = async () => {
+      while (isMounted) {
+        // Typing phase
+        setShowCursor1(true);
+        setShowCursor2(false);
+        setTypedText2('');
+        setNameColorClass('text-black');
+
+        for (let i = 0; i <= line1Text.length; i++) {
+          if (!isMounted) return;
+          setTypedText1(line1Text.substring(0, i));
+          await delay(typeDelay);
+        }
+
+        setShowCursor1(false);
+        setShowCursor2(true);
+
+        for (let i = 0; i <= line2Text.length; i++) {
+          if (!isMounted) return;
+          setTypedText2(line2Text.substring(0, i));
+          await delay(typeDelay + 20);
+        }
+        
+        let colorInterval: NodeJS.Timeout | undefined;
+        if (isMounted) {
+            let colorIndex = 0;
+            colorInterval = setInterval(() => {
+                if (!isMounted) {
+                    if (colorInterval) clearInterval(colorInterval);
+                    return;
+                }
+                setNameColorClass(colors[colorIndex % colors.length]);
+                colorIndex++;
+            }, 500);
+        }
+
+        await delay(pauseDelay);
+        if (isMounted && colorInterval) clearInterval(colorInterval);
+
+        // Erasing phase
+        if (!isMounted) return;
+        for (let i = line2Text.length; i >= 0; i--) {
+          if (!isMounted) return;
+          setTypedText2(line2Text.substring(0, i));
+          await delay(eraseDelay);
+        }
+        
+        if (!isMounted) return;
+        setShowCursor1(true);
+        setShowCursor2(false);
+        
+        for (let i = line1Text.length; i >= 0; i--) {
+          if (!isMounted) return;
+          setTypedText1(line1Text.substring(0, i));
+          await delay(eraseDelay);
+        }
+
+        if (!isMounted) return;
+        await delay(500);
+      }
+    };
+
+    runAnimation();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   return (
@@ -53,10 +131,16 @@ export default function ContactPage() {
         
         {/* Hero Section */}
         <h1 className="text-5xl md:text-7xl font-serif font-bold text-black min-h-[48px] md:min-h-[72px]">
-          {typedText}
-          <span className="typing-cursor">|</span>
+          {typedText1}
+          {showCursor1 && <span className="typing-cursor">|</span>}
         </h1>
-        <p className="mt-2 text-lg text-zinc-600">Based in Nairobi, Kenya</p>
+        <h2 className={cn(
+            "text-4xl md:text-6xl font-serif font-bold min-h-[40px] md:min-h-[64px] mt-2 transition-colors duration-300", 
+            nameColorClass
+        )}>
+          {typedText2}
+          {showCursor2 && <span className="typing-cursor">|</span>}
+        </h2>
         
         {devImage && (
              <div className="relative w-48 h-64 mt-8 overflow-hidden rounded-[100px]">
