@@ -6,7 +6,6 @@ import { Button } from '@/components/ui/button';
 import { Minus, Plus } from 'lucide-react';
 import { useAppContext } from '@/context/AppContext';
 import { cn } from '@/lib/utils';
-import ProductStarRating from './ProductStarRating';
 
 interface ProductPurchaseFormProps {
   product: Product;
@@ -82,9 +81,6 @@ export default function ProductPurchaseForm({ product, selectedColor, setSelecte
                 stroke="black" strokeWidth="1.5"/>
             </svg>
         </button>
-        </div>
-        <div className="mt-2">
-            <ProductStarRating productId={product.id} />
         </div>
       </div>
 
