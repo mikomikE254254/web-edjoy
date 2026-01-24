@@ -373,10 +373,10 @@ export default function AdminDashboard() {
                 <h3 className="text-lg font-semibold mb-4">Media</h3>
                  <p className="text-xs text-muted-foreground mb-4">Use external URLs for images. The first image is the main one.</p>
                 <div className="space-y-2">
-                    <FormField control={form.control} name="imageUrl1" render={({ field }) => ( <FormItem><FormControl><Input {...field} placeholder="Main Image URL" /></FormControl><FormMessage /></FormItem> )}/>
-                    <FormField control={form.control} name="imageUrl2" render={({ field }) => ( <FormItem><FormControl><Input {...field} placeholder="Gallery Image 2 URL" /></FormControl><FormMessage /></FormItem> )}/>
-                    <FormField control={form.control} name="imageUrl3" render={({ field }) => ( <FormItem><FormControl><Input {...field} placeholder="Gallery Image 3 URL" /></FormControl><FormMessage /></FormItem> )}/>
-                    <FormField control={form.control} name="imageUrl4" render={({ field }) => ( <FormItem><FormControl><Input {...field} placeholder="Gallery Image 4 URL" /></FormControl><FormMessage /></FormItem> )}/>
+                    <FormField control={form.control} name="imageUrl1" render={({ field }) => ( <FormItem><FormControl><Input {...field} value={field.value || ''} placeholder="Main Image URL" /></FormControl><FormMessage /></FormItem> )}/>
+                    <FormField control={form.control} name="imageUrl2" render={({ field }) => ( <FormItem><FormControl><Input {...field} value={field.value || ''} placeholder="Gallery Image 2 URL" /></FormControl><FormMessage /></FormItem> )}/>
+                    <FormField control={form.control} name="imageUrl3" render={({ field }) => ( <FormItem><FormControl><Input {...field} value={field.value || ''} placeholder="Gallery Image 3 URL" /></FormControl><FormMessage /></FormItem> )}/>
+                    <FormField control={form.control} name="imageUrl4" render={({ field }) => ( <FormItem><FormControl><Input {...field} value={field.value || ''} placeholder="Gallery Image 4 URL" /></FormControl><FormMessage /></FormItem> )}/>
                 </div>
               </div>
 
