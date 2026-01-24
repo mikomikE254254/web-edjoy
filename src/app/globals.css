@@ -93,10 +93,13 @@
   }
 
   .wishlist-btn.active svg {
-    fill: #ff0000;
-    stroke: #ff0000;
     transform: scale(1.2);
     animation: heartPop 0.3s forwards;
+  }
+
+  .wishlist-btn.active svg path {
+    fill: #ff0000;
+    stroke: #ff0000;
   }
 
   .particles {
