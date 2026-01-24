@@ -32,24 +32,21 @@ service cloud.firestore {
      * @path
      *   /products/{productId}
      * @allow
-     *   Any user can read product details and list products. (get, list)
+     *   Any user can read product details and list products. (read)
      * @allow
-     *   Any user can create, update, and delete products for development purposes. (create, update, delete)
+     *   Any user can create, update, and delete products for development purposes. (write)
      * @principle
      *   Prototyping Flexibility over Security. This rule is intentionally permissive to
      *   facilitate rapid development. It MUST be secured before production.
      */
     match /products/{productId} {
-      allow get: if true;
-      allow list: if true;
+      allow read: if true;
 
       // WARNING: Open write access for prototyping.
       // These rules allow any user to create, update, or delete products.
       // This is for development convenience and MUST be secured before production
       // by implementing proper authentication and authorization checks.
-      allow create: if true;
-      allow update: if true;
-      allow delete: if true;
+      allow write: if true;
     }
 
     /**
@@ -58,7 +55,7 @@ service cloud.firestore {
      * @path
      *   /categories/{categoryId}
      * @allow
-     *   Any user can list all available categories. (get, list)
+     *   Any user can list all available categories. (read)
      * @deny
      *   All write operations are denied as there is no admin system for categories.
      * @principle
@@ -66,14 +63,11 @@ service cloud.firestore {
      *   while writes are locked down for security.
      */
     match /categories/{categoryId} {
-      allow get: if true;
-      allow list: if true;
+      allow read: if true;
 
       // CRITICAL: Cannot implement owner-only or admin-only writes. The 'Category' entity is missing an 'ownerId' or role-based field.
       // All write operations are disabled to prevent unauthorized data modification.
-      allow create: if false; // TODO: Add admin validation once an admin role system is implemented.
-      allow update: if false; // TODO: Add admin validation once an admin role system is implemented.
-      allow delete: if false; // TODO: Add admin validation once an admin role system is implemented.
+      allow write: if false;
     }
   }
 }
