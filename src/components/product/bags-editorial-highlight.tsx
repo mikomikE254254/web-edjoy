@@ -28,9 +28,9 @@ export default function BagsEditorialHighlight() {
   }, []);
 
   const largeImage = PlaceHolderImages.find(p => p.id === 'bag-editorial-large-replace');
-  const tallImage = PlaceHolderImages.find(p => p.id === 'bag-white-background');
-  const smallImage = PlaceHolderImages.find(p => p.id === 'black-woman-fashion');
-  const wideImage = PlaceHolderImages.find(p => p.id === 'editorial-wide');
+  const tallImage = PlaceHolderImages.find(p => p.id === 'stylish-crossbody-bag');
+  const smallImage = PlaceHolderImages.find(p => p.id === 'minimalist-clutch');
+  const wideImage = PlaceHolderImages.find(p => p.id === 'leather-duffle-bag');
 
   return (
     <section className="my-12">
