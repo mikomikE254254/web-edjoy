@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { useCollection, useFirestore } from '@/firebase';
+import { useCollection, useFirestore, useMemoFirebase } from '@/firebase';
 import { collection, addDoc, doc, updateDoc, deleteDoc, serverTimestamp } from 'firebase/firestore';
 import { Product } from '@/lib/types';
 import { Button } from '@/components/ui/button';
@@ -30,7 +30,11 @@ type ProductFormData = z.infer<typeof productSchema>;
 
 export default function AdminDashboard() {
   const firestore = useFirestore();
-  const { data: products, isLoading } = useCollection<Product>(firestore ? collection(firestore, 'products') : null);
+  const productsQuery = useMemoFirebase(
+    () => (firestore ? collection(firestore, 'products') : null),
+    [firestore]
+  );
+  const { data: products, isLoading } = useCollection<Product>(productsQuery);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
 
