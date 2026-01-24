@@ -73,7 +73,7 @@ export default function ProductCard({ product }: { product: Product }) {
       </div>
 
       <div 
-        className="absolute bottom-4 left-4 right-4 bg-gray-300/60 backdrop-blur-md rounded-2xl p-3 flex items-center justify-between border border-white/20"
+        className="absolute bottom-4 left-4 right-4 bg-gray-300/60 backdrop-blur-md rounded-2xl p-3 flex items-center justify-between border border-white/20 z-20"
       >
         <div>
           <h3 className="font-normal text-gray-900 truncate">{product.name}</h3>
@@ -87,7 +87,7 @@ export default function ProductCard({ product }: { product: Product }) {
         <button
           onClick={handleAddToCartClick}
           aria-label="Add to cart"
-          className="z-20 flex-shrink-0 w-11 h-11 bg-black text-white rounded-full flex items-center justify-center hover:bg-gray-800 active:scale-95 transition-all"
+          className="flex-shrink-0 w-11 h-11 bg-black text-white rounded-full flex items-center justify-center hover:bg-gray-800 active:scale-95 transition-all"
         >
           <ShoppingBag size={20} />
         </button>
