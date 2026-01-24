@@ -264,7 +264,7 @@ export default function AdminDashboard() {
               <FormField control={form.control} name="slug" render={({ field }) => (
                 <FormItem>
                   <FormLabel>URL Slug</FormLabel>
-                  <FormControl><Input {...field} /></FormControl>
+                  <FormControl><Input {...field} value={field.value || ''} /></FormControl>
                   <FormMessage />
                 </FormItem>
               )}/>
@@ -316,14 +316,14 @@ export default function AdminDashboard() {
                     <FormField control={form.control} name="originalPrice" render={({ field }) => (
                       <FormItem>
                         <FormLabel>Original Price (Optional)</FormLabel>
-                        <FormControl><Input type="number" {...field} value={field.value ?? ''} onChange={e => field.onChange(e.target.value === '' ? null : parseFloat(e.target.value))} placeholder="e.g., 2000" /></FormControl>
+                        <FormControl><Input type="number" {...field} value={isNaN(field.value as number) ? '' : field.value ?? ''} onChange={e => field.onChange(e.target.value === '' ? null : parseFloat(e.target.value))} placeholder="e.g., 2000" /></FormControl>
                         <FormMessage />
                       </FormItem>
                     )}/>
                     <FormField control={form.control} name="price" render={({ field }) => (
                       <FormItem>
                         <FormLabel>Sale Price</FormLabel>
-                        <FormControl><Input type="number" {...field} onChange={e => field.onChange(parseFloat(e.target.value))} /></FormControl>
+                        <FormControl><Input type="number" {...field} value={isNaN(field.value) ? '' : field.value} onChange={e => field.onChange(parseFloat(e.target.value))} /></FormControl>
                         <FormMessage />
                       </FormItem>
                     )}/>
@@ -493,5 +493,3 @@ export default function AdminDashboard() {
     </div>
   );
 }
-
-    
