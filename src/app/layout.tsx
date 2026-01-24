@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { PT_Sans, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
@@ -8,18 +7,6 @@ import { Toaster } from "@/components/ui/toaster";
 import WhatsAppChannelModal from "@/components/layout/WhatsAppChannelModal";
 import { FirebaseClientProvider } from "@/firebase";
 import { cn } from "@/lib/utils";
-
-const ptSans = PT_Sans({
-  subsets: ["latin"],
-  weight: ["400", "700"],
-  variable: "--font-pt-sans",
-});
-
-const playfairDisplay = Playfair_Display({
-  subsets: ["latin"],
-  weight: ["400", "700"],
-  variable: "--font-playfair-display",
-});
 
 export const metadata: Metadata = {
   title: "Nextgen",
@@ -35,9 +22,7 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={cn(
-          "bg-gray-50 font-sans",
-          ptSans.variable,
-          playfairDisplay.variable
+          "bg-gray-50 font-sans"
         )}
       >
         <AppProvider>

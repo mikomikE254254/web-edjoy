@@ -13,6 +13,17 @@ import {
   SiPhp,
 } from 'react-icons/si';
 import { cn } from '@/lib/utils';
+import { PT_Sans, Playfair_Display } from 'next/font/google';
+
+const ptSans = PT_Sans({
+  subsets: ['latin'],
+  weight: ['400', '700'],
+});
+
+const playfairDisplay = Playfair_Display({
+  subsets: ['latin'],
+  weight: ['400', '700'],
+});
 
 const AnimatedStat = ({ finalValue, label, suffix = '' }: { finalValue: number, label: string, suffix?: string }) => {
   const [count, setCount] = useState(0);
@@ -51,7 +62,7 @@ const AnimatedStat = ({ finalValue, label, suffix = '' }: { finalValue: number, 
 
   return (
     <div className="bg-gray-50 p-6 rounded-2xl text-center shadow-inner">
-      <p className="text-5xl font-serif font-bold text-black">{count}{suffix}</p>
+      <p className={cn("text-5xl font-bold text-black", playfairDisplay.className)}>{count}{suffix}</p>
       <p className="text-xs uppercase tracking-wider text-gray-500 mt-2">{label}</p>
     </div>
   );
@@ -87,11 +98,11 @@ export default function ContactPage() {
   ];
 
   return (
-    <div className="bg-white max-w-4xl mx-auto w-full rounded-3xl shadow-lg p-6 sm:p-12 relative">
+    <div className={cn("bg-white max-w-4xl mx-auto w-full rounded-3xl shadow-lg p-6 sm:p-12 relative", ptSans.className)}>
       
       <header className="mb-16 text-center md:text-left">
-        <h1 className="text-5xl md:text-6xl font-serif mb-2 text-black">Michael Muchemi</h1>
-        <p className="text-2xl md:text-3xl text-gray-700">Creative Developer</p>
+        <h1 className={cn("text-5xl md:text-6xl mb-2 text-black", playfairDisplay.className)}>Michael Muchemi</h1>
+        <p className={cn("text-2xl md:text-3xl text-gray-700", playfairDisplay.className)}>Creative Developer</p>
       </header>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">

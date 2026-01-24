@@ -17,10 +17,6 @@ export default {
       },
     },
     extend: {
-      fontFamily: {
-        sans: ['var(--font-pt-sans)', ...defaultTheme.fontFamily.sans],
-        serif: ['var(--font-playfair-display)', ...defaultTheme.fontFamily.serif],
-      },
       colors: {
         beige: '#f6eada',
         border: 'hsl(var(--border))',
