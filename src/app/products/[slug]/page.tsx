@@ -1,6 +1,6 @@
 'use client';
 
-import { notFound } from 'next/navigation';
+import { notFound, useParams } from 'next/navigation';
 import Image from 'next/image';
 import ProductPurchaseForm from '@/components/product/product-purchase-form';
 import ProductReviews from '@/components/product/product-reviews';
@@ -13,8 +13,8 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 type ImageType = Product['images'][0];
 
-export default function ProductPage({ params }: { params: { slug:string } }) {
-  const { slug } = params;
+export default function ProductPage() {
+  const { slug } = useParams<{ slug: string }>();
   
   const firestore = useFirestore();
   const productQuery = useMemoFirebase(
