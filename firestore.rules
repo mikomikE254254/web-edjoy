@@ -1,83 +1,69 @@
 /**
- * This ruleset enforces a public, read-only security model for a retail product catalog.
+ * This ruleset enforces a security model for a retail product catalog.
  *
  * Core Philosophy:
- * The primary goal is to allow any user, including anonymous guests, to browse the entire
- * product and category catalog freely. This supports the core e-commerce experience.
- * Write access (creating, updating, or deleting products/categories) is completely
- * disabled by default, as there is no administrative role system defined in the data model.
- * This creates a secure "read-only" state, preventing any unauthorized modification of the
- * public catalog data.
+ * The primary goal is to allow any user to browse the catalog freely while enabling
+ * administrators to manage products during development. Write access is currently
+ * open for prototyping purposes and MUST be secured before production.
  *
  * Data Structure:
- * The data is organized into two flat, top-level collections:
  * - /products/{productId}: Stores individual product details.
  * - /categories/{categoryId}: Stores category information.
- * This flat structure is highly performant and simplifies security rules, as it avoids
- * the need for complex, nested lookups (`get()` calls).
+ * This flat structure is performant and simplifies security rules.
  *
  * Key Security Decisions:
  * - Public Read Access: All documents in both `/products` and `/categories` are publicly
- *   readable and listable (`allow get, list: if true;`). This is intentional to allow
- *   the application's front-end to function for all visitors.
- * - Writes Disabled: All write operations (`create`, `update`, `delete`) are explicitly
- *   denied (`if false;`). This is the most secure posture, as the data model lacks any
- *   'ownerId' or admin role fields to safely grant write permissions. A placeholder `TODO`
- *   is included to guide future implementation of an admin system.
- * - Prototyping Flexibility: In line with the prototyping philosophy, these rules do not
- *   validate the specific shape or data types of the documents. The focus is strictly on
- *   controlling read/write authorization.
+ *   readable and listable to allow the app's front-end to function for all visitors.
+ * - Open Write Access (Products): For development, all write operations on the `/products`
+ *   collection are allowed (`if true;`). This enables the admin dashboard to function
+ *   without a full authentication system. This is insecure and must be replaced with
+ *   role-based access control before launch.
+ * - Category Writes Disabled: Write access to `/categories` remains disabled, as there
+ *   is currently no UI to manage them.
  */
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // Helper Functions
-    /**
-     * Checks if a user is authenticated.
-     */
-    //function isSignedIn() {
-    //  return auth != null;
-    //}
-
     /**
      * @description
-     *   Rules for the top-level product catalog. Products are public and can be read by anyone,
-     *   but can only be modified by authorized administrators (currently disabled).
+     *   Rules for the top-level product catalog. Products are public and can be read by anyone.
+     *   Write access is currently open for prototyping.
      * @path
      *   /products/{productId}
      * @allow
-     *   An anonymous user can read a specific product's details. (get)
-     * @deny
-     *   Any user, signed-in or not, attempts to add a new product. (create)
+     *   Any user can read product details and list products. (get, list)
+     * @allow
+     *   Any user can create, update, and delete products for development purposes. (create, update, delete)
      * @principle
-     *   Public Read-Only Data. This rule makes the product catalog publicly accessible for
-     *   browsing while preventing any modification until a proper admin role is implemented.
+     *   Prototyping Flexibility over Security. This rule is intentionally permissive to
+     *   facilitate rapid development. It MUST be secured before production.
      */
     match /products/{productId} {
       allow get: if true;
       allow list: if true;
 
-      // CRITICAL: Cannot implement owner-only or admin-only writes. The 'Product' entity is missing an 'ownerId' or role-based field.
-      // All write operations are disabled to prevent unauthorized data modification.
-      allow create: if false; // TODO: Add admin validation once an admin role system is implemented.
-      allow update: if false; // TODO: Add admin validation once an admin role system is implemented.
-      allow delete: if false; // TODO: Add admin validation once an admin role system is implemented.
+      // WARNING: Open write access for prototyping.
+      // These rules allow any user to create, update, or delete products.
+      // This is for development convenience and MUST be secured before production
+      // by implementing proper authentication and authorization checks.
+      allow create: if true;
+      allow update: if true;
+      allow delete: if true;
     }
 
     /**
      * @description
-     *   Rules for product categories. Categories are public information and can be read by anyone,
-     *   but can only be managed by authorized administrators (currently disabled).
+     *   Rules for product categories. Categories are public and read-only.
      * @path
      *   /categories/{categoryId}
      * @allow
-     *   Any user, including anonymous ones, can list all available categories. (list)
+     *   Any user can list all available categories. (get, list)
      * @deny
-     *   Any user attempts to delete an existing category. (delete)
+     *   All write operations are denied as there is no admin system for categories.
      * @principle
-     *   Public Read-Only Data. This rule ensures that categories are viewable by all users of
-     *   the app, while writes are locked down for security.
+     *   Public Read-Only Data. This rule ensures categories are viewable by all,
+     *   while writes are locked down for security.
      */
     match /categories/{categoryId} {
       allow get: if true;
