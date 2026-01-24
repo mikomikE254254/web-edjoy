@@ -4,19 +4,22 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { useCollection, useFirestore, useMemoFirebase, addDocumentNonBlocking, updateDocumentNonBlocking, deleteDocumentNonBlocking } from '@/firebase';
+import { useCollection, useFirestore, useMemoFirebase, addDocumentNonBlocking, updateDocumentNonBlocking, deleteDocumentNonBlocking, useFirebaseApp } from '@/firebase';
 import { collection, doc, serverTimestamp } from 'firebase/firestore';
+import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { Product } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Trash, Edit } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Trash, Edit, Copy } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Separator } from '@/components/ui/separator';
+import { Progress } from '@/components/ui/progress';
+import { useToast } from '@/hooks/use-toast';
 
 const PRESET_COLORS = [
     { name: 'Black', hex: '#111827' }, { name: 'White', hex: '#FFFFFF' },
@@ -63,6 +66,12 @@ export default function AdminDashboard() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
 
+  const { toast } = useToast();
+  const firebaseApp = useFirebaseApp();
+  const [uploading, setUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [uploadedUrl, setUploadedUrl] = useState<string | null>(null);
+
   const form = useForm<ProductFormData>({
     resolver: zodResolver(productSchema),
     defaultValues: {
@@ -81,6 +90,52 @@ export default function AdminDashboard() {
       availableColors: [],
     },
   });
+  
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file || !firebaseApp) return;
+
+    const storage = getStorage(firebaseApp);
+    const storageRef = ref(storage, `products/${Date.now()}-${file.name}`);
+    const uploadTask = uploadBytesResumable(storageRef, file);
+
+    setUploading(true);
+    setUploadedUrl(null);
+
+    uploadTask.on('state_changed',
+        (snapshot) => {
+            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            setUploadProgress(progress);
+        },
+        (error) => {
+            console.error("Upload failed", error);
+            toast({
+                variant: "destructive",
+                title: "Upload Failed",
+                description: error.message,
+            });
+            setUploading(false);
+        },
+        () => {
+            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                setUploadedUrl(downloadURL);
+                setUploading(false);
+                toast({
+                    title: "Upload Complete!",
+                    description: "You can now copy the URL.",
+                });
+            });
+        }
+    );
+};
+
+  const copyUrlToClipboard = () => {
+    if (!uploadedUrl) return;
+    navigator.clipboard.writeText(uploadedUrl);
+    toast({
+        title: "Copied to Clipboard!",
+    });
+  };
 
   React.useEffect(() => {
     if (editingProduct) {
@@ -248,10 +303,47 @@ export default function AdminDashboard() {
               </div>
 
                <Separator />
+
+               <div>
+                <h3 className="text-lg font-semibold mb-2">Quick Image Uploader</h3>
+                <p className="text-xs text-muted-foreground mb-4">
+                    Upload an image to Firebase Storage, then copy the URL and paste it into the media fields below.
+                </p>
+                <div className="space-y-4 p-4 border rounded-lg">
+                    <FormItem>
+                        <FormLabel>Upload Photo</FormLabel>
+                        <FormControl>
+                            <Input type="file" accept="image/webp, image/jpeg, image/png" onChange={handleImageUpload} disabled={uploading} />
+                        </FormControl>
+                    </FormItem>
+
+                    {uploading && (
+                        <div className="space-y-2">
+                            <Progress value={uploadProgress} className="w-full" />
+                            <p className="text-sm text-center text-muted-foreground">{Math.round(uploadProgress)}%</p>
+                        </div>
+                    )}
+
+                    {uploadedUrl && !uploading && (
+                        <div className="space-y-2">
+                            <FormLabel>Uploaded Image URL</FormLabel>
+                            <div className="flex items-center gap-2">
+                                <Input readOnly value={uploadedUrl} className="bg-gray-100" />
+                                <Button type="button" variant="outline" size="icon" onClick={copyUrlToClipboard}>
+                                    <Copy className="h-4 w-4" />
+                                    <span className="sr-only">Copy URL</span>
+                                </Button>
+                            </div>
+                        </div>
+                    )}
+                </div>
+              </div>
+
+               <Separator />
               
                <div>
                 <h3 className="text-lg font-semibold mb-4">Media</h3>
-                 <p className="text-xs text-muted-foreground mb-4">Use external URLs for images. The first image is the main one. File uploads can be added later.</p>
+                 <p className="text-xs text-muted-foreground mb-4">Use external URLs for images. The first image is the main one.</p>
                 <div className="space-y-2">
                     <FormField control={form.control} name="imageUrl1" render={({ field }) => ( <FormItem><FormControl><Input {...field} placeholder="Main Image URL" /></FormControl><FormMessage /></FormItem> )}/>
                     <FormField control={form.control} name="imageUrl2" render={({ field }) => ( <FormItem><FormControl><Input {...field} placeholder="Gallery Image 2 URL" /></FormControl><FormMessage /></FormItem> )}/>
