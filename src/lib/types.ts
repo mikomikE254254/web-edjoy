@@ -6,8 +6,8 @@ export type Product = {
   price: number;
   originalPrice?: number;
   isFeatured?: boolean;
-  category: 'women' | 'men' | 'children' | 'bags';
-  style?: 'casual' | 'streetwear' | 'formal' | 'vintage' | 'minimal';
+  category: string;
+  style?: string;
   images: {
     url: string;
     alt: string;

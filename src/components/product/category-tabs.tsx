@@ -1,15 +1,15 @@
 'use client';
 
+import { useState, useMemo } from 'react';
 import { cn } from '@/lib/utils';
+import { useCollection, useFirestore, useMemoFirebase } from '@/firebase';
+import { collection } from 'firebase/firestore';
+import { Skeleton } from '@/components/ui/skeleton';
 
-const categories = [
-  "All",
-  "Casual",
-  "Streetwear",
-  "Formal",
-  "Vintage",
-  "Minimal",
-];
+interface Style {
+  id: string;
+  name: string;
+}
 
 interface CategoryTabsProps {
   activeTab: string;
@@ -17,10 +17,26 @@ interface CategoryTabsProps {
 }
 
 export default function CategoryTabs({ activeTab, setActiveTab }: CategoryTabsProps) {
+  const firestore = useFirestore();
+  const stylesQuery = useMemoFirebase(
+    () => (firestore ? collection(firestore, 'styles') : null),
+    [firestore]
+  );
+  const { data: stylesData, isLoading } = useCollection<Style>(stylesQuery);
+
+  const categories = useMemo(() => {
+    const sortedStyles = stylesData?.sort((a, b) => a.name.localeCompare(b.name)).map(s => s.name) || [];
+    return ["All", ...sortedStyles];
+  }, [stylesData]);
+
+
   return (
     <div className="py-4 overflow-x-auto">
       <div className="flex gap-2.5 pb-2">
-        {categories.map((category) => (
+        {isLoading && Array.from({length: 6}).map((_, i) => (
+          <Skeleton key={i} className="h-10 w-24 rounded-full" />
+        ))}
+        {!isLoading && categories.map((category) => (
           <button
             key={category}
             onClick={() => setActiveTab(category)}

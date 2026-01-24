@@ -1,7 +1,6 @@
-
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -14,8 +13,8 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Trash, Edit, Copy, Star } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
+import { Trash, Edit, Copy, Star, PlusCircle } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Separator } from '@/components/ui/separator';
@@ -41,8 +40,8 @@ const productSchema = z.object({
   slug: z.string().min(1, 'Slug is required'),
   description: z.string().min(1, 'Description is required'),
   
-  category: z.enum(['women', 'men', 'children', 'bags']),
-  style: z.enum(['casual', 'streetwear', 'formal', 'vintage', 'minimal']),
+  category: z.string().min(1, 'Category is required'),
+  style: z.string().optional(),
   
   price: z.coerce.number().min(0, 'Price must be positive'),
   originalPrice: z.coerce.number().optional().nullable(),
@@ -58,53 +57,71 @@ const productSchema = z.object({
 });
 
 type ProductFormData = z.infer<typeof productSchema>;
+type Category = { id: string; name: string };
+type Style = { id: string; name: string };
 
 export default function AdminDashboard() {
   const firestore = useFirestore();
-  const productsQuery = useMemoFirebase(
-    () => (firestore ? collection(firestore, 'products') : null),
-    [firestore]
-  );
-  const { data: products, isLoading } = useCollection<Product>(productsQuery);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
-
   const { toast } = useToast();
   const firebaseApp = useFirebaseApp();
+
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  
   const [uploading, setUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [uploadedUrl, setUploadedUrl] = useState<string | null>(null);
+  
+  const [isCategoryDialogOpen, setIsCategoryDialogOpen] = useState(false);
+  const [newCategoryName, setNewCategoryName] = useState('');
+  const [isStyleDialogOpen, setIsStyleDialogOpen] = useState(false);
+  const [newStyleName, setNewStyleName] = useState('');
+
+  // Data fetching
+  const productsQuery = useMemoFirebase(() => firestore ? collection(firestore, 'products') : null, [firestore]);
+  const categoriesQuery = useMemoFirebase(() => firestore ? collection(firestore, 'categories') : null, [firestore]);
+  const stylesQuery = useMemoFirebase(() => firestore ? collection(firestore, 'styles') : null, [firestore]);
+
+  const { data: products, isLoading: isLoadingProducts } = useCollection<Product>(productsQuery);
+  const { data: categories, isLoading: isLoadingCategories } = useCollection<Category>(categoriesQuery);
+  const { data: styles, isLoading: isLoadingStyles } = useCollection<Style>(stylesQuery);
+
+  const sortedCategories = useMemo(() => categories?.sort((a, b) => a.name.localeCompare(b.name)) || [], [categories]);
+  const sortedStyles = useMemo(() => styles?.sort((a, b) => a.name.localeCompare(b.name)) || [], [styles]);
+
+  // Seed initial data if collections are empty
+  useEffect(() => {
+    if (!firestore || isLoadingCategories || isLoadingStyles) return;
+
+    if (categories && categories.length === 0) {
+        const defaultCategories = ['Women', 'Men', 'Children', 'Bags'];
+        defaultCategories.forEach(name => {
+            addDocumentNonBlocking(collection(firestore, 'categories'), { name });
+        });
+    }
+
+    if (styles && styles.length === 0) {
+        const defaultStyles = ['Casual', 'Streetwear', 'Formal', 'Vintage', 'Minimal'];
+        defaultStyles.forEach(name => {
+            addDocumentNonBlocking(collection(firestore, 'styles'), { name });
+        });
+    }
+  }, [firestore, categories, styles, isLoadingCategories, isLoadingStyles]);
 
   const form = useForm<ProductFormData>({
     resolver: zodResolver(productSchema),
     defaultValues: {
-      name: '',
-      slug: '',
-      description: '',
-      category: 'women',
-      style: 'casual',
-      price: 0,
-      originalPrice: null,
-      imageUrl1: '',
-      imageUrl2: '',
-      imageUrl3: '',
-      imageUrl4: '',
-      sizes: [],
-      availableColors: [],
+      name: '', slug: '', description: '', category: '', style: '',
+      price: 0, originalPrice: null, imageUrl1: '', imageUrl2: '',
+      imageUrl3: '', imageUrl4: '', sizes: [], availableColors: [],
       isFeatured: false,
     },
   });
 
   const nameValue = form.watch('name');
-  React.useEffect(() => {
+  useEffect(() => {
     if (!editingProduct && nameValue) {
-      const generatedSlug = nameValue
-        .toLowerCase()
-        .trim()
-        .replace(/&/g, 'and')
-        .replace(/[^a-z0-9\s-]/g, '')
-        .replace(/\s+/g, '-')
-        .replace(/-+/g, '-');
+      const generatedSlug = nameValue.toLowerCase().trim().replace(/&/g, 'and').replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-');
       form.setValue('slug', generatedSlug, { shouldValidate: true });
     }
   }, [nameValue, editingProduct, form.setValue]);
@@ -121,70 +138,43 @@ export default function AdminDashboard() {
     setUploadedUrl(null);
 
     uploadTask.on('state_changed',
-        (snapshot) => {
-            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            setUploadProgress(progress);
-        },
+        (snapshot) => setUploadProgress((snapshot.bytesTransferred / snapshot.totalBytes) * 100),
         (error) => {
             console.error("Upload failed", error);
-            toast({
-                variant: "destructive",
-                title: "Upload Failed",
-                description: error.message,
-            });
+            toast({ variant: "destructive", title: "Upload Failed", description: error.message });
             setUploading(false);
         },
         () => {
             getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
                 setUploadedUrl(downloadURL);
                 setUploading(false);
-
                 const imageFields: ('imageUrl1' | 'imageUrl2' | 'imageUrl3' | 'imageUrl4')[] = ['imageUrl1', 'imageUrl2', 'imageUrl3', 'imageUrl4'];
-                const currentValues = form.getValues();
-                const firstEmptyField = imageFields.find(field => !currentValues[field] || currentValues[field] === '');
-                
+                const firstEmptyField = imageFields.find(field => !form.getValues(field));
                 if (firstEmptyField) {
                     form.setValue(firstEmptyField, downloadURL, { shouldValidate: true });
-                    toast({
-                        title: "Upload Complete!",
-                        description: `Image URL has been auto-filled. You can also copy it.`,
-                    });
+                    toast({ title: "Upload Complete!", description: `Image URL auto-filled.` });
                 } else {
-                    toast({
-                        title: "Upload Complete!",
-                        description: "All image fields are full. You can copy the URL manually.",
-                    });
+                    toast({ title: "Upload Complete!", description: "All image fields full." });
                 }
             });
         }
     );
-};
+  };
 
   const copyUrlToClipboard = () => {
     if (!uploadedUrl) return;
-    navigator.clipboard.writeText(uploadedUrl);
-    toast({
-        title: "Copied to Clipboard!",
-    });
+    navigator.clipboard.writeText(uploadedUrl).then(() => toast({ title: "Copied to Clipboard!" }));
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (editingProduct) {
       form.reset({
-        name: editingProduct.name,
-        slug: editingProduct.slug,
-        description: editingProduct.description,
-        category: editingProduct.category,
-        style: editingProduct.style,
-        price: editingProduct.price,
-        originalPrice: editingProduct.originalPrice,
-        imageUrl1: editingProduct.images?.[0]?.url || '',
-        imageUrl2: editingProduct.images?.[1]?.url || '',
-        imageUrl3: editingProduct.images?.[2]?.url || '',
-        imageUrl4: editingProduct.images?.[3]?.url || '',
-        sizes: editingProduct.sizes || [],
-        availableColors: editingProduct.availableColors || [],
-        isFeatured: editingProduct.isFeatured || false,
+        name: editingProduct.name, slug: editingProduct.slug, description: editingProduct.description,
+        category: editingProduct.category, style: editingProduct.style || '', price: editingProduct.price,
+        originalPrice: editingProduct.originalPrice, imageUrl1: editingProduct.images?.[0]?.url || '',
+        imageUrl2: editingProduct.images?.[1]?.url || '', imageUrl3: editingProduct.images?.[2]?.url || '',
+        imageUrl4: editingProduct.images?.[3]?.url || '', sizes: editingProduct.sizes || [],
+        availableColors: editingProduct.availableColors || [], isFeatured: editingProduct.isFeatured || false,
       });
     } else {
       form.reset();
@@ -199,23 +189,16 @@ export default function AdminDashboard() {
         .map(url => ({ url, alt: data.name, hint: 'product image' }));
     
     const productData = {
-      name: data.name,
-      slug: data.slug,
-      price: data.price,
+      ...data,
+      style: data.style || null,
       originalPrice: data.originalPrice || null,
-      description: data.description,
-      category: data.category,
-      style: data.style,
-      sizes: data.sizes,
-      availableColors: data.availableColors,
       images: images,
       isFeatured: data.isFeatured ?? false,
       updatedAt: serverTimestamp(),
     };
 
     if (editingProduct) {
-      const productRef = doc(firestore, 'products', editingProduct.id);
-      updateDocumentNonBlocking(productRef, productData);
+      updateDocumentNonBlocking(doc(firestore, 'products', editingProduct.id), productData);
     } else {
       addDocumentNonBlocking(collection(firestore, 'products'), { ...productData, createdAt: serverTimestamp() });
     }
@@ -227,8 +210,7 @@ export default function AdminDashboard() {
   const handleDelete = (productId: string) => {
     if (!firestore) return;
     if (window.confirm('Are you sure you want to delete this product?')) {
-        const productRef = doc(firestore, 'products', productId);
-        deleteDocumentNonBlocking(productRef);
+      deleteDocumentNonBlocking(doc(firestore, 'products', productId));
     }
   }
 
@@ -242,6 +224,22 @@ export default function AdminDashboard() {
     form.reset();
     setIsDialogOpen(true);
   }
+  
+  const handleAddCategory = () => {
+    if (!firestore || !newCategoryName.trim()) return;
+    addDocumentNonBlocking(collection(firestore, 'categories'), { name: newCategoryName.trim() });
+    setNewCategoryName('');
+    setIsCategoryDialogOpen(false);
+    toast({ title: 'Category Added', description: `${newCategoryName} has been added.` });
+  };
+  
+  const handleAddStyle = () => {
+    if (!firestore || !newStyleName.trim()) return;
+    addDocumentNonBlocking(collection(firestore, 'styles'), { name: newStyleName.trim() });
+    setNewStyleName('');
+    setIsStyleDialogOpen(false);
+    toast({ title: 'Style Added', description: `${newStyleName} has been added.` });
+  };
 
   return (
     <div className="container mx-auto py-8">
@@ -252,48 +250,24 @@ export default function AdminDashboard() {
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>{editingProduct ? 'Edit Product Wizard' : 'New Product Wizard'}</DialogTitle>
-          </DialogHeader>
+          <DialogHeader><DialogTitle>{editingProduct ? 'Edit Product Wizard' : 'New Product Wizard'}</DialogTitle></DialogHeader>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 py-4">
               
               <FormField control={form.control} name="name" render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Product Name</FormLabel>
-                  <FormControl><Input {...field} /></FormControl>
-                  <FormMessage />
-                </FormItem>
+                <FormItem><FormLabel>Product Name</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
               )}/>
               
               <FormField control={form.control} name="slug" render={({ field }) => (
-                <FormItem>
-                  <FormLabel>URL Slug</FormLabel>
-                  <FormControl><Input {...field} value={field.value || ''} /></FormControl>
-                  <FormMessage />
-                </FormItem>
+                <FormItem><FormLabel>URL Slug</FormLabel><FormControl><Input {...field} value={field.value || ''} /></FormControl><FormMessage /></FormItem>
               )}/>
 
-              <FormField
-                control={form.control}
-                name="isFeatured"
-                render={({ field }) => (
+              <FormField control={form.control} name="isFeatured" render={({ field }) => (
                   <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                    <div className="space-y-0.5">
-                      <FormLabel className="text-base">Feature on Homepage</FormLabel>
-                      <FormDescription>
-                        Show this product in the "Featured Products" section on the homepage.
-                      </FormDescription>
-                    </div>
-                    <FormControl>
-                      <Switch
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                    </FormControl>
+                    <div className="space-y-0.5"><FormLabel className="text-base">Feature on Homepage</FormLabel><FormDescription>Show in "Featured Products" on the homepage.</FormDescription></div>
+                    <FormControl><Switch checked={field.value} onCheckedChange={field.onChange} /></FormControl>
                   </FormItem>
-                )}
-              />
+              )}/>
 
               <Separator />
 
@@ -303,31 +277,32 @@ export default function AdminDashboard() {
                   <FormField control={form.control} name="category" render={({ field }) => (
                     <FormItem>
                       <FormLabel>Page / Category</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl><SelectTrigger><SelectValue /></SelectTrigger></FormControl>
-                        <SelectContent>
-                          <SelectItem value="men">Men</SelectItem>
-                          <SelectItem value="women">Women</SelectItem>
-                          <SelectItem value="children">Unisex</SelectItem>
-                          <SelectItem value="bags">Bags</SelectItem>
-                        </SelectContent>
-                      </Select>
+                       <div className="flex gap-2">
+                        <Select onValueChange={field.onChange} value={field.value}>
+                          <FormControl><SelectTrigger><SelectValue placeholder="Select a category" /></SelectTrigger></FormControl>
+                          <SelectContent>
+                            {isLoadingCategories && <SelectItem value="loading" disabled>Loading...</SelectItem>}
+                            {sortedCategories.map(cat => <SelectItem key={cat.id} value={cat.name}>{cat.name}</SelectItem>)}
+                          </SelectContent>
+                        </Select>
+                        <Button type="button" variant="outline" size="icon" onClick={() => setIsCategoryDialogOpen(true)}><PlusCircle className="h-4 w-4" /></Button>
+                      </div>
                       <FormMessage />
                     </FormItem>
                   )}/>
                   <FormField control={form.control} name="style" render={({ field }) => (
                     <FormItem>
                       <FormLabel>Style / Sub-category</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl><SelectTrigger><SelectValue /></SelectTrigger></FormControl>
-                        <SelectContent>
-                          <SelectItem value="casual">Casual</SelectItem>
-                          <SelectItem value="streetwear">Streetwear</SelectItem>
-                          <SelectItem value="formal">Formal</SelectItem>
-                          <SelectItem value="vintage">Vintage</SelectItem>
-                          <SelectItem value="minimal">Minimal</SelectItem>
-                        </SelectContent>
-                      </Select>
+                      <div className="flex gap-2">
+                        <Select onValueChange={field.onChange} value={field.value}>
+                          <FormControl><SelectTrigger><SelectValue placeholder="Select a style" /></SelectTrigger></FormControl>
+                          <SelectContent>
+                            {isLoadingStyles && <SelectItem value="loading" disabled>Loading...</SelectItem>}
+                            {sortedStyles.map(sty => <SelectItem key={sty.id} value={sty.name}>{sty.name}</SelectItem>)}
+                          </SelectContent>
+                        </Select>
+                        <Button type="button" variant="outline" size="icon" onClick={() => setIsStyleDialogOpen(true)}><PlusCircle className="h-4 w-4" /></Button>
+                      </div>
                       <FormMessage />
                     </FormItem>
                   )}/>
@@ -360,35 +335,12 @@ export default function AdminDashboard() {
 
                <div>
                 <h3 className="text-lg font-semibold mb-2">Quick Image Uploader</h3>
-                <p className="text-xs text-muted-foreground mb-4">
-                    Upload an image to Firebase Storage, then copy the URL and paste it into the media fields below.
-                </p>
+                <p className="text-xs text-muted-foreground mb-4">Upload an image, then copy the URL and paste it below.</p>
                 <div className="space-y-4 p-4 border rounded-lg">
-                    <FormItem>
-                        <FormLabel>Upload Photo</FormLabel>
-                        <FormControl>
-                            <Input type="file" accept="image/webp, image/jpeg, image/png" onChange={handleImageUpload} disabled={uploading} />
-                        </FormControl>
-                    </FormItem>
-
-                    {uploading && (
-                        <div className="space-y-2">
-                            <Progress value={uploadProgress} className="w-full" />
-                            <p className="text-sm text-center text-muted-foreground">{Math.round(uploadProgress)}%</p>
-                        </div>
-                    )}
-
+                    <FormItem><FormLabel>Upload Photo</FormLabel><FormControl><Input type="file" accept="image/*" onChange={handleImageUpload} disabled={uploading} /></FormControl></FormItem>
+                    {uploading && <div className="space-y-2"><Progress value={uploadProgress} /><p className="text-sm text-center">{Math.round(uploadProgress)}%</p></div>}
                     {uploadedUrl && !uploading && (
-                        <div className="space-y-2">
-                            <FormLabel>Uploaded Image URL</FormLabel>
-                            <div className="flex items-center gap-2">
-                                <Input readOnly value={uploadedUrl} className="bg-gray-100" />
-                                <Button type="button" variant="outline" size="icon" onClick={copyUrlToClipboard}>
-                                    <Copy className="h-4 w-4" />
-                                    <span className="sr-only">Copy URL</span>
-                                </Button>
-                            </div>
-                        </div>
+                        <div className="space-y-2"><FormLabel>Uploaded URL</FormLabel><div className="flex items-center gap-2"><Input readOnly value={uploadedUrl} /><Button type="button" variant="outline" size="icon" onClick={copyUrlToClipboard}><Copy className="h-4 w-4" /></Button></div></div>
                     )}
                 </div>
               </div>
@@ -397,7 +349,7 @@ export default function AdminDashboard() {
               
                <div>
                 <h3 className="text-lg font-semibold mb-4">Media</h3>
-                 <p className="text-xs text-muted-foreground mb-4">Use external URLs for images. The first image is the main one.</p>
+                 <p className="text-xs text-muted-foreground mb-4">Use external URLs for images. The first is the main one.</p>
                 <div className="space-y-2">
                     <FormField control={form.control} name="imageUrl1" render={({ field }) => ( <FormItem><FormControl><Input {...field} value={field.value || ''} placeholder="Main Image URL" /></FormControl><FormMessage /></FormItem> )}/>
                     <FormField control={form.control} name="imageUrl2" render={({ field }) => ( <FormItem><FormControl><Input {...field} value={field.value || ''} placeholder="Gallery Image 2 URL" /></FormControl><FormMessage /></FormItem> )}/>
@@ -411,13 +363,7 @@ export default function AdminDashboard() {
               <div>
                  <h3 className="text-lg font-semibold mb-4">Details</h3>
                  <div className='space-y-4'>
-                    <FormField control={form.control} name="description" render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Description</FormLabel>
-                        <FormControl><Textarea {...field} rows={5} /></FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}/>
+                    <FormField control={form.control} name="description" render={({ field }) => (<FormItem><FormLabel>Description</FormLabel><FormControl><Textarea {...field} rows={5} /></FormControl><FormMessage /></FormItem>)}/>
                     <FormField control={form.control} name="sizes" render={() => (
                       <FormItem>
                           <FormLabel>Available Sizes</FormLabel>
@@ -425,23 +371,12 @@ export default function AdminDashboard() {
                           {AVAILABLE_SIZES.map((size) => (
                               <FormField key={size} control={form.control} name="sizes" render={({ field }) => (
                                 <FormItem key={size} className="flex flex-row items-center space-x-2 space-y-0">
-                                  <FormControl>
-                                    <Checkbox
-                                      checked={field.value?.includes(size)}
-                                      onCheckedChange={(checked) => {
-                                        const updatedSizes = field.value || [];
-                                        return checked
-                                          ? field.onChange([...updatedSizes, size])
-                                          : field.onChange(updatedSizes.filter(value => value !== size));
-                                      }}
-                                    />
-                                  </FormControl>
+                                  <FormControl><Checkbox checked={field.value?.includes(size)} onCheckedChange={(c) => field.onChange(c ? [...(field.value || []), size] : (field.value || []).filter(v => v !== size))} /></FormControl>
                                   <FormLabel className="font-normal text-sm">{size}</FormLabel>
                                 </FormItem>
                               )}/>
                           ))}
-                          </div>
-                        <FormMessage />
+                          </div><FormMessage />
                       </FormItem>
                     )}/>
                  </div>
@@ -452,47 +387,41 @@ export default function AdminDashboard() {
               <div>
                 <h3 className="text-lg font-semibold mb-4">Color Palette</h3>
                  <FormField control={form.control} name="availableColors" render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
+                  <FormItem><FormControl>
                       <div className="grid grid-cols-6 sm:grid-cols-8 gap-3">
                         {PRESET_COLORS.map((color) => {
                           const isSelected = field.value?.some(c => c.hex === color.hex);
-                          return (
-                            <button
-                              type="button"
-                              key={color.hex}
-                              onClick={() => {
-                                const currentColors = field.value || [];
-                                const newColors = isSelected
-                                  ? currentColors.filter(c => c.hex !== color.hex)
-                                  : [...currentColors, color];
-                                field.onChange(newColors);
-                              }}
-                              className={`w-9 h-9 rounded-full border-2 transition-all ${isSelected ? 'ring-2 ring-offset-2 ring-primary' : 'border-gray-300'}`}
-                              style={{ backgroundColor: color.hex }}
-                              title={color.name}
-                            >
-                              <span className="sr-only">{color.name}</span>
-                            </button>
-                          );
+                          return <button type="button" key={color.hex} onClick={() => field.onChange(isSelected ? (field.value || []).filter(c => c.hex !== color.hex) : [...(field.value || []), color])} className={`w-9 h-9 rounded-full border-2 transition-all ${isSelected ? 'ring-2 ring-offset-2 ring-primary' : 'border-gray-300'}`} style={{ backgroundColor: color.hex }} title={color.name}><span className="sr-only">{color.name}</span></button>;
                         })}
                       </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
+                  </FormControl><FormMessage /></FormItem>
                 )}/>
               </div>
 
-              <Button type="submit" size="lg" className="w-full">
-                {editingProduct ? 'Save Changes' : 'Finish & Add Product'}
-              </Button>
+              <Button type="submit" size="lg" className="w-full">{editingProduct ? 'Save Changes' : 'Finish & Add Product'}</Button>
             </form>
           </Form>
         </DialogContent>
       </Dialog>
       
+      <Dialog open={isCategoryDialogOpen} onOpenChange={setIsCategoryDialogOpen}>
+          <DialogContent>
+              <DialogHeader><DialogTitle>Add New Category</DialogTitle></DialogHeader>
+              <div className="py-4"><Input placeholder="Category Name" value={newCategoryName} onChange={(e) => setNewCategoryName(e.target.value)} /></div>
+              <DialogFooter><Button onClick={handleAddCategory}>Save Category</Button></DialogFooter>
+          </DialogContent>
+      </Dialog>
+      
+      <Dialog open={isStyleDialogOpen} onOpenChange={setIsStyleDialogOpen}>
+          <DialogContent>
+              <DialogHeader><DialogTitle>Add New Style</DialogTitle></DialogHeader>
+              <div className="py-4"><Input placeholder="Style Name" value={newStyleName} onChange={(e) => setNewStyleName(e.target.value)} /></div>
+              <DialogFooter><Button onClick={handleAddStyle}>Save Style</Button></DialogFooter>
+          </DialogContent>
+      </Dialog>
+      
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {isLoading && Array.from({ length: 6 }).map((_, i) => <Card key={i}><CardHeader><CardTitle><div className="h-6 bg-gray-200 rounded w-3/4 animate-pulse" /></CardTitle></CardHeader><CardContent><div className="h-4 bg-gray-200 rounded w-1/2 mb-2 animate-pulse" /><div className="h-4 bg-gray-200 rounded w-full animate-pulse" /></CardContent></Card>)}
+        {isLoadingProducts && Array.from({ length: 6 }).map((_, i) => <Card key={i}><CardHeader><CardTitle><div className="h-6 bg-gray-200 rounded w-3/4 animate-pulse" /></CardTitle></CardHeader><CardContent><div className="h-4 bg-gray-200 rounded w-1/2 mb-2 animate-pulse" /><div className="h-4 bg-gray-200 rounded w-full animate-pulse" /></CardContent></Card>)}
         {products?.map(product => (
           <Card key={product.id}>
             <CardHeader>
@@ -502,12 +431,8 @@ export default function AdminDashboard() {
                   {product.name}
                 </span>
                  <div className="flex gap-2 flex-shrink-0">
-                    <Button variant="ghost" size="icon" onClick={() => openEditDialog(product)}>
-                        <Edit className="h-4 w-4" />
-                    </Button>
-                    <Button variant="ghost" size="icon" onClick={() => handleDelete(product.id)}>
-                        <Trash className="h-4 w-4 text-destructive" />
-                    </Button>
+                    <Button variant="ghost" size="icon" onClick={() => openEditDialog(product)}><Edit className="h-4 w-4" /></Button>
+                    <Button variant="ghost" size="icon" onClick={() => handleDelete(product.id)}><Trash className="h-4 w-4 text-destructive" /></Button>
                 </div>
               </CardTitle>
             </CardHeader>

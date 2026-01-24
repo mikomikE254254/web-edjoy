@@ -10,84 +10,41 @@
  * - /products/{productId}: Stores individual product details.
  * - /products/{productId}/reviews/{userId}: Stores user-specific ratings.
  * - /categories/{categoryId}: Stores category information.
+ * - /styles/{styleId}: Stores style information.
  * This flat structure is performant and simplifies security rules.
  *
  * Key Security Decisions:
- * - Public Read Access: All documents in both `/products` and `/categories` are publicly
- *   readable and listable to allow the app's front-end to function for all visitors.
- * - Open Write Access (Products): For development, all write operations on the `/products`
- *   collection are allowed (`if true;`). This enables the admin dashboard to function
- *   without a full authentication system. This is insecure and must be replaced with
- *   role-based access control before launch.
- * - Owner-Only Review Writes: Users can only write to their own review document,
- *   preventing them from modifying other users' ratings.
- * - Category Writes Disabled: Write access to `/categories` remains disabled, as there
- *   is currently no UI to manage them.
+ * - Public Read Access: All documents are publicly readable to allow the app's front-end
+ *   to function for all visitors.
+ * - Open Write Access (for Prototyping): For development, write operations on products,
+ *   categories, and styles are allowed (`if true;`). This is insecure and must be
+ *   replaced with role-based access control before launch.
+ * - Owner-Only Review Writes: Users can only write to their own review document.
  */
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    /**
-     * @description
-     *   Rules for the top-level product catalog. Products are public and can be read by anyone.
-     *   Write access is currently open for prototyping.
-     * @path
-     *   /products/{productId}
-     * @allow
-     *   Any user can read product details and list products. (read)
-     * @allow
-     *   Any user can create, update, and delete products for development purposes. (write)
-     * @principle
-     *   Prototyping Flexibility over Security. This rule is intentionally permissive to
-     *   facilitate rapid development. It MUST be secured before production.
-     */
     match /products/{productId} {
       allow read: if true;
+      allow write: if true; // WARNING: Open write access for prototyping.
 
-      // WARNING: Open write access for prototyping.
-      // These rules allow any user to create, update, or delete products.
-      // This is for development convenience and MUST be secured before production
-      // by implementing proper authentication and authorization checks.
-      allow write: if true;
-
-      /**
-       * @description
-       *   Rules for product reviews.
-       * @path
-       *   /products/{productId}/reviews/{userId}
-       * @allow
-       *   Any user can read reviews.
-       * @allow
-       *   A user can only create or update their own review.
-       * @principle
-       *   Owner-Only Writes. Ensures users cannot tamper with other users' ratings.
-       */
       match /reviews/{userId} {
         allow read: if true;
         allow write: if request.auth != null && request.auth.uid == userId;
       }
     }
 
-    /**
-     * @description
-     *   Rules for product categories. Categories are public and read-only.
-     * @path
-     *   /categories/{categoryId}
-     * @allow
-     *   Any user can list all available categories. (read)
-     * @deny
-     *   All write operations are denied as there is no admin system for categories.
-     * @principle
-     *   Public Read-Only Data. This rule ensures categories are viewable by all,
-     *   while writes are locked down for security.
-     */
     match /categories/{categoryId} {
       allow read: if true;
-
-      // CRITICAL: Cannot implement owner-only or admin-only writes. The 'Category' entity is missing an 'ownerId' or role-based field.
-      // All write operations are disabled to prevent unauthorized data modification.
-      allow write: if false;
+      // Allow writes for admin to add new categories during development
+      allow write: if true;
+    }
+    
+    match /styles/{styleId} {
+      allow read: if true;
+      // Allow writes for admin to add new styles during development
+      allow write: if true;
     }
   }
 }
