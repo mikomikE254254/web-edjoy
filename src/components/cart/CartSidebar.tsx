@@ -25,7 +25,7 @@ export default function CartSidebar() {
   const handleCheckoutViaWhatsApp = () => {
     if (cart.length === 0) return;
 
-    let message = "Hi Eddjoys, I would like to order the following items:\n\n";
+    let message = "Hi Eddjos, I would like to order the following items:\n\n";
     cart.forEach(item => {
       message += `- ${item.name} (Quantity: ${item.quantity})\n`;
     });

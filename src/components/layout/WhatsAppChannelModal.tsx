@@ -46,7 +46,7 @@ export default function WhatsAppChannelModal() {
           </DialogDescription>
         </DialogHeader>
         <div className="py-4">
-          <p>Stay in the loop with the latest trends from Eddjoys.ke. Join our channel for a first look at everything new!</p>
+          <p>Stay in the loop with the latest trends from Eddjos.ke. Join our channel for a first look at everything new!</p>
         </div>
         <DialogFooter className="sm:justify-start">
           <Button asChild variant="tactile-green" className="w-full sm:w-auto">

@@ -14,7 +14,7 @@ export default function Footer() {
 
         {/* Top Segment */}
         <div className="bg-white p-4 flex flex-col sm:flex-row justify-between items-center border-2 border-black rounded-2xl">
-          <Link href="/" className="font-bold text-xl mb-4 sm:mb-0">Eddjoys.ke</Link>
+          <Link href="/" className="font-bold text-xl mb-4 sm:mb-0">Eddjos.ke</Link>
           <div className="flex items-center gap-4">
             <nav className="flex flex-wrap justify-center gap-x-5 text-sm">
               <Link href="/" className="hover:underline">Home</Link>
@@ -47,7 +47,7 @@ export default function Footer() {
 
         {/* Bottom Segment */}
         <div className="bg-white p-4 flex flex-col sm:flex-row justify-between items-center gap-4 border-2 border-black rounded-2xl">
-          <p className="text-xs text-gray-600">© 2026 Eddjoys.ke. All rights reserved.</p>
+          <p className="text-xs text-gray-600">© 2026 Eddjos.ke. All rights reserved.</p>
           
           <Button asChild variant="secondary" size="icon" className="rounded-full">
               <Link href="/contact" aria-label="Contact page">

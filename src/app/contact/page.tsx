@@ -118,7 +118,7 @@ export default function ContactPage() {
                 <h3 className="text-gray-400">Contact</h3>
                 <div className="space-y-1 mt-2 font-normal normal-case">
                     <p className="text-gray-600">Nairobi, Kenya</p>
-                    <Link href="mailto:contact@eddjoys.ke" className="text-black font-medium hover:underline block">contact@eddjoys.ke</Link>
+                    <Link href="mailto:contact@eddjos.ke" className="text-black font-medium hover:underline block">contact@eddjos.ke</Link>
                     <Link href="tel:+254793832286" className="text-lg font-semibold text-black hover:underline block">+254 793 832286</Link>
                 </div>
             </div>
