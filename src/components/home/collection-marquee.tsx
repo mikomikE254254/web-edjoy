@@ -9,14 +9,14 @@ const collections = [
     href: '/women',
     style: {},
     isImage: true,
-    imageHint: 'ethereal-trench-main',
+    imageHint: 'marquee-women',
   },
   {
     title: 'UNISEX',
     items: ['Sweaters', 'Accessories', 'Casual Wear', 'Outerwear'],
     href: '/children',
     style: {},
-    imageHint: 'cat-bag',
+    imageHint: 'marquee-unisex',
     isImage: true,
   },
   {
@@ -25,7 +25,15 @@ const collections = [
     href: '/men',
     style: {},
     isImage: true,
-    imageHint: 'urban-nomad-1',
+    imageHint: 'marquee-men',
+  },
+  {
+    title: 'BAGS',
+    items: ['Handbags', 'Backpacks', 'Totes', 'Clutches'],
+    href: '/bags',
+    style: {},
+    isImage: true,
+    imageHint: 'bag-editorial-large-replace',
   },
 ];
 

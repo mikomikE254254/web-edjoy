@@ -371,6 +371,24 @@
       "imageUrl": "https://i.postimg.cc/QC4rLk9B/Whats-App-Image-2026-01-24-at-23-51-56.jpg",
       "description": "Portrait of the developer, Michael Muchemi.",
       "imageHint": "man portrait"
+    },
+    {
+      "id": "marquee-men",
+      "imageUrl": "https://i.postimg.cc/vTsyc37q/download_(11).jpg",
+      "description": "Man in fashionable outfit for marquee.",
+      "imageHint": "man fashion"
+    },
+    {
+      "id": "marquee-women",
+      "imageUrl": "https://i.postimg.cc/3wn9bh1K/perse_bag.jpg",
+      "description": "Woman with purse for marquee.",
+      "imageHint": "woman purse"
+    },
+    {
+      "id": "marquee-unisex",
+      "imageUrl": "https://i.postimg.cc/zXbR1f2f/download_(6).jpg",
+      "description": "Unisex fashion for marquee.",
+      "imageHint": "unisex fashion"
     }
   ]
 }
