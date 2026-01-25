@@ -58,7 +58,7 @@ export default function Home() {
       </section>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-        <Link href="/women" className="relative rounded-xl overflow-hidden group h-full min-h-[140px]">
+        <Link href="/bags" className="relative rounded-xl overflow-hidden group h-full min-h-[140px]">
           {promoImage1 && (
             <Image
               src={promoImage1.imageUrl}
@@ -72,7 +72,7 @@ export default function Home() {
           <div className="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent p-6 flex items-center">
             <div>
               <h3 className="text-white font-medium text-lg">Where dreams meet couture</h3>
-              <Button variant="secondary" className="mt-2 rounded-full backdrop-blur-sm bg-white/90 border-transparent hover:bg-gray-100/90">Shop Now</Button>
+              <Button variant="secondary" className="mt-2 rounded-full backdrop-blur-sm bg-white/90 hover:bg-gray-100/90">Shop Now</Button>
             </div>
           </div>
         </Link>
