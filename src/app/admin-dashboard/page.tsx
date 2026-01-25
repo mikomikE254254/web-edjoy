@@ -32,6 +32,16 @@ const PRESET_COLORS = [
     { name: 'Yellow', hex: '#EAB308' }, { name: 'Orange', hex: '#F97316' },
     { name: 'Brown', hex: '#78350F' }, { name: 'Beige', hex: '#F5F5DC' },
     { name: 'Purple', hex: '#8B5CF6' }, { name: 'Indigo', hex: '#6366F1' },
+    { name: 'Sage', hex: '#8F9779' }, { name: 'Olive', hex: '#556B2F' },
+    { name: 'Terracotta', hex: '#E2725B' }, { name: 'Ochre', hex: '#CC7722' },
+    { name: 'Sand', hex: '#C2B280' }, { name: 'Taupe', hex: '#483C32' },
+    { name: 'Charcoal', hex: '#36454F' }, { name: 'Slate', hex: '#708090' },
+    { name: 'Navy', hex: '#000080' }, { name: 'Maroon', hex: '#800000' },
+    { name: 'Forest', hex: '#228B22' }, { name: 'Zinc', hex: '#B4B4B4' },
+    { name: 'Teal', hex: '#008080' }, { name: 'Emerald', hex: '#50C878' },
+    { name: 'Crimson', hex: '#DC143C' }, { name: 'Amber', hex: '#FFBF00' },
+    { name: 'Violet', hex: '#8F00FF' }, { name: 'Fuchsia', hex: '#FF00FF' },
+    { name: 'Mint', hex: '#98FF98' }, { name: 'Mauve', hex: '#E0B0FF' },
 ];
 
 const AVAILABLE_SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];

@@ -1,166 +1,101 @@
 'use client';
 
-import { useState, useMemo } from 'react';
-import { useCollection, useFirestore, useUser, useMemoFirebase, setDocumentNonBlocking } from '@/firebase';
-import { collection, doc, serverTimestamp, query, orderBy, where, limit } from 'firebase/firestore';
-import type { Review, Product } from '@/lib/types';
-import { useParams } from 'next/navigation';
-import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
-import { Star } from 'lucide-react';
+import React, { useRef } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { Quote, Star } from 'lucide-react';
+import { PT_Sans, Playfair_Display } from 'next/font/google';
 import { cn } from '@/lib/utils';
-import { useToast } from '@/hooks/use-toast';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Skeleton } from '../ui/skeleton';
 
-function ReviewCard({ review }: { review: Review }) {
-    return (
-        <div className="flex gap-4 border-b py-6">
-            <Avatar>
-                <AvatarFallback>{review.userName ? review.userName.charAt(0).toUpperCase() : 'A'}</AvatarFallback>
-            </Avatar>
-            <div className="flex-1">
-                <div className="flex justify-between items-center">
-                    <p className="font-semibold">{review.userName || 'Anonymous'}</p>
-                    <p className="text-xs text-muted-foreground">
-                        {review.createdAt ? new Date(review.createdAt.seconds * 1000).toLocaleDateString() : 'Just now'}
-                    </p>
-                </div>
-                <div className="flex items-center gap-0.5 mt-1">
-                    {[...Array(5)].map((_, i) => (
-                        <Star key={i} className={cn("w-4 h-4", i < review.rating ? "text-yellow-400 fill-yellow-400" : "text-gray-300")} />
-                    ))}
-                </div>
-                <p className="mt-3 text-sm text-gray-700">{review.comment}</p>
-            </div>
-        </div>
-    );
-}
+const playfair = Playfair_Display({
+  subsets: ['latin'],
+  weight: ['400', '700', '900'],
+});
 
-function ReviewForm({ productId, onReviewAdded }: { productId: string, onReviewAdded: () => void }) {
-    const { user, isUserLoading } = useUser();
-    const firestore = useFirestore();
-    const { toast } = useToast();
-    const [rating, setRating] = useState(0);
-    const [hoverRating, setHoverRating] = useState(0);
-    const [comment, setComment] = useState('');
-    const [isSubmitting, setIsSubmitting] = useState(false);
+const ptSans = PT_Sans({
+  subsets: ['latin'],
+  weight: ['400', '700'],
+});
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!user || !firestore) {
-            toast({ variant: "destructive", title: "You must be logged in to leave a review." });
-            return;
-        }
-        if (rating === 0) {
-            toast({ variant: "destructive", title: "Please select a star rating." });
-            return;
-        }
-        if (comment.trim().length < 10) {
-            toast({ variant: "destructive", title: "Comment must be at least 10 characters." });
-            return;
-        }
-
-        setIsSubmitting(true);
-        const reviewRef = doc(firestore, 'products', productId, 'reviews', user.uid);
-        
-        const reviewData = {
-            userId: user.uid,
-            userName: user.displayName || user.email || 'Anonymous',
-            rating,
-            comment,
-            createdAt: serverTimestamp(),
-        };
-
-        setDocumentNonBlocking(reviewRef, reviewData, { merge: true });
-
-        toast({ title: "Review submitted!", description: "Thank you for your feedback." });
-        setRating(0);
-        setComment('');
-        onReviewAdded();
-        setIsSubmitting(false);
-    };
-    
-    if (isUserLoading) return <Skeleton className="h-48 w-full" />;
-    if (!user) return <p className="text-center text-muted-foreground py-8">Please sign in to leave a review.</p>;
-
-    return (
-        <form onSubmit={handleSubmit} className="p-6 border rounded-lg bg-gray-50/50 space-y-4">
-            <h3 className="text-lg font-semibold">Write a Review</h3>
-            <div>
-                <p className="text-sm font-medium mb-2">Your Rating</p>
-                <div className="flex items-center gap-1">
-                    {[...Array(5)].map((_, i) => {
-                        const value = i + 1;
-                        return (
-                            <Star
-                                key={value}
-                                className={cn("w-6 h-6 cursor-pointer transition-colors", value <= (hoverRating || rating) ? "text-yellow-400 fill-yellow-400" : "text-gray-300 hover:text-yellow-300")}
-                                onClick={() => setRating(value)}
-                                onMouseEnter={() => setHoverRating(value)}
-                                onMouseLeave={() => setHoverRating(0)}
-                            />
-                        )
-                    })}
-                </div>
-            </div>
-            <div>
-                <Textarea
-                    placeholder="Share your thoughts on the product..."
-                    value={comment}
-                    onChange={(e) => setComment(e.target.value)}
-                    rows={4}
-                />
-            </div>
-            <Button type="submit" disabled={isSubmitting}>
-                {isSubmitting ? 'Submitting...' : 'Submit Review'}
-            </Button>
-        </form>
-    );
-}
-
+const REVIEWS = [
+    { id: 1, name: 'Alex M.', initials: 'AM', rating: 5, text: "The craftsmanship is impeccable. It feels substantial and looks even better in person. A new favorite." },
+    { id: 2, name: 'Jordan S.', initials: 'JS', rating: 5, text: "Absolutely stunning. The minimalist design is exactly what I was looking for. Worth every penny." },
+    { id: 3, name: 'Casey L.', initials: 'CL', rating: 5, text: "I've received so many compliments. It's versatile enough for both casual and formal occasions." },
+    { id: 4, name: 'Taylor B.', initials: 'TB', rating: 4, text: "Great product, very stylish. The color was slightly different than expected, but it's grown on me." },
+    { id: 5, name: 'Morgan P.', initials: 'MP', rating: 5, text: "Exceeded all my expectations. The quality of the materials is top-notch. Highly recommend." },
+    { id: 6, name: 'Riley J.', initials: 'RJ', rating: 5, text: "A truly timeless piece. It’s a staple in my wardrobe now. I'm considering buying another color." },
+    { id: 7, name: 'Jamie K.', initials: 'JK', rating: 5, text: "The attention to detail is remarkable. From the stitching to the hardware, everything is perfect." },
+    { id: 8, name: 'Drew W.', initials: 'DW', rating: 5, text: "So elegant and functional. It holds everything I need without looking bulky. The perfect everyday item." },
+    { id: 9, name: 'Cameron T.', initials: 'CT', rating: 4, text: "Love the design and feel. My only wish is that it came in more sizes. Still, a fantastic purchase." },
+    { id: 10, name: 'Avery G.', initials: 'AG', rating: 5, text: "This was a gift, and it was a huge hit. The packaging was as beautiful as the product itself." },
+    { id: 11, name: 'Skyler H.', initials: 'SH', rating: 5, text: "It's rare to find something this well-made. Feels like a luxury item that will last for years." },
+    { id: 12, name: 'Quinn R.', initials: 'QR', rating: 5, text: "Simple, elegant, and beautifully executed. A masterclass in minimalist design. I'm beyond impressed." },
+];
 
 export default function ProductReviews() {
-    const { slug } = useParams<{ slug: string }>();
-    const firestore = useFirestore();
-    const [showForm, setShowForm] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
 
-    const productQuery = useMemoFirebase(
-        () => firestore ? query(collection(firestore, 'products'), where('slug', '==', slug), limit(1)) : null,
-        [firestore, slug]
-    );
-    const { data: products, isLoading: isLoadingProduct } = useCollection<Product>(productQuery);
-    const productId = products?.[0]?.id;
+  return (
+    <section ref={containerRef} className="relative h-[250vh] bg-background py-20">
+      <div className="sticky top-0 mx-auto flex h-screen max-w-5xl items-center justify-center px-4">
+        <div className="flex flex-col items-center gap-6">
+          <h2 className={cn("text-4xl md:text-5xl font-bold text-center", playfair.className)}>
+            Customer Reviews
+          </h2>
+          <p className="text-muted-foreground text-center max-w-lg">
+            What our clients are saying about this product.
+          </p>
+          <div className="relative h-[450px] w-full max-w-lg">
+            {REVIEWS.map((review, index) => (
+              <Card key={review.id} review={review} index={index} containerRef={containerRef} />
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
 
-    const reviewsQuery = useMemoFirebase(
-        () => productId ? query(collection(firestore, 'products', productId, 'reviews'), orderBy('createdAt', 'desc')) : null,
-        [firestore, productId]
-    );
+const Card = ({ review, index, containerRef }: { review: (typeof REVIEWS)[0], index: number, containerRef: React.RefObject<HTMLDivElement> }) => {
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ['start start', 'end end'],
+  });
 
-    const { data: reviews, isLoading: isLoadingReviews } = useCollection<Review>(reviewsQuery);
-    
-    if (isLoadingProduct) return <div className="py-12"><Skeleton className="h-64 w-full" /></div>;
-    if (!productId) return null;
+  const start = index * 0.05;
+  const end = 1;
+  
+  const scale = useTransform(scrollYProgress, [start, end], [1, 0.5 + index * 0.025]);
+  const top = useTransform(scrollYProgress, [start, end], [0, -40 * (REVIEWS.length - index)]);
 
-    return (
-        <div className="py-12 md:py-16 space-y-10">
-            <div className="flex justify-between items-center">
-                <h2 className="text-2xl md:text-3xl font-bold">Customer Reviews ({reviews?.length || 0})</h2>
-                <Button variant="outline" onClick={() => setShowForm(!showForm)}>
-                    {showForm ? 'Cancel' : 'Write a Review'}
-                </Button>
-            </div>
-
-            {showForm && <ReviewForm productId={productId} onReviewAdded={() => setShowForm(false)} />}
-            
-            <div className="space-y-6">
-                {isLoadingReviews && Array.from({length: 3}).map((_, i) => <Skeleton key={i} className="h-24 w-full" />)}
-                {!isLoadingReviews && reviews && reviews.length > 0 ? (
-                    reviews.map(review => <ReviewCard key={review.id} review={review} />)
-                ) : (
-                    !isLoadingReviews && <p className="text-center text-muted-foreground py-8">No reviews yet. Be the first!</p>
-                )}
+  return (
+    <motion.div
+      style={{
+        scale,
+        top,
+        zIndex: REVIEWS.length - index,
+      }}
+      className="absolute left-0 top-0 flex h-[450px] w-full max-w-lg flex-col justify-between rounded-2xl border-2 border-black bg-white p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]"
+    >
+      <Quote className="h-10 w-10 text-gray-300" />
+      <p className={cn("text-2xl font-semibold italic text-center", playfair.className)}>
+        "{review.text}"
+      </p>
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+            <Avatar>
+                <AvatarFallback>{review.initials}</AvatarFallback>
+            </Avatar>
+            <div>
+                <p className="font-bold">{review.name}</p>
+                 <div className="flex items-center gap-0.5">
+                    {[...Array(review.rating)].map((_, i) => (
+                        <Star key={i} className="h-4 w-4 text-yellow-400 fill-yellow-400" />
+                    ))}
+                </div>
             </div>
         </div>
-    );
-}
+      </div>
+    </motion.div>
+  );
+};
