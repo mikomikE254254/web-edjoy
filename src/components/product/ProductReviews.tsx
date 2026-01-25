@@ -31,7 +31,7 @@ function ReviewCard({ review }: { review: WithId<ReviewType> }) {
 
   return (
     <div className="p-1 h-full">
-      <div className="w-full h-full bg-white/5 backdrop-blur-lg rounded-2xl p-6 border border-white/20 shadow-lg flex flex-col justify-between transition-transform duration-300 hover:-translate-y-2">
+      <div className="w-full h-full bg-gray-50 rounded-2xl p-6 border border-gray-200 shadow-sm flex flex-col justify-between transition-transform duration-300 hover:-translate-y-1">
         <div>
           <div className="flex items-center gap-1 mb-4">
             {[...Array(5)].map((_, i) => (
@@ -39,16 +39,16 @@ function ReviewCard({ review }: { review: WithId<ReviewType> }) {
                 key={i}
                 className={cn(
                   "w-5 h-5",
-                  i < review.rating ? "text-yellow-400 fill-yellow-400" : "text-gray-500"
+                  i < review.rating ? "text-yellow-400 fill-yellow-400" : "text-gray-300"
                 )}
               />
             ))}
           </div>
-          <p className="text-gray-300 text-sm italic line-clamp-5">"{review.comment}"</p>
+          <p className="text-gray-600 text-sm italic line-clamp-5">"{review.comment}"</p>
         </div>
         <div className="mt-4 text-right">
-          <p className="font-semibold text-white">{review.userName}</p>
-          <p className="text-xs text-gray-400">{formatDistanceToNow(date, { addSuffix: true })}</p>
+          <p className="font-semibold text-gray-900">{review.userName}</p>
+          <p className="text-xs text-gray-500">{formatDistanceToNow(date, { addSuffix: true })}</p>
         </div>
       </div>
     </div>
@@ -73,7 +73,7 @@ const StarRatingInput = ({ value, onChange }: { value: number, onChange: (value:
                         <Star
                             className={cn(
                                 "w-7 h-7 cursor-pointer transition-colors",
-                                ratingValue <= (hover || value) ? "text-yellow-400 fill-yellow-400" : "text-gray-400"
+                                ratingValue <= (hover || value) ? "text-yellow-400 fill-yellow-400" : "text-gray-300"
                             )}
                         />
                     </button>
@@ -166,12 +166,12 @@ export default function ProductReviews({ productId }: { productId: string }) {
   }, [reviews]);
 
   return (
-    <div className="py-12 md:py-24 bg-gray-900/50 rounded-3xl mt-12 overflow-hidden">
+    <div className="py-12 md:py-24 bg-white border border-gray-200 rounded-3xl mt-12 overflow-hidden">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
           <div className="lg:col-span-1 space-y-6 lg:sticky top-24">
-            <h2 className="text-3xl font-bold text-white">Share Your Thoughts</h2>
-            <p className="text-gray-300">
+            <h2 className="text-3xl font-bold text-gray-900">Share Your Thoughts</h2>
+            <p className="text-gray-600">
                 Your feedback helps us improve and assists other shoppers. Let us know what you think about this product!
             </p>
             <Form {...form}>
@@ -181,9 +181,9 @@ export default function ProductReviews({ productId }: { productId: string }) {
                   name="userName"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-white">Your Name</FormLabel>
+                      <FormLabel>Your Name</FormLabel>
                       <FormControl>
-                        <Input placeholder="e.g., Jane Doe" {...field} className="bg-gray-800 border-gray-700 text-white placeholder:text-gray-500" />
+                        <Input placeholder="e.g., Jane Doe" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -194,7 +194,7 @@ export default function ProductReviews({ productId }: { productId: string }) {
                   name="rating"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-white">Your Rating</FormLabel>
+                      <FormLabel>Your Rating</FormLabel>
                       <FormControl>
                         <StarRatingInput value={field.value} onChange={field.onChange} />
                       </FormControl>
@@ -207,9 +207,9 @@ export default function ProductReviews({ productId }: { productId: string }) {
                   name="comment"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-white">Your Review</FormLabel>
+                      <FormLabel>Your Review</FormLabel>
                       <FormControl>
-                        <Textarea placeholder="Tell us about your experience..." {...field} className="bg-gray-800 border-gray-700 text-white placeholder:text-gray-500" />
+                        <Textarea placeholder="Tell us about your experience..." {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -224,7 +224,7 @@ export default function ProductReviews({ productId }: { productId: string }) {
           </div>
           
           <div className="lg:col-span-2">
-            <h3 className="text-3xl font-bold text-white mb-6">What Others Are Saying</h3>
+            <h3 className="text-3xl font-bold text-gray-900 mb-6">What Others Are Saying</h3>
             <Carousel opts={{ align: "start" }} className="w-full">
               <CarouselContent className="-ml-4">
                 {isLoadingReviews && Array.from({length: 3}).map((_, i) => (
@@ -235,7 +235,7 @@ export default function ProductReviews({ productId }: { productId: string }) {
                     </CarouselItem>
                 ))}
                 {!isLoadingReviews && sortedReviews.length === 0 && (
-                    <div className="w-full text-center py-12 text-gray-400">
+                    <div className="w-full text-center py-12 text-gray-500">
                         <p>Be the first to review this product!</p>
                     </div>
                 )}
