@@ -176,21 +176,21 @@
     },
     {
       "id": "stylish-crossbody-bag",
-      "imageUrl": "https://images.unsplash.com/photo-1709899629440-64da054379d4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8Y3Jvc3Nib2R5JTIwYmFnfGVufDB8fHx8MTc2OTE1NDQxMXww&ixlib=rb-4.1.0&q=80&w=1080",
-      "description": "A stylish crossbody bag.",
-      "imageHint": "crossbody bag"
+      "imageUrl": "https://i.postimg.cc/3wn9bh1K/perse_bag.jpg",
+      "description": "Woman with purse.",
+      "imageHint": "woman purse"
     },
     {
       "id": "leather-duffle-bag",
-      "imageUrl": "https://images.unsplash.com/photo-1761369333007-14045c7d2890?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxsZWF0aGVyJTIwZHVmZmxlfGVufDB8fHx8MTc2OTE1NDQxMXww&ixlib=rb-4.1.0&q=80&w=1080",
-      "description": "A leather duffle bag.",
-      "imageHint": "leather duffle"
+      "imageUrl": "https://i.postimg.cc/gkX6P0tk/Men_s_Accessories_Backpacks_Watches.jpg",
+      "description": "Men's accessories.",
+      "imageHint": "men accessories"
     },
     {
       "id": "minimalist-clutch",
-      "imageUrl": "https://images.unsplash.com/photo-1749294423916-036296782a61?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxtaW5pbWFsaXN0JTIwY2x1dGNofGVufDB8fHx8MTc2OTE1NDQxMXww&ixlib=rb-4.1.0&q=80&w=1080",
-      "description": "A minimalist clutch.",
-      "imageHint": "minimalist clutch"
+      "imageUrl": "https://i.postimg.cc/W3y8T7xY/black_bag.jpg",
+      "description": "A black bag.",
+      "imageHint": "black bag"
     },
     {
       "id": "men-formal-shirt",
@@ -314,7 +314,7 @@
     },
     {
       "id": "prada-bag",
-      "imageUrl": "https://i.postimg.cc/k6xKyWJR/Women-s-Bags-PRADA.jpg",
+      "imageUrl": "https://i.postimg.cc/k6xKyWJR/Women_s-Bags-PRADA.jpg",
       "description": "A women's Prada bag.",
       "imageHint": "prada bag"
     },
