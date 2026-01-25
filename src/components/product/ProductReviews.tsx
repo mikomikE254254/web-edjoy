@@ -1,283 +1,100 @@
 'use client';
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
+import Image from "next/image";
+import { useCollection, useFirestore, useMemoFirebase, WithId } from '@/firebase';
+import { collection, query, limit } from 'firebase/firestore';
+import type { Review as ReviewType } from '@/lib/types';
+import { Skeleton } from "@/components/ui/skeleton";
 
-import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
-import { useUser, useCollection, useFirestore, useMemoFirebase, setDocumentNonBlocking, WithId } from '@/firebase';
-import { collection, doc, serverTimestamp } from 'firebase/firestore';
-import { Star } from 'lucide-react';
-import { formatDistanceToNow } from 'date-fns';
-import { motion } from 'framer-motion';
-
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Separator } from '@/components/ui/separator';
-import { cn } from '@/lib/utils';
-import type { Review } from '@/lib/types';
-import { useToast } from '@/hooks/use-toast';
-import { Skeleton } from '../ui/skeleton';
-
-const reviewSchema = z.object({
-  name: z.string().min(2, { message: 'Name must be at least 2 characters.' }).max(50),
-  rating: z.number().min(1, { message: 'Please select a rating.' }).max(5),
-  comment: z.string().min(10, { message: 'Comment must be at least 10 characters.' }).max(1000),
-});
-
-type ReviewFormData = z.infer<typeof reviewSchema>;
-
-const StarRatingInput = ({ field }: { field: any }) => {
-  const [hover, setHover] = useState(0);
-  return (
-    <div className="flex items-center gap-1">
-      {[...Array(5)].map((_, index) => {
-        const ratingValue = index + 1;
-        return (
-          <button
-            type="button"
-            key={ratingValue}
-            onClick={() => field.onChange(ratingValue)}
-            onMouseEnter={() => setHover(ratingValue)}
-            onMouseLeave={() => setHover(0)}
-          >
-            <Star
-              className={cn(
-                'w-7 h-7 cursor-pointer transition-colors',
-                ratingValue <= (hover || field.value)
-                  ? 'text-yellow-400 fill-yellow-400'
-                  : 'text-gray-300'
-              )}
-            />
-          </button>
-        );
-      })}
-    </div>
-  );
-};
-
-const ReviewForm = ({ productId }: { productId: string }) => {
-  const { toast } = useToast();
-  const { user, isUserLoading } = useUser();
-  const firestore = useFirestore();
-
-  const form = useForm<ReviewFormData>({
-    resolver: zodResolver(reviewSchema),
-    defaultValues: {
-      name: '',
-      rating: 0,
-      comment: '',
-    },
+function ReviewCard({ review, index, totalReviews, containerRef }: { review: WithId<ReviewType>, index: number, totalReviews: number, containerRef: React.RefObject<HTMLDivElement> }) {
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"]
   });
 
-  const onSubmit = (data: ReviewFormData) => {
-    if (!firestore) {
-      toast({
-        variant: "destructive",
-        title: "Database Error",
-        description: "Could not connect to the database.",
-      });
-      return;
-    }
-    
-    if (isUserLoading) {
-        toast({ title: "Please wait...", description: "Verifying user session." });
-        return;
-    }
+  // Calculate timing for each card
+  const start = index / totalReviews;
+  const end = (index + 1) / totalReviews;
 
-    if (!user) {
-        toast({
-            variant: "destructive",
-            title: "Authentication Error",
-            description: "Your session could not be verified. Please refresh and try again.",
-        });
-        return;
-    }
-
-    const reviewRef = doc(firestore, 'products', productId, 'reviews', user.uid);
-    
-    const reviewData = {
-      userId: user.uid,
-      userName: data.name,
-      rating: data.rating,
-      comment: data.comment,
-      createdAt: serverTimestamp(),
-    };
-
-    setDocumentNonBlocking(reviewRef, reviewData, { merge: true });
-
-    toast({
-      title: "Review Submitted!",
-      description: "Thank you for your feedback.",
-    });
-    form.reset();
-  };
-
-  if (isUserLoading) {
-    return <Skeleton className="h-48 w-full rounded-lg" />;
-  }
+  // This handles the "Slide from bottom" animation
+  const y = useTransform(scrollYProgress, [start, end], index === 0 ? ["0%", "0%"] : ["100%", "0%"]);
 
   return (
-    <Card className="shadow-md">
-      <CardHeader>
-        <CardTitle>Leave a Review</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            <FormField
-              control={form.control}
-              name="rating"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Your Rating</FormLabel>
-                  <FormControl>
-                    <StarRatingInput field={field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Your Name</FormLabel>
-                  <FormControl>
-                    <Input placeholder="e.g. Jane Doe" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="comment"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Your Review</FormLabel>
-                  <FormControl>
-                    <Textarea placeholder="Tell us what you think about the product..." rows={4} {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button type="submit" disabled={isUserLoading || form.formState.isSubmitting}>Submit Review</Button>
-            {user?.isAnonymous && (
-                 <p className="text-xs text-muted-foreground pt-2">You're submitting as a guest. Your review will be tied to this session.</p>
-            )}
-          </form>
-        </Form>
-      </CardContent>
-    </Card>
-  );
-};
-
-const cardVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
-};
-
-const ReviewCard = ({ review }: { review: WithId<Review> }) => {
-  const { rating, comment, userName, createdAt } = review;
-  return (
-    <motion.div 
-      className="bg-white p-6 rounded-xl shadow-sm border"
-      variants={cardVariants}
+    <motion.div
+      style={{ y, zIndex: index }}
+      className="absolute inset-0 w-full h-screen border-t-2 border-black"
     >
-      <div className="flex items-start gap-4">
-        <Avatar>
-          <AvatarFallback>{userName ? userName.substring(0, 2).toUpperCase() : 'A'}</AvatarFallback>
-        </Avatar>
-        <div className="flex-1">
-          <div className="flex justify-between items-center">
-            <p className="font-semibold">{userName}</p>
-            {createdAt && (
-              <p className="text-xs text-muted-foreground">
-                {formatDistanceToNow(createdAt.toDate(), { addSuffix: true })}
-              </p>
-            )}
-          </div>
-          <div className="flex items-center gap-0.5 my-2">
-            {[...Array(5)].map((_, i) => (
-              <Star
-                key={i}
-                className={cn(
-                  'w-4 h-4',
-                  i < rating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'
-                )}
-              />
-            ))}
-          </div>
-          <p className="text-sm text-gray-700 leading-relaxed">{comment}</p>
+      {/* Background Image Fix for Blur */}
+      <div className="absolute inset-0 z-0">
+        <Image 
+          src="https://i.postimg.cc/vTsyc37q/download_(11).jpg"
+          alt="Product Background"
+          fill
+          priority={index < 2}
+          sizes="100vw"
+          className={`object-cover ${index === 0 ? 'hidden' : 'opacity-60'}`} // Hide img on first red card
+          style={{ imageRendering: 'auto' }} 
+        />
+        {/* Dark overlay for readability */}
+        <div className={`absolute inset-0 ${index === 0 ? 'bg-red-600' : 'bg-black/40'}`} />
+      </div>
+
+      {/* Content Container (Sharp Rectangles) */}
+      <div className="relative z-10 h-full flex items-center justify-center px-6">
+        <div className="w-full max-w-5xl border-[4px] border-white p-10 md:p-20 text-white flex flex-col items-start gap-6">
+           <span className="font-mono text-sm tracking-widest bg-white text-black px-2 py-1">
+             VERIFIED REVIEW {index + 1}/{totalReviews}
+           </span>
+           <h2 className="text-4xl md:text-8xl font-serif uppercase leading-[0.9] tracking-tighter">
+             "{review.comment}"
+           </h2>
+           <div className="w-full h-[2px] bg-white mt-4" />
+           <p className="text-xl font-bold">— {review.userName}</p>
         </div>
       </div>
     </motion.div>
   );
-};
+}
 
 export default function ProductReviews({ productId }: { productId: string }) {
-    const firestore = useFirestore();
-    
-    const reviewsQuery = useMemoFirebase(
-        () => (firestore ? collection(firestore, 'products', productId, 'reviews') : null),
-        [firestore, productId]
-    );
+  const containerRef = useRef<HTMLDivElement>(null);
+  const firestore = useFirestore();
 
-    const { data: reviews, isLoading: isLoadingReviews } = useCollection<Review>(reviewsQuery);
-    
-    const containerVariants = {
-        hidden: { opacity: 0 },
-        visible: {
-          opacity: 1,
-          transition: {
-            staggerChildren: 0.1,
-          },
-        },
-      };
+  const reviewsQuery = useMemoFirebase(
+      () => (firestore ? query(collection(firestore, 'products', productId, 'reviews'), limit(11)) : null),
+      [firestore, productId]
+  );
 
-    return (
-        <div className="py-12 md:py-16 space-y-12">
-            <Separator />
-            <div className="grid md:grid-cols-3 gap-8 md:gap-12 items-start">
-                <div className="md:col-span-1 space-y-2">
-                    <h2 className="text-3xl font-bold">Customer Reviews</h2>
-                    <p className="text-muted-foreground">See what others are saying about this product.</p>
-                </div>
-                <div className="md:col-span-2">
-                    <ReviewForm productId={productId} />
-                </div>
-            </div>
-            
-            <div className="space-y-8">
-                {isLoadingReviews && (
-                    <div className="space-y-6">
-                        <Skeleton className="h-24 w-full rounded-xl" />
-                        <Skeleton className="h-24 w-full rounded-xl" />
-                        <Skeleton className="h-24 w-full rounded-xl" />
-                    </div>
-                )}
-                
-                {reviews && reviews.length > 0 ? (
-                     <motion.div 
-                        className="space-y-6"
-                        variants={containerVariants}
-                        initial="hidden"
-                        animate="visible"
-                    >
-                        {reviews.sort((a, b) => (b.createdAt?.toMillis() || 0) - (a.createdAt?.toMillis() || 0)).map(review => (
-                            <ReviewCard key={review.id} review={review} />
-                        ))}
-                    </motion.div>
-                ) : (
-                    !isLoadingReviews && <p className="text-center text-muted-foreground py-8">Be the first to review this product!</p>
-                )}
-            </div>
-        </div>
-    );
+  const { data: fetchedReviews, isLoading: isLoadingReviews } = useCollection<ReviewType>(reviewsQuery);
+
+  if (isLoadingReviews) {
+    return <div className="h-screen w-full flex items-center justify-center"><Skeleton className="h-96 w-full max-w-5xl" /></div>;
+  }
+
+  if (!fetchedReviews || fetchedReviews.length === 0) {
+    return null; // Don't render the section if there are no reviews to show.
+  }
+  
+  const anchorReview: WithId<ReviewType> = {
+    id: 'anchor-0',
+    userName: 'RUNWAY RETAIL',
+    comment: 'THIS IS THE PRIMARY ANCHOR. RED BASE.',
+    // Add dummy data for other required fields of ReviewType
+    rating: 5,
+    userId: 'system',
+    createdAt: new Date() as any, // Not a firestore timestamp, but will work for typing.
+  };
+  
+  const displayReviews = [anchorReview, ...fetchedReviews];
+
+  return (
+    <div ref={containerRef} className="relative h-[800vh] bg-white">
+      <div className="sticky top-0 h-screen w-full flex items-center justify-center overflow-hidden">
+        {displayReviews.map((review, index) => (
+          <ReviewCard key={review.id} review={review} index={index} totalReviews={displayReviews.length} containerRef={containerRef} />
+        ))}
+      </div>
+    </div>
+  );
 }
