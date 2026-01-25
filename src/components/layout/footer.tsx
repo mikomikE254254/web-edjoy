@@ -1,8 +1,13 @@
+'use client';
+
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { Facebook, Twitter, Instagram, Linkedin, Phone, Settings } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export default function Footer() {
+  const pathname = usePathname();
+
   return (
     <footer className="bg-background text-black py-12 px-6 sm:px-12 lg:px-20">
       <div className="space-y-6 max-w-7xl mx-auto">
@@ -18,12 +23,14 @@ export default function Footer() {
               <Link href="/children" className="hover:underline">Unisex</Link>
               <Link href="/bags" className="hover:underline">Bags</Link>
             </nav>
-            <Button asChild variant="tactile-green" size="sm">
-              <Link href="/admin-dashboard">
-                <Settings />
-                Admin
-              </Link>
-            </Button>
+            {pathname === '/bags' && (
+              <Button asChild variant="secondary" size="sm">
+                <Link href="/admin-dashboard">
+                  <Settings />
+                  Admin
+                </Link>
+              </Button>
+            )}
           </div>
         </div>
 
