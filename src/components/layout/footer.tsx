@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Facebook, Twitter, Instagram, Linkedin, Phone } from 'lucide-react';
+import { Facebook, Twitter, Instagram, Linkedin, Phone, Settings } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export default function Footer() {
@@ -10,13 +10,21 @@ export default function Footer() {
         {/* Top Segment */}
         <div className="bg-white p-4 flex flex-col sm:flex-row justify-between items-center border-2 border-black rounded-2xl">
           <Link href="/" className="font-bold text-xl mb-4 sm:mb-0">Eddjoys.ke</Link>
-          <nav className="flex flex-wrap justify-center gap-x-5 text-sm">
-            <Link href="/" className="hover:underline">Home</Link>
-            <Link href="/women" className="hover:underline">Women</Link>
-            <Link href="/men" className="hover:underline">Men</Link>
-            <Link href="/children" className="hover:underline">Unisex</Link>
-            <Link href="/bags" className="hover:underline">Bags</Link>
-          </nav>
+          <div className="flex items-center gap-4">
+            <nav className="flex flex-wrap justify-center gap-x-5 text-sm">
+              <Link href="/" className="hover:underline">Home</Link>
+              <Link href="/women" className="hover:underline">Women</Link>
+              <Link href="/men" className="hover:underline">Men</Link>
+              <Link href="/children" className="hover:underline">Unisex</Link>
+              <Link href="/bags" className="hover:underline">Bags</Link>
+            </nav>
+            <Button asChild variant="tactile-green" size="sm">
+              <Link href="/admin-dashboard">
+                <Settings />
+                Admin
+              </Link>
+            </Button>
+          </div>
         </div>
 
         {/* Middle Segment */}
