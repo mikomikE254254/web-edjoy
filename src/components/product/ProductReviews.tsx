@@ -74,13 +74,27 @@ const ReviewForm = ({ productId }: { productId: string }) => {
   });
 
   const onSubmit = (data: ReviewFormData) => {
-    if (!firestore || !user) {
+    if (!firestore) {
       toast({
         variant: "destructive",
-        title: "Authentication Error",
-        description: "You must be signed in to leave a review.",
+        title: "Database Error",
+        description: "Could not connect to the database.",
       });
       return;
+    }
+    
+    if (isUserLoading) {
+        toast({ title: "Please wait...", description: "Verifying user session." });
+        return;
+    }
+
+    if (!user) {
+        toast({
+            variant: "destructive",
+            title: "Authentication Error",
+            description: "Your session could not be verified. Please refresh and try again.",
+        });
+        return;
     }
 
     const reviewRef = doc(firestore, 'products', productId, 'reviews', user.uid);
@@ -93,7 +107,6 @@ const ReviewForm = ({ productId }: { productId: string }) => {
       createdAt: serverTimestamp(),
     };
 
-    // Using set with merge to allow users to update their review.
     setDocumentNonBlocking(reviewRef, reviewData, { merge: true });
 
     toast({
@@ -154,8 +167,10 @@ const ReviewForm = ({ productId }: { productId: string }) => {
                 </FormItem>
               )}
             />
-            <Button type="submit" disabled={!user}>Submit Review</Button>
-            {!user && <p className="text-xs text-muted-foreground pt-2">You are browsing as a guest. Your review will be submitted anonymously.</p>}
+            <Button type="submit" disabled={isUserLoading || form.formState.isSubmitting}>Submit Review</Button>
+            {user?.isAnonymous && (
+                 <p className="text-xs text-muted-foreground pt-2">You're submitting as a guest. Your review will be tied to this session.</p>
+            )}
           </form>
         </Form>
       </CardContent>
@@ -255,7 +270,7 @@ export default function ProductReviews({ productId }: { productId: string }) {
                         initial="hidden"
                         animate="visible"
                     >
-                        {reviews.sort((a, b) => b.createdAt.toMillis() - a.createdAt.toMillis()).map(review => (
+                        {reviews.sort((a, b) => (b.createdAt?.toMillis() || 0) - (a.createdAt?.toMillis() || 0)).map(review => (
                             <ReviewCard key={review.id} review={review} />
                         ))}
                     </motion.div>
