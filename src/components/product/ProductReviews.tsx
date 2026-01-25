@@ -1,101 +1,268 @@
 'use client';
 
-import React, { useRef } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { Quote, Star } from 'lucide-react';
-import { PT_Sans, Playfair_Display } from 'next/font/google';
-import { cn } from '@/lib/utils';
+import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import { useUser, useCollection, useFirestore, useMemoFirebase, setDocumentNonBlocking, WithId } from '@/firebase';
+import { collection, doc, serverTimestamp } from 'firebase/firestore';
+import { Star } from 'lucide-react';
+import { formatDistanceToNow } from 'date-fns';
+import { motion } from 'framer-motion';
+
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Separator } from '@/components/ui/separator';
+import { cn } from '@/lib/utils';
+import type { Review } from '@/lib/types';
+import { useToast } from '@/hooks/use-toast';
+import { Skeleton } from '../ui/skeleton';
 
-const playfair = Playfair_Display({
-  subsets: ['latin'],
-  weight: ['400', '700', '900'],
+const reviewSchema = z.object({
+  name: z.string().min(2, { message: 'Name must be at least 2 characters.' }).max(50),
+  rating: z.number().min(1, { message: 'Please select a rating.' }).max(5),
+  comment: z.string().min(10, { message: 'Comment must be at least 10 characters.' }).max(1000),
 });
 
-const ptSans = PT_Sans({
-  subsets: ['latin'],
-  weight: ['400', '700'],
-});
+type ReviewFormData = z.infer<typeof reviewSchema>;
 
-const REVIEWS = [
-    { id: 1, name: 'Alex M.', initials: 'AM', rating: 5, text: "The craftsmanship is impeccable. It feels substantial and looks even better in person. A new favorite." },
-    { id: 2, name: 'Jordan S.', initials: 'JS', rating: 5, text: "Absolutely stunning. The minimalist design is exactly what I was looking for. Worth every penny." },
-    { id: 3, name: 'Casey L.', initials: 'CL', rating: 5, text: "I've received so many compliments. It's versatile enough for both casual and formal occasions." },
-    { id: 4, name: 'Taylor B.', initials: 'TB', rating: 4, text: "Great product, very stylish. The color was slightly different than expected, but it's grown on me." },
-    { id: 5, name: 'Morgan P.', initials: 'MP', rating: 5, text: "Exceeded all my expectations. The quality of the materials is top-notch. Highly recommend." },
-    { id: 6, name: 'Riley J.', initials: 'RJ', rating: 5, text: "A truly timeless piece. It’s a staple in my wardrobe now. I'm considering buying another color." },
-    { id: 7, name: 'Jamie K.', initials: 'JK', rating: 5, text: "The attention to detail is remarkable. From the stitching to the hardware, everything is perfect." },
-    { id: 8, name: 'Drew W.', initials: 'DW', rating: 5, text: "So elegant and functional. It holds everything I need without looking bulky. The perfect everyday item." },
-    { id: 9, name: 'Cameron T.', initials: 'CT', rating: 4, text: "Love the design and feel. My only wish is that it came in more sizes. Still, a fantastic purchase." },
-    { id: 10, name: 'Avery G.', initials: 'AG', rating: 5, text: "This was a gift, and it was a huge hit. The packaging was as beautiful as the product itself." },
-    { id: 11, name: 'Skyler H.', initials: 'SH', rating: 5, text: "It's rare to find something this well-made. Feels like a luxury item that will last for years." },
-    { id: 12, name: 'Quinn R.', initials: 'QR', rating: 5, text: "Simple, elegant, and beautifully executed. A masterclass in minimalist design. I'm beyond impressed." },
-];
-
-export default function ProductReviews() {
-  const containerRef = useRef<HTMLDivElement>(null);
-
+const StarRatingInput = ({ field }: { field: any }) => {
+  const [hover, setHover] = useState(0);
   return (
-    <section ref={containerRef} className="relative h-[250vh] bg-background py-20">
-      <div className="sticky top-0 mx-auto flex h-screen max-w-5xl items-center justify-center px-4">
-        <div className="flex flex-col items-center gap-6">
-          <h2 className={cn("text-4xl md:text-5xl font-bold text-center", playfair.className)}>
-            Customer Reviews
-          </h2>
-          <p className="text-muted-foreground text-center max-w-lg">
-            What our clients are saying about this product.
-          </p>
-          <div className="relative h-[450px] w-full max-w-lg">
-            {REVIEWS.map((review, index) => (
-              <Card key={review.id} review={review} index={index} containerRef={containerRef} />
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
+    <div className="flex items-center gap-1">
+      {[...Array(5)].map((_, index) => {
+        const ratingValue = index + 1;
+        return (
+          <button
+            type="button"
+            key={ratingValue}
+            onClick={() => field.onChange(ratingValue)}
+            onMouseEnter={() => setHover(ratingValue)}
+            onMouseLeave={() => setHover(0)}
+          >
+            <Star
+              className={cn(
+                'w-7 h-7 cursor-pointer transition-colors',
+                ratingValue <= (hover || field.value)
+                  ? 'text-yellow-400 fill-yellow-400'
+                  : 'text-gray-300'
+              )}
+            />
+          </button>
+        );
+      })}
+    </div>
   );
-}
+};
 
-const Card = ({ review, index, containerRef }: { review: (typeof REVIEWS)[0], index: number, containerRef: React.RefObject<HTMLDivElement> }) => {
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ['start start', 'end end'],
+const ReviewForm = ({ productId }: { productId: string }) => {
+  const { toast } = useToast();
+  const { user, isUserLoading } = useUser();
+  const firestore = useFirestore();
+
+  const form = useForm<ReviewFormData>({
+    resolver: zodResolver(reviewSchema),
+    defaultValues: {
+      name: '',
+      rating: 0,
+      comment: '',
+    },
   });
 
-  const start = index * 0.05;
-  const end = 1;
-  
-  const scale = useTransform(scrollYProgress, [start, end], [1, 0.5 + index * 0.025]);
-  const top = useTransform(scrollYProgress, [start, end], [0, -40 * (REVIEWS.length - index)]);
+  const onSubmit = (data: ReviewFormData) => {
+    if (!firestore || !user) {
+      toast({
+        variant: "destructive",
+        title: "Authentication Error",
+        description: "You must be signed in to leave a review.",
+      });
+      return;
+    }
+
+    const reviewRef = doc(firestore, 'products', productId, 'reviews', user.uid);
+    
+    const reviewData = {
+      userId: user.uid,
+      userName: data.name,
+      rating: data.rating,
+      comment: data.comment,
+      createdAt: serverTimestamp(),
+    };
+
+    // Using set with merge to allow users to update their review.
+    setDocumentNonBlocking(reviewRef, reviewData, { merge: true });
+
+    toast({
+      title: "Review Submitted!",
+      description: "Thank you for your feedback.",
+    });
+    form.reset();
+  };
+
+  if (isUserLoading) {
+    return <Skeleton className="h-48 w-full rounded-lg" />;
+  }
 
   return (
-    <motion.div
-      style={{
-        scale,
-        top,
-        zIndex: REVIEWS.length - index,
-      }}
-      className="absolute left-0 top-0 flex h-[450px] w-full max-w-lg flex-col justify-between rounded-2xl border-2 border-black bg-white p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]"
+    <Card className="shadow-md">
+      <CardHeader>
+        <CardTitle>Leave a Review</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <FormField
+              control={form.control}
+              name="rating"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Your Rating</FormLabel>
+                  <FormControl>
+                    <StarRatingInput field={field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Your Name</FormLabel>
+                  <FormControl>
+                    <Input placeholder="e.g. Jane Doe" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="comment"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Your Review</FormLabel>
+                  <FormControl>
+                    <Textarea placeholder="Tell us what you think about the product..." rows={4} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Button type="submit" disabled={!user}>Submit Review</Button>
+            {!user && <p className="text-xs text-muted-foreground pt-2">You are browsing as a guest. Your review will be submitted anonymously.</p>}
+          </form>
+        </Form>
+      </CardContent>
+    </Card>
+  );
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+};
+
+const ReviewCard = ({ review }: { review: WithId<Review> }) => {
+  const { rating, comment, userName, createdAt } = review;
+  return (
+    <motion.div 
+      className="bg-white p-6 rounded-xl shadow-sm border"
+      variants={cardVariants}
     >
-      <Quote className="h-10 w-10 text-gray-300" />
-      <p className={cn("text-2xl font-semibold italic text-center", playfair.className)}>
-        "{review.text}"
-      </p>
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-            <Avatar>
-                <AvatarFallback>{review.initials}</AvatarFallback>
-            </Avatar>
-            <div>
-                <p className="font-bold">{review.name}</p>
-                 <div className="flex items-center gap-0.5">
-                    {[...Array(review.rating)].map((_, i) => (
-                        <Star key={i} className="h-4 w-4 text-yellow-400 fill-yellow-400" />
-                    ))}
-                </div>
-            </div>
+      <div className="flex items-start gap-4">
+        <Avatar>
+          <AvatarFallback>{userName ? userName.substring(0, 2).toUpperCase() : 'A'}</AvatarFallback>
+        </Avatar>
+        <div className="flex-1">
+          <div className="flex justify-between items-center">
+            <p className="font-semibold">{userName}</p>
+            {createdAt && (
+              <p className="text-xs text-muted-foreground">
+                {formatDistanceToNow(createdAt.toDate(), { addSuffix: true })}
+              </p>
+            )}
+          </div>
+          <div className="flex items-center gap-0.5 my-2">
+            {[...Array(5)].map((_, i) => (
+              <Star
+                key={i}
+                className={cn(
+                  'w-4 h-4',
+                  i < rating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'
+                )}
+              />
+            ))}
+          </div>
+          <p className="text-sm text-gray-700 leading-relaxed">{comment}</p>
         </div>
       </div>
     </motion.div>
   );
 };
+
+export default function ProductReviews({ productId }: { productId: string }) {
+    const firestore = useFirestore();
+    
+    const reviewsQuery = useMemoFirebase(
+        () => (firestore ? collection(firestore, 'products', productId, 'reviews') : null),
+        [firestore, productId]
+    );
+
+    const { data: reviews, isLoading: isLoadingReviews } = useCollection<Review>(reviewsQuery);
+    
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+          opacity: 1,
+          transition: {
+            staggerChildren: 0.1,
+          },
+        },
+      };
+
+    return (
+        <div className="py-12 md:py-16 space-y-12">
+            <Separator />
+            <div className="grid md:grid-cols-3 gap-8 md:gap-12 items-start">
+                <div className="md:col-span-1 space-y-2">
+                    <h2 className="text-3xl font-bold">Customer Reviews</h2>
+                    <p className="text-muted-foreground">See what others are saying about this product.</p>
+                </div>
+                <div className="md:col-span-2">
+                    <ReviewForm productId={productId} />
+                </div>
+            </div>
+            
+            <div className="space-y-8">
+                {isLoadingReviews && (
+                    <div className="space-y-6">
+                        <Skeleton className="h-24 w-full rounded-xl" />
+                        <Skeleton className="h-24 w-full rounded-xl" />
+                        <Skeleton className="h-24 w-full rounded-xl" />
+                    </div>
+                )}
+                
+                {reviews && reviews.length > 0 ? (
+                     <motion.div 
+                        className="space-y-6"
+                        variants={containerVariants}
+                        initial="hidden"
+                        animate="visible"
+                    >
+                        {reviews.sort((a, b) => b.createdAt.toMillis() - a.createdAt.toMillis()).map(review => (
+                            <ReviewCard key={review.id} review={review} />
+                        ))}
+                    </motion.div>
+                ) : (
+                    !isLoadingReviews && <p className="text-center text-muted-foreground py-8">Be the first to review this product!</p>
+                )}
+            </div>
+        </div>
+    );
+}

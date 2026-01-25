@@ -184,7 +184,7 @@ export default function ProductPage() {
           </div>
         </div>
       </div>
-      <ProductReviews />
+      <ProductReviews productId={product.id} />
     </>
   );
 }
