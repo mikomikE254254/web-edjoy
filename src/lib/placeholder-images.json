@@ -62,7 +62,7 @@
     },
     {
       "id": "women-editorial-hero",
-      "imageUrl": "https://images.unsplash.com/photo-1616313253719-c46514cddee1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx3b21hbiUyMG91dGZpdHxlbnwwfHx8fDE3NjkxNTYwNzl8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://i.postimg.cc/28sLjfg6/download_(1).jpg",
       "description": "Editorial shot of a woman in fashionable clothing.",
       "imageHint": "woman outfit"
     },
@@ -74,7 +74,7 @@
     },
     {
       "id": "men-editorial-hero",
-      "imageUrl": "https://images.unsplash.com/photo-1507680434567-5739c80be1ac?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxtYW4lMjBmYXNoaW9ufGVufDB8fHx8MTc2OTE1NjA4MHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://i.postimg.cc/7YGTyLsQ/download_(9).jpg",
       "description": "Editorial shot of a man in fashionable clothing.",
       "imageHint": "man fashion"
     },
@@ -92,7 +92,7 @@
     },
     {
       "id": "unisex-editorial-hero",
-      "imageUrl": "https://i.postimg.cc/7YGTyLsQ/download_(9).jpg",
+      "imageUrl": "https://i.postimg.cc/qMP6BdWk/download_(3).jpg",
       "description": "A young child in a stylish outfit.",
       "imageHint": "child fashion"
     },
