@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useMemo, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -61,8 +62,29 @@ type Category = { id: string; name: string };
 type Style = { id: string; name: string };
 
 export default function AdminDashboard() {
-  const firestore = useFirestore();
   const { toast } = useToast();
+  const router = useRouter();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const password = prompt('Please enter the admin password:');
+    if (password !== 'Mmm@29315122') {
+        toast({
+            variant: "destructive",
+            title: "Access Denied",
+            description: "Incorrect password. You will be redirected.",
+        });
+        router.push('/');
+    } else {
+        setIsAuthenticated(true);
+        toast({
+            title: "Access Granted",
+            description: "Welcome to the Admin Dashboard.",
+        });
+    }
+  }, [router, toast]);
+
+  const firestore = useFirestore();
   const firebaseApp = useFirebaseApp();
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -247,6 +269,15 @@ export default function AdminDashboard() {
     setIsStyleDialogOpen(false);
     toast({ title: 'Style Added', description: `${newStyleName} has been added.` });
   };
+
+  if (!isAuthenticated) {
+      return (
+          <div className="container mx-auto py-8 text-center">
+              <h1 className="text-2xl font-bold">Verifying Access...</h1>
+              <p className="mt-2 text-muted-foreground">Please enter the password to continue.</p>
+          </div>
+      );
+  }
 
   return (
     <div className="container mx-auto py-8">
