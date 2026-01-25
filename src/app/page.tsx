@@ -12,7 +12,6 @@ import { useCollection, useFirestore, useMemoFirebase } from '@/firebase';
 import { collection, query, limit, where } from 'firebase/firestore';
 import type { Product } from '@/lib/types';
 import { Skeleton } from '@/components/ui/skeleton';
-import StackingCardsProjects from '@/components/home/stacking-cards-projects';
 
 export default function Home() {
   const heroImage = PlaceHolderImages.find(p => p.id === 'nextgen-hero');
@@ -136,7 +135,6 @@ export default function Home() {
           <ProductCard key={product.id} product={product} />
         ))}
       </div>
-      <StackingCardsProjects />
     </>
   );
 }
