@@ -8,7 +8,7 @@
  *
  * Data Structure:
  * - /products/{productId}: Stores individual product details.
- * - /products/{productId}/reviews/{userId}: Stores user-specific ratings.
+ * - /products/{productId}/reviews/{reviewId}: Stores user-specific ratings.
  * - /categories/{categoryId}: Stores category information.
  * - /styles/{styleId}: Stores style information.
  * This flat structure is performant and simplifies security rules.
@@ -19,7 +19,8 @@
  * - Open Write Access (for Prototyping): For development, write operations on products,
  *   categories, and styles are allowed (`if true;`). This is insecure and must be
  *   replaced with role-based access control before launch.
- * - Owner-Only Review Writes: Users can only write to their own review document.
+ * - Authenticated Review Writes: Any authenticated user (including anonymous) can
+ *   create a review, but cannot edit or delete reviews.
  */
 rules_version = '2';
 service cloud.firestore {
@@ -29,15 +30,16 @@ service cloud.firestore {
       allow read: if true;
       allow write: if true; // WARNING: Open write access for prototyping.
 
-      match /reviews/{userId} {
+      match /reviews/{reviewId} {
         allow read: if true;
-        // User can only create/update their own review.
+        // Any authenticated user (including anonymous) can create a review.
         // Data must conform to the expected schema.
-        allow write: if request.auth != null && request.auth.uid == userId
-                      && request.resource.data.userId == userId
-                      && request.resource.data.userName is string
+        // Editing/deleting is not allowed by this rule.
+        allow create: if request.auth != null
+                      && request.resource.data.userId == request.auth.uid
+                      && request.resource.data.userName is string && request.resource.data.userName.size() >= 2 && request.resource.data.userName.size() <= 50
                       && request.resource.data.rating is number && request.resource.data.rating >= 1 && request.resource.data.rating <= 5
-                      && request.resource.data.comment is string && request.resource.data.comment.size() > 0 && request.resource.data.comment.size() < 1000
+                      && request.resource.data.comment is string && request.resource.data.comment.size() >= 10 && request.resource.data.comment.size() <= 500
                       && request.resource.data.createdAt == request.time;
       }
     }

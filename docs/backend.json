@@ -165,16 +165,16 @@
         }
       },
       {
-        "path": "/products/{productId}/reviews/{userId}",
+        "path": "/products/{productId}/reviews/{reviewId}",
         "definition": {
           "entityName": "Review",
           "schema": {
             "$ref": "#/backend/entities/Review"
           },
-          "description": "Stores user ratings for a product. The `userId` is the document ID and corresponds to the user's UID.",
+          "description": "Stores user ratings for a product. The `reviewId` is an auto-generated document ID.",
           "params": [
             { "name": "productId", "description": "The ID of the product being reviewed." },
-            { "name": "userId", "description": "The UID of the user leaving the review." }
+            { "name": "reviewId", "description": "The unique identifier for the review." }
           ]
         }
       },
