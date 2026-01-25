@@ -90,7 +90,7 @@ export default function Home() {
           <div className="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent p-6 flex items-center">
             <div>
               <h3 className="text-white font-medium text-lg">Enchanting styles for every woman</h3>
-              <Button variant="secondary" className="mt-2 rounded-full backdrop-blur-sm bg-white/90 border-transparent hover:bg-gray-100/90">Shop Now</Button>
+              <Button variant="secondary" className="mt-2 rounded-full backdrop-blur-sm bg-white/90 hover:bg-gray-100/90">Shop Now</Button>
             </div>
           </div>
         </Link>
