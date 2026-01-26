@@ -87,10 +87,6 @@ export default function AdminDashboard() {
         router.push('/');
     } else {
         setIsAuthenticated(true);
-        toast({
-            title: "Access Granted",
-            description: "Welcome to the Admin Dashboard.",
-        });
     }
   }, [router, toast]);
 
@@ -126,7 +122,7 @@ export default function AdminDashboard() {
     if (!firestore || isLoadingCategories || isLoadingStyles) return;
 
     if (categories) {
-        const defaultCategories = ['Women', 'Men', 'Children', 'Bags'];
+        const defaultCategories = ['Women', 'Men', 'Unisex', 'Bags'];
         const existingCategoryNames = new Set(categories.map(c => c.name.toLowerCase()));
         defaultCategories.forEach(name => {
             if (!existingCategoryNames.has(name.toLowerCase())) {
@@ -191,9 +187,6 @@ export default function AdminDashboard() {
                 const firstEmptyField = imageFields.find(field => !form.getValues(field));
                 if (firstEmptyField) {
                     form.setValue(firstEmptyField, downloadURL, { shouldValidate: true });
-                    toast({ title: "Upload Complete!", description: `Image URL auto-filled.` });
-                } else {
-                    toast({ title: "Upload Complete!", description: "All image fields full." });
                 }
             });
         }
@@ -269,7 +262,6 @@ export default function AdminDashboard() {
     addDocumentNonBlocking(collection(firestore, 'categories'), { name: newCategoryName.trim() });
     setNewCategoryName('');
     setIsCategoryDialogOpen(false);
-    toast({ title: 'Category Added', description: `${newCategoryName} has been added.` });
   };
   
   const handleAddStyle = () => {
@@ -277,7 +269,6 @@ export default function AdminDashboard() {
     addDocumentNonBlocking(collection(firestore, 'styles'), { name: newStyleName.trim() });
     setNewStyleName('');
     setIsStyleDialogOpen(false);
-    toast({ title: 'Style Added', description: `${newStyleName} has been added.` });
   };
 
   if (!isAuthenticated) {
@@ -495,3 +486,5 @@ export default function AdminDashboard() {
     </div>
   );
 }
+
+    

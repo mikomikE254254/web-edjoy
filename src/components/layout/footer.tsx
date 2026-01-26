@@ -20,7 +20,7 @@ export default function Footer() {
               <Link href="/" className="hover:underline">Home</Link>
               <Link href="/women" className="hover:underline">Women</Link>
               <Link href="/men" className="hover:underline">Men</Link>
-              <Link href="/children" className="hover:underline">Unisex</Link>
+              <Link href="/unisex" className="hover:underline">Unisex</Link>
               <Link href="/bags" className="hover:underline">Bags</Link>
             </nav>
             {pathname === '/bags' && (
@@ -66,3 +66,5 @@ export default function Footer() {
     </footer>
   );
 }
+
+    

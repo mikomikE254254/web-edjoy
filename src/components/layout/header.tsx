@@ -41,7 +41,7 @@ export default function Header() {
     { href: '/', label: 'Home' },
     { href: '/men', label: 'Men' },
     { href: '/women', label: 'Women' },
-    { href: '/children', label: 'Unisex' },
+    { href: '/unisex', label: 'Unisex' },
     { href: '/bags', label: 'Bags' },
   ];
   
@@ -98,3 +98,5 @@ export default function Header() {
     </header>
   );
 }
+
+    
