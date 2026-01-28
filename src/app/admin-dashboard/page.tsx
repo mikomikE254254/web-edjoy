@@ -8,12 +8,12 @@ import { z } from 'zod';
 import { useCollection, useFirestore, useMemoFirebase, addDocumentNonBlocking, updateDocumentNonBlocking, deleteDocumentNonBlocking, useFirebaseApp } from '@/firebase';
 import { collection, doc, serverTimestamp } from 'firebase/firestore';
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
-import { Product } from '@/lib/types';
+import { Product, Order } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Trash, Edit, Copy, Star, PlusCircle } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -109,10 +109,23 @@ export default function AdminDashboard() {
   const productsQuery = useMemoFirebase(() => firestore ? collection(firestore, 'products') : null, [firestore]);
   const categoriesQuery = useMemoFirebase(() => firestore ? collection(firestore, 'categories') : null, [firestore]);
   const stylesQuery = useMemoFirebase(() => firestore ? collection(firestore, 'styles') : null, [firestore]);
+  const ordersQuery = useMemoFirebase(() => firestore ? collection(firestore, 'orders') : null, [firestore]);
 
   const { data: products, isLoading: isLoadingProducts } = useCollection<Product>(productsQuery);
   const { data: categories, isLoading: isLoadingCategories } = useCollection<Category>(categoriesQuery);
   const { data: styles, isLoading: isLoadingStyles } = useCollection<Style>(stylesQuery);
+  const { data: orders, isLoading: isLoadingOrders } = useCollection<Order>(ordersQuery);
+
+  const salesCount = useMemo(() => {
+    if (!orders) return {};
+    const counts: { [key: string]: number } = {};
+    orders.forEach(order => {
+        order.products.forEach(product => {
+            counts[product.id] = (counts[product.id] || 0) + product.quantity;
+        });
+    });
+    return counts;
+  }, [orders]);
 
   const sortedCategories = useMemo(() => categories?.sort((a, b) => a.name.localeCompare(b.name)) || [], [categories]);
   const sortedStyles = useMemo(() => styles?.sort((a, b) => a.name.localeCompare(b.name)) || [], [styles]);
@@ -476,15 +489,16 @@ export default function AdminDashboard() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-lg font-semibold">${product.price}</p>
+              <p className="text-lg font-semibold">Ksh {product.price}</p>
               <p className="text-sm text-muted-foreground capitalize">{product.category}</p>
               <p className="text-sm mt-2 line-clamp-3">{product.description}</p>
             </CardContent>
+            <CardFooter className="flex justify-end">
+                <p className="text-sm font-semibold">Sales: {salesCount[product.id] || 0}</p>
+            </CardFooter>
           </Card>
         ))}
       </div>
     </div>
   );
 }
-
-    

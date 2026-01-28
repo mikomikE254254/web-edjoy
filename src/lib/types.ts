@@ -31,3 +31,22 @@ export type Review = {
   comment: string;
   createdAt: Timestamp;
 };
+
+export type Order = {
+  id: string;
+  userId: string;
+  products: {
+    id: string;
+    name: string;
+    quantity: number;
+    price: number;
+  }[];
+  totalAmount: number;
+  shippingAddress: {
+    county: string;
+    region: string;
+    description: string;
+  };
+  status: 'pending' | 'shipped' | 'delivered' | 'cancelled';
+  createdAt: Timestamp;
+};

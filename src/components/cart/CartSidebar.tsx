@@ -9,6 +9,17 @@ import { Minus, Plus, ShoppingBag, X } from 'lucide-react';
 import Link from 'next/link';
 import { usePaystackPayment } from 'react-paystack';
 import { useToast } from '@/hooks/use-toast';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { kenyanCounties } from '@/lib/kenyan-counties';
+import { useFirestore, useUser, addDocumentNonBlocking } from '@/firebase';
+import { collection, serverTimestamp } from 'firebase/firestore';
 
 const WhatsAppIcon = () => (
   <svg
@@ -20,10 +31,27 @@ const WhatsAppIcon = () => (
   </svg>
 );
 
+const addressSchema = z.object({
+  county: z.string().min(1, 'County is required'),
+  region: z.string().min(1, 'Region/Town is required'),
+  description: z.string().min(1, 'Address description is required'),
+});
+type AddressFormData = z.infer<typeof addressSchema>;
+
 export default function CartSidebar() {
   const { cart, removeFromCart, updateQuantity, cartCount, cartTotal, clearCart } = useAppContext();
   const [open, setOpen] = React.useState(false);
+  const [isAddressDialogOpen, setIsAddressDialogOpen] = React.useState(false);
+  const [addressData, setAddressData] = React.useState<AddressFormData | null>(null);
+  
   const { toast } = useToast();
+  const firestore = useFirestore();
+  const { user } = useUser();
+
+  const addressForm = useForm<AddressFormData>({
+    resolver: zodResolver(addressSchema),
+    defaultValues: { county: '', region: '', description: '' },
+  });
 
   const handleCheckoutViaWhatsApp = () => {
     if (cart.length === 0) return;
@@ -49,16 +77,11 @@ export default function CartSidebar() {
       cartItems: cart.map(item => ({ name: item.name, quantity: item.quantity, price: item.price })),
       total: cartTotal,
       custom_fields: [
-        {
-          display_name: "Cart Total",
-          variable_name: "cart_total",
-          value: `Ksh ${cartTotal.toFixed(2)}`
-        },
-        {
-          display_name: "Number of Items",
-          variable_name: "number_of_items",
-          value: cartCount
-        }
+        { display_name: "Cart Total", variable_name: "cart_total", value: `Ksh ${cartTotal.toFixed(2)}`},
+        { display_name: "Number of Items", variable_name: "number_of_items", value: cartCount },
+        { display_name: "County", variable_name: "shipping_county", value: addressData?.county || "" },
+        { display_name: "Region", variable_name: "shipping_region", value: addressData?.region || "" },
+        { display_name: "Address Description", variable_name: "shipping_description", value: addressData?.description || "" }
       ]
     }
   };
@@ -66,114 +89,170 @@ export default function CartSidebar() {
   const initializePayment = usePaystackPayment(paystackConfig);
 
   const onPaystackSuccess = (reference: any) => {
-      toast({
-          title: "Payment Successful!",
-          description: `Thank you for your purchase. Reference: ${reference.reference}`,
-      });
-      clearCart();
-      setOpen(false);
+    if (!firestore || !user || !addressData) {
+      toast({ variant: "destructive", title: "Error", description: "Could not save order. User or address missing."});
+      return;
+    }
+
+    const orderData = {
+      userId: user.uid,
+      products: cart.map(item => ({ id: item.id, name: item.name, quantity: item.quantity, price: item.price })),
+      totalAmount: cartTotal,
+      shippingAddress: addressData,
+      status: 'pending' as const,
+      createdAt: serverTimestamp(),
+    };
+
+    addDocumentNonBlocking(collection(firestore, 'orders'), orderData);
+    
+    toast({
+        title: "Payment Successful!",
+        description: `Thank you for your purchase. Reference: ${reference.reference}`,
+    });
+    clearCart();
+    setOpen(false);
   };
 
   const onPaystackClose = () => {
       // silent on close
   };
+  
+  const handleAddressSubmit = (data: AddressFormData) => {
+    setAddressData(data);
+    setIsAddressDialogOpen(false);
+    initializePayment({ onSuccess: onPaystackSuccess, onClose: onPaystackClose });
+  }
 
-  const handlePayNow = () => {
-      if (cart.length === 0) {
-          toast({
-              variant: "destructive",
-              title: "Cart is Empty",
-              description: "Please add items to your cart before paying.",
-          });
-          return;
-      }
-      if (!process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY) {
-          toast({
-              variant: "destructive",
-              title: "Configuration Error",
-              description: "Paystack payment is not configured correctly."
-          });
-          return;
-      }
-      initializePayment({ onSuccess: onPaystackSuccess, onClose: onPaystackClose });
+  const handlePayNowClick = () => {
+    if (cart.length === 0) {
+      toast({ variant: "destructive", title: "Cart is Empty", description: "Please add items to your cart." });
+      return;
+    }
+    if (!process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY) {
+      toast({ variant: "destructive", title: "Configuration Error", description: "Payment gateway is not configured." });
+      return;
+    }
+    setIsAddressDialogOpen(true);
   };
 
-
   return (
-    <Sheet open={open} onOpenChange={setOpen}>
-      <SheetTrigger asChild>
-        <Button variant="ghost" size="icon" className="relative">
-            <ShoppingBag />
-            {cartCount > 0 && (
-                <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs">
-                    {cartCount}
-                </span>
-            )}
-            <span className="sr-only">Open shopping cart</span>
-        </Button>
-      </SheetTrigger>
-      <SheetContent className="w-full sm:max-w-md flex flex-col">
-        <SheetHeader>
-          <SheetTitle>Shopping Cart ({cartCount})</SheetTitle>
-        </SheetHeader>
-        {cart.length > 0 ? (
-          <>
-            <div className="flex-grow overflow-y-auto -mx-6 px-6 divide-y">
-              {cart.map(item => (
-                <div key={item.id} className="flex items-center gap-4 py-4">
-                  <div className="relative h-20 w-20 rounded-md overflow-hidden">
-                    <Image
-                      src={item.images[0]?.url || ''}
-                      alt={item.images[0]?.alt || item.name}
-                      fill
-                      className="object-cover"
-                      sizes="80px"
-                    />
-                  </div>
-                  <div className="flex-grow">
-                    <Link href={`/products/${item.slug}`} className="font-semibold hover:underline" onClick={() => setOpen(false)}>{item.name}</Link>
-                    <p className="text-sm text-muted-foreground">Ksh {item.price.toFixed(2)}</p>
-                    <div className="flex items-center gap-2 mt-2">
-                        <Button variant="outline" size="icon" className="h-7 w-7" onClick={() => updateQuantity(item.id, item.quantity - 1)}>
-                            <Minus className="h-4 w-4" />
-                        </Button>
-                        <span className="font-semibold">{item.quantity}</span>
-                        <Button variant="outline" size="icon" className="h-7 w-7" onClick={() => updateQuantity(item.id, item.quantity + 1)}>
-                            <Plus className="h-4 w-4" />
-                        </Button>
+    <>
+      <Sheet open={open} onOpenChange={setOpen}>
+        <SheetTrigger asChild>
+          <Button variant="ghost" size="icon" className="relative">
+              <ShoppingBag />
+              {cartCount > 0 && (
+                  <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs">
+                      {cartCount}
+                  </span>
+              )}
+              <span className="sr-only">Open shopping cart</span>
+          </Button>
+        </SheetTrigger>
+        <SheetContent className="w-full sm:max-w-md flex flex-col">
+          <SheetHeader>
+            <SheetTitle>Shopping Cart ({cartCount})</SheetTitle>
+          </SheetHeader>
+          {cart.length > 0 ? (
+            <>
+              <div className="flex-grow overflow-y-auto -mx-6 px-6 divide-y">
+                {cart.map(item => (
+                  <div key={item.id} className="flex items-center gap-4 py-4">
+                    <div className="relative h-20 w-20 rounded-md overflow-hidden">
+                      <Image
+                        src={item.images[0]?.url || ''}
+                        alt={item.images[0]?.alt || item.name}
+                        fill
+                        className="object-cover"
+                        sizes="80px"
+                      />
                     </div>
+                    <div className="flex-grow">
+                      <Link href={`/products/${item.slug}`} className="font-semibold hover:underline" onClick={() => setOpen(false)}>{item.name}</Link>
+                      <p className="text-sm text-muted-foreground">Ksh {item.price.toFixed(2)}</p>
+                      <div className="flex items-center gap-2 mt-2">
+                          <Button variant="outline" size="icon" className="h-7 w-7" onClick={() => updateQuantity(item.id, item.quantity - 1)}>
+                              <Minus className="h-4 w-4" />
+                          </Button>
+                          <span className="font-semibold">{item.quantity}</span>
+                          <Button variant="outline" size="icon" className="h-7 w-7" onClick={() => updateQuantity(item.id, item.quantity + 1)}>
+                              <Plus className="h-4 w-4" />
+                          </Button>
+                      </div>
+                    </div>
+                    <Button variant="ghost" size="icon" className="text-muted-foreground" onClick={() => removeFromCart(item.id)}>
+                      <X className="h-5 w-5" />
+                    </Button>
                   </div>
-                  <Button variant="ghost" size="icon" className="text-muted-foreground" onClick={() => removeFromCart(item.id)}>
-                    <X className="h-5 w-5" />
-                  </Button>
-                </div>
-              ))}
+                ))}
+              </div>
+              <SheetFooter className="mt-auto border-t pt-4 space-y-4">
+                  <div className="flex justify-between font-semibold">
+                      <span>Total</span>
+                      <span>Ksh {cartTotal.toFixed(2)}</span>
+                  </div>
+                  <div className="space-y-2">
+                    <Button className="w-full" size="lg" onClick={handlePayNowClick}>
+                      Pay Now
+                    </Button>
+                    <Button size="lg" variant="tactile-green" className="w-full" onClick={handleCheckoutViaWhatsApp}>
+                        <WhatsAppIcon />
+                        Checkout via WhatsApp
+                    </Button>
+                  </div>
+                  <Button variant="outline" className="w-full" onClick={clearCart}>Clear Cart</Button>
+              </SheetFooter>
+            </>
+          ) : (
+            <div className="flex-grow flex flex-col items-center justify-center text-center">
+              <ShoppingBag className="h-16 w-16 text-muted-foreground" />
+              <p className="mt-4 font-semibold">Your cart is empty</p>
+              <p className="text-sm text-muted-foreground">Add some products to get started.</p>
             </div>
-            <SheetFooter className="mt-auto border-t pt-4 space-y-4">
-                <div className="flex justify-between font-semibold">
-                    <span>Total</span>
-                    <span>Ksh {cartTotal.toFixed(2)}</span>
-                </div>
-                <div className="space-y-2">
-                  <Button className="w-full" size="lg" onClick={handlePayNow}>
-                    Pay Now
-                  </Button>
-                  <Button size="lg" variant="tactile-green" className="w-full" onClick={handleCheckoutViaWhatsApp}>
-                      <WhatsAppIcon />
-                      Checkout via WhatsApp
-                  </Button>
-                </div>
-                <Button variant="outline" className="w-full" onClick={clearCart}>Clear Cart</Button>
-            </SheetFooter>
-          </>
-        ) : (
-          <div className="flex-grow flex flex-col items-center justify-center text-center">
-            <ShoppingBag className="h-16 w-16 text-muted-foreground" />
-            <p className="mt-4 font-semibold">Your cart is empty</p>
-            <p className="text-sm text-muted-foreground">Add some products to get started.</p>
-          </div>
-        )}
-      </SheetContent>
-    </Sheet>
+          )}
+        </SheetContent>
+      </Sheet>
+      
+      <Dialog open={isAddressDialogOpen} onOpenChange={setIsAddressDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Shipping Address</DialogTitle>
+          </DialogHeader>
+          <Form {...addressForm}>
+            <form onSubmit={addressForm.handleSubmit(handleAddressSubmit)} className="space-y-4 py-4">
+              <FormField control={addressForm.control} name="county" render={({ field }) => (
+                <FormItem>
+                  <FormLabel>County</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl><SelectTrigger><SelectValue placeholder="Select a county" /></SelectTrigger></FormControl>
+                    <SelectContent>
+                      {kenyanCounties.map(county => <SelectItem key={county} value={county}>{county}</SelectItem>)}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}/>
+              <FormField control={addressForm.control} name="region" render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Region / Town</FormLabel>
+                  <FormControl><Input placeholder="e.g., Westlands" {...field} /></FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}/>
+              <FormField control={addressForm.control} name="description" render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Address Description</FormLabel>
+                  <FormControl><Textarea placeholder="e.g., Building name, street, house number" {...field} /></FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}/>
+              <DialogFooter>
+                <Button type="submit">Proceed to Payment</Button>
+              </DialogFooter>
+            </form>
+          </Form>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }

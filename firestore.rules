@@ -11,6 +11,7 @@
  * - /products/{productId}/reviews/{reviewId}: Stores user-specific ratings.
  * - /categories/{categoryId}: Stores category information.
  * - /styles/{styleId}: Stores style information.
+ * - /orders/{orderId}: Stores customer order information.
  * This flat structure is performant and simplifies security rules.
  *
  * Key Security Decisions:
@@ -21,6 +22,9 @@
  *   replaced with role-based access control before launch.
  * - Authenticated Review Writes: Any authenticated user (including anonymous) can
  *   create a review, but cannot edit or delete reviews.
+ * - Authenticated Order Management: Any authenticated user can create an order. For now,
+ *   all authenticated users can read all orders to facilitate admin dashboard functionality.
+ *   This should be restricted in production.
  */
 rules_version = '2';
 service cloud.firestore {
@@ -54,6 +58,10 @@ service cloud.firestore {
       allow read: if true;
       // Allow writes for admin to add new styles during development
       allow write: if true;
+    }
+    
+    match /orders/{orderId} {
+      allow read, write: if request.auth != null; // WARNING: Open for prototyping
     }
   }
 }

@@ -8,6 +8,18 @@ import { useAppContext } from '@/context/AppContext';
 import { cn } from '@/lib/utils';
 import { usePaystackPayment } from 'react-paystack';
 import { useToast } from '@/hooks/use-toast';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { kenyanCounties } from '@/lib/kenyan-counties';
+import { useFirestore, useUser, addDocumentNonBlocking } from '@/firebase';
+import { collection, serverTimestamp } from 'firebase/firestore';
+
 
 interface ProductPurchaseFormProps {
   product: Product;
@@ -25,18 +37,35 @@ const WhatsAppIcon = () => (
     </svg>
   );
 
-// Mock data for products without variants
+const addressSchema = z.object({
+  county: z.string().min(1, 'County is required'),
+  region: z.string().min(1, 'Region/Town is required'),
+  description: z.string().min(1, 'Address description is required'),
+});
+type AddressFormData = z.infer<typeof addressSchema>;
+
 const fallbackColors = ['#111827', '#f9fafb', '#4b5563', '#9ca3af'];
 const sizes = ['S', 'M', 'L', 'XL'];
-const availableSizes = ['S', 'M', 'L'];
-
 
 export default function ProductPurchaseForm({ product, selectedColor, setSelectedColor }: ProductPurchaseFormProps) {
   const { addToCart, toggleWishlist, isProductInWishlist } = useAppContext();
   const [selectedSize, setSelectedSize] = useState('M');
   const [quantity, setQuantity] = useState(1);
+  const [isAddressDialogOpen, setIsAddressDialogOpen] = useState(false);
+  const [addressData, setAddressData] = useState<AddressFormData | null>(null);
+
   const isInWishlist = isProductInWishlist(product.id);
   const { toast } = useToast();
+  const firestore = useFirestore();
+  const { user } = useUser();
+  
+  const addressForm = useForm<AddressFormData>({
+    resolver: zodResolver(addressSchema),
+    defaultValues: { county: '', region: '', description: '' },
+  });
+
+  const availableSizes = product.sizes || ['S', 'M', 'L'];
+
 
   const handleAddToCart = () => {
     addToCart(product, quantity);
@@ -66,21 +95,12 @@ export default function ProductPurchaseForm({ product, selectedColor, setSelecte
       quantity,
       size: selectedSize,
       custom_fields: [
-        {
-          display_name: "Product Name",
-          variable_name: "product_name",
-          value: product.name,
-        },
-        {
-          display_name: "Quantity",
-          variable_name: "quantity",
-          value: quantity,
-        },
-        {
-          display_name: "Size",
-          variable_name: "size",
-          value: selectedSize,
-        },
+        { display_name: "Product Name", variable_name: "product_name", value: product.name },
+        { display_name: "Quantity", variable_name: "quantity", value: quantity },
+        { display_name: "Size", variable_name: "size", value: selectedSize },
+        { display_name: "County", variable_name: "shipping_county", value: addressData?.county || "" },
+        { display_name: "Region", variable_name: "shipping_region", value: addressData?.region || "" },
+        { display_name: "Address Description", variable_name: "shipping_description", value: addressData?.description || "" }
       ]
     }
   };
@@ -88,17 +108,39 @@ export default function ProductPurchaseForm({ product, selectedColor, setSelecte
   const initializePayment = usePaystackPayment(paystackConfig);
 
   const onPaystackSuccess = (reference: any) => {
-      toast({
-          title: "Payment Successful!",
-          description: `Thank you for your purchase. Reference: ${reference.reference}`,
-      });
+    if (!firestore || !user || !addressData) {
+        toast({ variant: "destructive", title: "Error", description: "Could not save order. User or address missing."});
+        return;
+    }
+    
+    const orderData = {
+        userId: user.uid,
+        products: [{ id: product.id, name: product.name, quantity, price: product.price }],
+        totalAmount: product.price * quantity,
+        shippingAddress: addressData,
+        status: 'pending' as const,
+        createdAt: serverTimestamp(),
+    };
+    
+    addDocumentNonBlocking(collection(firestore, 'orders'), orderData);
+    
+    toast({
+        title: "Payment Successful!",
+        description: `Thank you for your purchase. Reference: ${reference.reference}`,
+    });
   };
 
   const onPaystackClose = () => {
       // Silent on close as it's triggered on success as well.
   };
 
-  const handlePayNow = () => {
+  const handleAddressSubmit = (data: AddressFormData) => {
+    setAddressData(data);
+    setIsAddressDialogOpen(false);
+    initializePayment({ onSuccess: onPaystackSuccess, onClose: onPaystackClose });
+  };
+
+  const handlePayNowClick = () => {
       if (!process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY) {
           toast({
               variant: "destructive",
@@ -107,14 +149,14 @@ export default function ProductPurchaseForm({ product, selectedColor, setSelecte
           });
           return;
       }
-      initializePayment({ onSuccess: onPaystackSuccess, onClose: onPaystackClose });
+      setIsAddressDialogOpen(true);
   };
-
 
   const colorOptions = product.availableColors || fallbackColors.map(hex => ({ name: hex, hex }));
 
 
   return (
+    <>
     <div className="bg-white p-4 sm:p-8 rounded-2xl shadow-sm space-y-6">
       <div>
         <div className="flex justify-between items-start gap-4">
@@ -206,7 +248,7 @@ export default function ProductPurchaseForm({ product, selectedColor, setSelecte
         </div>
         <div className="grid grid-cols-1 gap-2">
             <Button size="lg" className="w-full rounded-full h-12 text-base font-bold" onClick={handleAddToCart}>Add to Cart</Button>
-            <Button size="lg" variant="default" className="w-full rounded-full h-12 text-base font-bold" onClick={handlePayNow}>Pay Now</Button>
+            <Button size="lg" variant="default" className="w-full rounded-full h-12 text-base font-bold" onClick={handlePayNowClick}>Pay Now</Button>
             <Button size="lg" variant="tactile-green" className="w-full rounded-full h-12 text-base font-bold" onClick={handleBuyViaWhatsApp}>
                 <WhatsAppIcon />
                 Buy via WhatsApp
@@ -221,5 +263,46 @@ export default function ProductPurchaseForm({ product, selectedColor, setSelecte
         </p>
       </div>
     </div>
+    <Dialog open={isAddressDialogOpen} onOpenChange={setIsAddressDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Shipping Address</DialogTitle>
+          </DialogHeader>
+          <Form {...addressForm}>
+            <form onSubmit={addressForm.handleSubmit(handleAddressSubmit)} className="space-y-4 py-4">
+              <FormField control={addressForm.control} name="county" render={({ field }) => (
+                <FormItem>
+                  <FormLabel>County</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl><SelectTrigger><SelectValue placeholder="Select a county" /></SelectTrigger></FormControl>
+                    <SelectContent>
+                      {kenyanCounties.map(county => <SelectItem key={county} value={county}>{county}</SelectItem>)}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}/>
+              <FormField control={addressForm.control} name="region" render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Region / Town</FormLabel>
+                  <FormControl><Input placeholder="e.g., Westlands" {...field} /></FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}/>
+              <FormField control={addressForm.control} name="description" render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Address Description</FormLabel>
+                  <FormControl><Textarea placeholder="e.g., Building name, street, house number" {...field} /></FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}/>
+              <DialogFooter>
+                <Button type="submit">Proceed to Payment</Button>
+              </DialogFooter>
+            </form>
+          </Form>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }

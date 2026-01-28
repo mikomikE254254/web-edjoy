@@ -138,6 +138,43 @@
         }
       },
       "required": ["userId", "userName", "rating", "comment", "createdAt"]
+    },
+    "Order": {
+      "title": "Order",
+      "type": "object",
+      "description": "Represents a customer's order.",
+      "properties": {
+        "userId": { "type": "string" },
+        "products": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string" },
+              "name": { "type": "string" },
+              "quantity": { "type": "number" },
+              "price": { "type": "number" }
+            },
+            "required": ["id", "name", "quantity", "price"]
+          }
+        },
+        "totalAmount": { "type": "number" },
+        "shippingAddress": {
+          "type": "object",
+          "properties": {
+            "county": { "type": "string" },
+            "region": { "type": "string" },
+            "description": { "type": "string" }
+          },
+          "required": ["county", "description"]
+        },
+        "status": {
+          "type": "string",
+          "enum": ["pending", "shipped", "delivered", "cancelled"]
+        },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "products", "totalAmount", "shippingAddress", "status", "createdAt"]
     }
   },
   "auth": {
@@ -206,6 +243,22 @@
             {
               "name": "styleId",
               "description": "The unique identifier for the style."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/orders/{orderId}",
+        "definition": {
+          "entityName": "Order",
+          "schema": {
+            "$ref": "#/backend/entities/Order"
+          },
+          "description": "Stores customer orders.",
+          "params": [
+            {
+              "name": "orderId",
+              "description": "The unique identifier for the order."
             }
           ]
         }
