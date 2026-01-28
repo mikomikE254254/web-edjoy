@@ -6,6 +6,8 @@ import { Button } from '@/components/ui/button';
 import { Minus, Plus } from 'lucide-react';
 import { useAppContext } from '@/context/AppContext';
 import { cn } from '@/lib/utils';
+import { usePaystackPayment } from 'react-paystack';
+import { useToast } from '@/hooks/use-toast';
 
 interface ProductPurchaseFormProps {
   product: Product;
@@ -34,6 +36,7 @@ export default function ProductPurchaseForm({ product, selectedColor, setSelecte
   const [selectedSize, setSelectedSize] = useState('M');
   const [quantity, setQuantity] = useState(1);
   const isInWishlist = isProductInWishlist(product.id);
+  const { toast } = useToast();
 
   const handleAddToCart = () => {
     addToCart(product, quantity);
@@ -46,12 +49,68 @@ export default function ProductPurchaseForm({ product, selectedColor, setSelecte
   const handleBuyViaWhatsApp = () => {
     const selectedColorName = product.availableColors?.find(c => c.hex === selectedColor)?.name;
     const colorText = selectedColorName ? ` in color ${selectedColorName}` : '';
-    const message = `Hi Eddjoys, I would like to order ${quantity} of the ${product.name}${colorText} in Size ${selectedSize}. Price: Ksh ${(product.price * quantity).toFixed(2)}.`;
+    const message = `Hi Eddjos, I would like to order ${quantity} of the ${product.name}${colorText} in Size ${selectedSize}. Price: Ksh ${(product.price * quantity).toFixed(2)}.`;
     const encodedMessage = encodeURIComponent(message);
     const whatsappUrl = `https://wa.me/254740685488?text=${encodedMessage}`;
     window.open(whatsappUrl, '_blank');
   };
   
+  const paystackConfig = {
+    reference: (new Date()).getTime().toString(),
+    email: "customer@example.com", // Using a placeholder email
+    amount: product.price * quantity * 100, // Amount in cents
+    publicKey: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY || '',
+    currency: 'KES',
+    metadata: {
+      productName: product.name,
+      quantity,
+      size: selectedSize,
+      custom_fields: [
+        {
+          display_name: "Product Name",
+          variable_name: "product_name",
+          value: product.name,
+        },
+        {
+          display_name: "Quantity",
+          variable_name: "quantity",
+          value: quantity,
+        },
+        {
+          display_name: "Size",
+          variable_name: "size",
+          value: selectedSize,
+        },
+      ]
+    }
+  };
+
+  const initializePayment = usePaystackPayment(paystackConfig);
+
+  const onPaystackSuccess = (reference: any) => {
+      toast({
+          title: "Payment Successful!",
+          description: `Thank you for your purchase. Reference: ${reference.reference}`,
+      });
+  };
+
+  const onPaystackClose = () => {
+      // Silent on close as it's triggered on success as well.
+  };
+
+  const handlePayNow = () => {
+      if (!process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY) {
+          toast({
+              variant: "destructive",
+              title: "Configuration Error",
+              description: "Paystack payment is not configured correctly."
+          });
+          return;
+      }
+      initializePayment({ onSuccess: onPaystackSuccess, onClose: onPaystackClose });
+  };
+
+
   const colorOptions = product.availableColors || fallbackColors.map(hex => ({ name: hex, hex }));
 
 
@@ -147,6 +206,7 @@ export default function ProductPurchaseForm({ product, selectedColor, setSelecte
         </div>
         <div className="grid grid-cols-1 gap-2">
             <Button size="lg" className="w-full rounded-full h-12 text-base font-bold" onClick={handleAddToCart}>Add to Cart</Button>
+            <Button size="lg" variant="default" className="w-full rounded-full h-12 text-base font-bold" onClick={handlePayNow}>Pay Now</Button>
             <Button size="lg" variant="tactile-green" className="w-full rounded-full h-12 text-base font-bold" onClick={handleBuyViaWhatsApp}>
                 <WhatsAppIcon />
                 Buy via WhatsApp

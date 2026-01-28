@@ -7,6 +7,8 @@ import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import { Minus, Plus, ShoppingBag, X } from 'lucide-react';
 import Link from 'next/link';
+import { usePaystackPayment } from 'react-paystack';
+import { useToast } from '@/hooks/use-toast';
 
 const WhatsAppIcon = () => (
   <svg
@@ -21,6 +23,7 @@ const WhatsAppIcon = () => (
 export default function CartSidebar() {
   const { cart, removeFromCart, updateQuantity, cartCount, cartTotal, clearCart } = useAppContext();
   const [open, setOpen] = React.useState(false);
+  const { toast } = useToast();
 
   const handleCheckoutViaWhatsApp = () => {
     if (cart.length === 0) return;
@@ -35,6 +38,66 @@ export default function CartSidebar() {
     const whatsappUrl = `https://wa.me/254740685488?text=${encodedMessage}`;
     window.open(whatsappUrl, '_blank');
   };
+
+  const paystackConfig = {
+    reference: (new Date()).getTime().toString(),
+    email: "customer@example.com", // Using a placeholder email
+    amount: cartTotal * 100, // Amount in cents
+    publicKey: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY || '',
+    currency: 'KES',
+    metadata: {
+      cartItems: cart.map(item => ({ name: item.name, quantity: item.quantity, price: item.price })),
+      total: cartTotal,
+      custom_fields: [
+        {
+          display_name: "Cart Total",
+          variable_name: "cart_total",
+          value: `Ksh ${cartTotal.toFixed(2)}`
+        },
+        {
+          display_name: "Number of Items",
+          variable_name: "number_of_items",
+          value: cartCount
+        }
+      ]
+    }
+  };
+
+  const initializePayment = usePaystackPayment(paystackConfig);
+
+  const onPaystackSuccess = (reference: any) => {
+      toast({
+          title: "Payment Successful!",
+          description: `Thank you for your purchase. Reference: ${reference.reference}`,
+      });
+      clearCart();
+      setOpen(false);
+  };
+
+  const onPaystackClose = () => {
+      // silent on close
+  };
+
+  const handlePayNow = () => {
+      if (cart.length === 0) {
+          toast({
+              variant: "destructive",
+              title: "Cart is Empty",
+              description: "Please add items to your cart before paying.",
+          });
+          return;
+      }
+      if (!process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY) {
+          toast({
+              variant: "destructive",
+              title: "Configuration Error",
+              description: "Paystack payment is not configured correctly."
+          });
+          return;
+      }
+      initializePayment({ onSuccess: onPaystackSuccess, onClose: onPaystackClose });
+  };
+
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -92,8 +155,8 @@ export default function CartSidebar() {
                     <span>Ksh {cartTotal.toFixed(2)}</span>
                 </div>
                 <div className="space-y-2">
-                  <Button className="w-full" size="lg">
-                    Checkout (Ksh {cartTotal.toFixed(2)})
+                  <Button className="w-full" size="lg" onClick={handlePayNow}>
+                    Pay Now
                   </Button>
                   <Button size="lg" variant="tactile-green" className="w-full" onClick={handleCheckoutViaWhatsApp}>
                       <WhatsAppIcon />
