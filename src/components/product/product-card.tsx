@@ -5,32 +5,10 @@ import Link from 'next/link';
 import type { Product } from '@/lib/types';
 import { ShoppingBag } from 'lucide-react';
 import { useAppContext } from '@/context/AppContext';
-import { cn, shimmer, toBase64 } from '@/lib/utils';
-import { useEffect, useRef } from 'react';
+import { cn } from '@/lib/utils';
 
 export default function ProductCard({ product }: { product: Product }) {
   const { addToCart, toggleWishlist, isProductInWishlist } = useAppContext();
-  const cardRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const card = cardRef.current;
-    if (!card) return;
-
-    const handleMouseMove = (e: MouseEvent) => {
-      const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-
-      card.style.setProperty('--mouse-x', `${x}px`);
-      card.style.setProperty('--mouse-y', `${y}px`);
-    };
-
-    card.addEventListener('mousemove', handleMouseMove);
-
-    return () => {
-      card.removeEventListener('mousemove', handleMouseMove);
-    };
-  }, []);
 
   const primaryImage = product.images[0] ?? {
     url: 'https://placehold.co/600x800',
@@ -54,9 +32,7 @@ export default function ProductCard({ product }: { product: Product }) {
 
   return (
     <div 
-      ref={cardRef}
-      className="minimal-glow-card relative group overflow-hidden rounded-2xl bg-gray-100 transition-all duration-100 ease-in-out shadow-[0_4px_0_hsl(var(--border))] hover:-translate-y-0.5 hover:shadow-[0_6px_0_hsl(var(--border))] border-2 border-black"
-      style={{ '--glow-card-radius': '1rem' } as React.CSSProperties}
+      className="relative group overflow-hidden rounded-2xl bg-gray-100 transition-all duration-100 ease-in-out shadow-[0_4px_0_hsl(var(--border))] hover:-translate-y-0.5 hover:shadow-[0_6px_0_hsl(var(--border))] border-2 border-black"
     >
       <Link href={`/products/${product.slug}`} className="absolute inset-0 z-10" aria-label={product.name}/>
       <div className="aspect-[3/4]">

@@ -29,6 +29,7 @@ const AnimatedStat = ({ finalValue, label, suffix = '' }: { finalValue: number, 
   const [count, setCount] = useState(0);
 
   useEffect(() => {
+    let animationFrameId: number;
     const animate = () => {
       let start = 0;
       const end = finalValue;
@@ -44,21 +45,18 @@ const AnimatedStat = ({ finalValue, label, suffix = '' }: { finalValue: number, 
         const current = Math.floor(progress * range + start);
         setCount(current);
         if (progress < 1) {
-          requestAnimationFrame(step);
+          animationFrameId = requestAnimationFrame(step);
         }
       };
 
-      requestAnimationFrame(step);
+      animationFrameId = requestAnimationFrame(step);
     };
 
     animate(); // Initial animation
-    const interval = setInterval(() => {
-        setCount(0); // Reset for re-animation
-        animate();
-    }, 5000); // Loop every 5 seconds
 
-    return () => clearInterval(interval);
+    return () => cancelAnimationFrame(animationFrameId);
   }, [finalValue]);
+
 
   return (
     <div className="bg-gray-50 p-6 rounded-2xl text-center shadow-inner">

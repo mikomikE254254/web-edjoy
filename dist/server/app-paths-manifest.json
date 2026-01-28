@@ -1,5 +1,10 @@
 {
+  "/admin-dashboard/page": "app/admin-dashboard/page.js",
+  "/bags/page": "app/bags/page.js",
   "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/men/page": "app/men/page.js",
   "/page": "app/page.js",
-  "/products/[slug]/page": "app/products/[slug]/page.js"
+  "/products/[slug]/page": "app/products/[slug]/page.js",
+  "/unisex/page": "app/unisex/page.js",
+  "/women/page": "app/women/page.js"
 }
