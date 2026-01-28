@@ -67,8 +67,6 @@ export default function ProductCard({ product }: { product: Product }) {
           className="object-cover transition-opacity duration-500 group-hover:scale-105"
           data-ai-hint={primaryImage.hint}
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          placeholder="blur"
-          blurDataURL={`data:image/svg+xml;base64,${toBase64(shimmer(300, 400))}`}
         />
       </div>
 

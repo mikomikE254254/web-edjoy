@@ -13,7 +13,11 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$re
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$plus$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Plus$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/plus.js [app-ssr] (ecmascript) <export default as Plus>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$context$2f$AppContext$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/context/AppContext.tsx [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$utils$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/utils.ts [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$paystack$2f$dist$2f$index$2e$es$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/react-paystack/dist/index.es.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$hooks$2f$use$2d$toast$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/hooks/use-toast.ts [app-ssr] (ecmascript)");
 'use client';
+;
+;
 ;
 ;
 ;
@@ -29,12 +33,12 @@ const WhatsAppIcon = ()=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$pr
             d: "M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 .2c54.9 0 105.8 21.2 144.2 59.5 38.2 38.3 59.5 89.4 59.5 144.2 0 112.2-91.5 203.7-203.7 203.7-35.1 0-69.2-9-98.7-25.9l-7.1-4.2-73.3 19.3 19.7-71.5-4.5-7.4c-18.4-30.6-28.2-66.2-28.2-103.5 0-112.2 91.5-203.7 203.7-203.7zM223.9 150.1c-12.2 0-22.1 9.9-22.1 22.1v.1c0 12.2 9.9 22.1 22.1 22.1 6.1 0 11.6-2.5 15.6-6.5 3.9-3.9 6.5-9.4 6.5-15.6-.1-12.2-10-22.1-22.1-22.1zm53.8 141.2c-4.4-2.2-26.2-12.9-30.3-14.4-4.1-1.5-7.1-2.2-10.1 2.2s-11.4 14.4-14 17.3c-2.6 3-5.2 3.3-9.6 1.1-4.4-2.2-18.6-6.9-35.4-21.8-13-11.7-21.8-26.2-24.4-30.6-2.6-4.4-.3-6.9 1.9-9.1 2-2 4.4-5.2 6.6-7.8 2.2-2.6 3-4.4 1.5-7.4-1.5-3-10.1-24.3-13.8-33.3-3.7-8.9-7.5-7.7-10.1-7.8h-9.1c-2.6 0-7.1.3-10.9 4.4-3.8 4.1-14.6 14.3-14.6 34.9 0 20.6 15 40.5 17.1 43.5 2.1 3 29.5 44.9 71.9 62.8 10.4 4.4 18.5 7.1 24.8 9.1 6.3 2 12.1 1.7 16.7.7 5.2-.9 26.2-10.7 29.9-21.1 3.7-10.4 3.7-19.3 2.6-21.1-1.1-1.9-4.1-3-8.5-5.2z"
         }, void 0, false, {
             fileName: "[project]/src/components/product/product-purchase-form.tsx",
-            lineNumber: 22,
+            lineNumber: 24,
             columnNumber: 7
         }, ("TURBOPACK compile-time value", void 0))
     }, void 0, false, {
         fileName: "[project]/src/components/product/product-purchase-form.tsx",
-        lineNumber: 17,
+        lineNumber: 19,
         columnNumber: 5
     }, ("TURBOPACK compile-time value", void 0));
 // Mock data for products without variants
@@ -60,6 +64,7 @@ function ProductPurchaseForm({ product, selectedColor, setSelectedColor }) {
     const [selectedSize, setSelectedSize] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])('M');
     const [quantity, setQuantity] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(1);
     const isInWishlist = isProductInWishlist(product.id);
+    const { toast } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$hooks$2f$use$2d$toast$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useToast"])();
     const handleAddToCart = ()=>{
         addToCart(product, quantity);
     };
@@ -69,10 +74,57 @@ function ProductPurchaseForm({ product, selectedColor, setSelectedColor }) {
     const handleBuyViaWhatsApp = ()=>{
         const selectedColorName = product.availableColors?.find((c)=>c.hex === selectedColor)?.name;
         const colorText = selectedColorName ? ` in color ${selectedColorName}` : '';
-        const message = `Hi Eddjoys, I would like to order ${quantity} of the ${product.name}${colorText} in Size ${selectedSize}. Price: Ksh ${(product.price * quantity).toFixed(2)}.`;
+        const message = `Hi Eddjos, I would like to order ${quantity} of the ${product.name}${colorText} in Size ${selectedSize}. Price: Ksh ${(product.price * quantity).toFixed(2)}.`;
         const encodedMessage = encodeURIComponent(message);
         const whatsappUrl = `https://wa.me/254740685488?text=${encodedMessage}`;
         window.open(whatsappUrl, '_blank');
+    };
+    const paystackConfig = {
+        reference: new Date().getTime().toString(),
+        email: "customer@example.com",
+        amount: product.price * quantity * 100,
+        publicKey: ("TURBOPACK compile-time value", "pk_live_b147e795a1240956224f4b7643b1286c62b42045") || '',
+        currency: 'KES',
+        metadata: {
+            productName: product.name,
+            quantity,
+            size: selectedSize,
+            custom_fields: [
+                {
+                    display_name: "Product Name",
+                    variable_name: "product_name",
+                    value: product.name
+                },
+                {
+                    display_name: "Quantity",
+                    variable_name: "quantity",
+                    value: quantity
+                },
+                {
+                    display_name: "Size",
+                    variable_name: "size",
+                    value: selectedSize
+                }
+            ]
+        }
+    };
+    const initializePayment = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$paystack$2f$dist$2f$index$2e$es$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["usePaystackPayment"])(paystackConfig);
+    const onPaystackSuccess = (reference)=>{
+        toast({
+            title: "Payment Successful!",
+            description: `Thank you for your purchase. Reference: ${reference.reference}`
+        });
+    };
+    const onPaystackClose = ()=>{
+    // Silent on close as it's triggered on success as well.
+    };
+    const handlePayNow = ()=>{
+        if ("TURBOPACK compile-time falsy", 0) //TURBOPACK unreachable
+        ;
+        initializePayment({
+            onSuccess: onPaystackSuccess,
+            onClose: onPaystackClose
+        });
     };
     const colorOptions = product.availableColors || fallbackColors.map((hex)=>({
             name: hex,
@@ -90,7 +142,7 @@ function ProductPurchaseForm({ product, selectedColor, setSelectedColor }) {
                             children: product.name
                         }, void 0, false, {
                             fileName: "[project]/src/components/product/product-purchase-form.tsx",
-                            lineNumber: 62,
+                            lineNumber: 121,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -107,7 +159,7 @@ function ProductPurchaseForm({ product, selectedColor, setSelectedColor }) {
                                             }
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/product/product-purchase-form.tsx",
-                                            lineNumber: 72,
+                                            lineNumber: 131,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -116,7 +168,7 @@ function ProductPurchaseForm({ product, selectedColor, setSelectedColor }) {
                                             }
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/product/product-purchase-form.tsx",
-                                            lineNumber: 73,
+                                            lineNumber: 132,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -125,7 +177,7 @@ function ProductPurchaseForm({ product, selectedColor, setSelectedColor }) {
                                             }
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/product/product-purchase-form.tsx",
-                                            lineNumber: 74,
+                                            lineNumber: 133,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -134,7 +186,7 @@ function ProductPurchaseForm({ product, selectedColor, setSelectedColor }) {
                                             }
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/product/product-purchase-form.tsx",
-                                            lineNumber: 75,
+                                            lineNumber: 134,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -143,7 +195,7 @@ function ProductPurchaseForm({ product, selectedColor, setSelectedColor }) {
                                             }
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/product/product-purchase-form.tsx",
-                                            lineNumber: 76,
+                                            lineNumber: 135,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -152,13 +204,13 @@ function ProductPurchaseForm({ product, selectedColor, setSelectedColor }) {
                                             }
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/product/product-purchase-form.tsx",
-                                            lineNumber: 77,
+                                            lineNumber: 136,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/product/product-purchase-form.tsx",
-                                    lineNumber: 71,
+                                    lineNumber: 130,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
@@ -171,29 +223,29 @@ function ProductPurchaseForm({ product, selectedColor, setSelectedColor }) {
                                         strokeWidth: "1.5"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/product/product-purchase-form.tsx",
-                                        lineNumber: 80,
+                                        lineNumber: 139,
                                         columnNumber: 17
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/product/product-purchase-form.tsx",
-                                    lineNumber: 79,
+                                    lineNumber: 138,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/product/product-purchase-form.tsx",
-                            lineNumber: 63,
+                            lineNumber: 122,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/components/product/product-purchase-form.tsx",
-                    lineNumber: 61,
+                    lineNumber: 120,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/components/product/product-purchase-form.tsx",
-                lineNumber: 60,
+                lineNumber: 119,
                 columnNumber: 7
             }, this),
             colorOptions.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -203,7 +255,7 @@ function ProductPurchaseForm({ product, selectedColor, setSelectedColor }) {
                         children: "Color"
                     }, void 0, false, {
                         fileName: "[project]/src/components/product/product-purchase-form.tsx",
-                        lineNumber: 89,
+                        lineNumber: 148,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -219,23 +271,23 @@ function ProductPurchaseForm({ product, selectedColor, setSelectedColor }) {
                                     children: color.name
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/product/product-purchase-form.tsx",
-                                    lineNumber: 98,
+                                    lineNumber: 157,
                                     columnNumber: 17
                                 }, this)
                             }, color.name, false, {
                                 fileName: "[project]/src/components/product/product-purchase-form.tsx",
-                                lineNumber: 92,
+                                lineNumber: 151,
                                 columnNumber: 15
                             }, this))
                     }, void 0, false, {
                         fileName: "[project]/src/components/product/product-purchase-form.tsx",
-                        lineNumber: 90,
+                        lineNumber: 149,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/product/product-purchase-form.tsx",
-                lineNumber: 88,
+                lineNumber: 147,
                 columnNumber: 9
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -248,7 +300,7 @@ function ProductPurchaseForm({ product, selectedColor, setSelectedColor }) {
                                 children: "Size"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/product/product-purchase-form.tsx",
-                                lineNumber: 107,
+                                lineNumber: 166,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -263,19 +315,19 @@ function ProductPurchaseForm({ product, selectedColor, setSelectedColor }) {
                                         children: size
                                     }, size, false, {
                                         fileName: "[project]/src/components/product/product-purchase-form.tsx",
-                                        lineNumber: 112,
+                                        lineNumber: 171,
                                         columnNumber: 17
                                     }, this);
                                 })
                             }, void 0, false, {
                                 fileName: "[project]/src/components/product/product-purchase-form.tsx",
-                                lineNumber: 108,
+                                lineNumber: 167,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/product/product-purchase-form.tsx",
-                        lineNumber: 106,
+                        lineNumber: 165,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
@@ -284,13 +336,13 @@ function ProductPurchaseForm({ product, selectedColor, setSelectedColor }) {
                         children: "Size Guide"
                     }, void 0, false, {
                         fileName: "[project]/src/components/product/product-purchase-form.tsx",
-                        lineNumber: 125,
+                        lineNumber: 184,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/product/product-purchase-form.tsx",
-                lineNumber: 105,
+                lineNumber: 164,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -300,7 +352,7 @@ function ProductPurchaseForm({ product, selectedColor, setSelectedColor }) {
                         children: "Quantity"
                     }, void 0, false, {
                         fileName: "[project]/src/components/product/product-purchase-form.tsx",
-                        lineNumber: 129,
+                        lineNumber: 188,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -317,12 +369,12 @@ function ProductPurchaseForm({ product, selectedColor, setSelectedColor }) {
                                         className: "w-4 h-4"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/product/product-purchase-form.tsx",
-                                        lineNumber: 133,
+                                        lineNumber: 192,
                                         columnNumber: 15
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/product/product-purchase-form.tsx",
-                                    lineNumber: 132,
+                                    lineNumber: 191,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -330,7 +382,7 @@ function ProductPurchaseForm({ product, selectedColor, setSelectedColor }) {
                                     children: quantity
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/product/product-purchase-form.tsx",
-                                    lineNumber: 135,
+                                    lineNumber: 194,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
@@ -342,29 +394,29 @@ function ProductPurchaseForm({ product, selectedColor, setSelectedColor }) {
                                         className: "w-4 h-4"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/product/product-purchase-form.tsx",
-                                        lineNumber: 137,
+                                        lineNumber: 196,
                                         columnNumber: 15
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/product/product-purchase-form.tsx",
-                                    lineNumber: 136,
+                                    lineNumber: 195,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/product/product-purchase-form.tsx",
-                            lineNumber: 131,
+                            lineNumber: 190,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/components/product/product-purchase-form.tsx",
-                        lineNumber: 130,
+                        lineNumber: 189,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/product/product-purchase-form.tsx",
-                lineNumber: 128,
+                lineNumber: 187,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -378,7 +430,7 @@ function ProductPurchaseForm({ product, selectedColor, setSelectedColor }) {
                                 children: "Total Price"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/product/product-purchase-form.tsx",
-                                lineNumber: 145,
+                                lineNumber: 204,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -389,13 +441,13 @@ function ProductPurchaseForm({ product, selectedColor, setSelectedColor }) {
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/product/product-purchase-form.tsx",
-                                lineNumber: 146,
+                                lineNumber: 205,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/product/product-purchase-form.tsx",
-                        lineNumber: 144,
+                        lineNumber: 203,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -408,7 +460,18 @@ function ProductPurchaseForm({ product, selectedColor, setSelectedColor }) {
                                 children: "Add to Cart"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/product/product-purchase-form.tsx",
-                                lineNumber: 149,
+                                lineNumber: 208,
+                                columnNumber: 13
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
+                                size: "lg",
+                                variant: "default",
+                                className: "w-full rounded-full h-12 text-base font-bold",
+                                onClick: handlePayNow,
+                                children: "Pay Now"
+                            }, void 0, false, {
+                                fileName: "[project]/src/components/product/product-purchase-form.tsx",
+                                lineNumber: 209,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
@@ -419,26 +482,26 @@ function ProductPurchaseForm({ product, selectedColor, setSelectedColor }) {
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(WhatsAppIcon, {}, void 0, false, {
                                         fileName: "[project]/src/components/product/product-purchase-form.tsx",
-                                        lineNumber: 151,
+                                        lineNumber: 211,
                                         columnNumber: 17
                                     }, this),
                                     "Buy via WhatsApp"
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/product/product-purchase-form.tsx",
-                                lineNumber: 150,
+                                lineNumber: 210,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/product/product-purchase-form.tsx",
-                        lineNumber: 148,
+                        lineNumber: 207,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/product/product-purchase-form.tsx",
-                lineNumber: 143,
+                lineNumber: 202,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -448,7 +511,7 @@ function ProductPurchaseForm({ product, selectedColor, setSelectedColor }) {
                         children: "Description"
                     }, void 0, false, {
                         fileName: "[project]/src/components/product/product-purchase-form.tsx",
-                        lineNumber: 158,
+                        lineNumber: 218,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -456,19 +519,19 @@ function ProductPurchaseForm({ product, selectedColor, setSelectedColor }) {
                         children: product.description
                     }, void 0, false, {
                         fileName: "[project]/src/components/product/product-purchase-form.tsx",
-                        lineNumber: 159,
+                        lineNumber: 219,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/product/product-purchase-form.tsx",
-                lineNumber: 157,
+                lineNumber: 217,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/components/product/product-purchase-form.tsx",
-        lineNumber: 59,
+        lineNumber: 118,
         columnNumber: 5
     }, this);
 }
