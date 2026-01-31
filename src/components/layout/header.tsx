@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import CartSidebar from '@/components/cart/CartSidebar';
+import UserNav from '@/components/layout/UserNav';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { cn } from '@/lib/utils';
 
@@ -91,12 +92,11 @@ export default function Header() {
             ))}
           </nav>
         </div>
-        <div className="pr-2 flex-shrink-0">
+        <div className="pr-2 flex items-center gap-2 flex-shrink-0">
           <CartSidebar />
+          <UserNav />
         </div>
       </div>
     </header>
   );
 }
-
-    
