@@ -10,7 +10,7 @@ To get started, take a look at `src/app/page.tsx`.
 
 Follow these steps to push your Firebase Studio project to your GitHub repository.
 
-**Target Repository:** `https://github.com/mikomikE254254/web-edjoy`
+**Target Repository:** `https://github.com/mikomike254/eddjoys`
 
 ### Step-by-step Commands
 
@@ -56,7 +56,7 @@ git commit -m "Initial commit from Firebase Studio"
 This links your local repository to the one on GitHub.
 
 ```sh
-git remote add origin https://github.com/mikomikE254254/web-edjoy.git
+git remote add origin https://github.com/mikomike254/eddjoys.git
 ```
 
 **6. Push your code to GitHub**
@@ -77,7 +77,7 @@ git push -u origin main
 
 If GitHub prompts you for a username and password in the terminal:
 
--   **Username:** `mikomikE254254`
+-   **Username:** `mikomike254`
 -   **Password:** **Do NOT use your GitHub password.** You must use a **Personal Access Token (PAT)**.
 
 #### How to create a Personal Access Token:
@@ -93,6 +93,6 @@ If GitHub prompts you for a username and password in the terminal:
 ### Success Check
 
 After pushing, go to your repository URL to confirm your files are there:
-[https://github.com/mikomikE254254/web-edjoy](https://github.com/mikomikE254254/web-edjoy)
+[https://github.com/mikomike254/eddjoys](https://github.com/mikomike254/eddjoys)
 
 You should see all your project files, the "Initial commit..." message, and a `main` branch.
