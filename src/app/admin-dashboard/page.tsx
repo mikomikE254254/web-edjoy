@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useCollection, useFirestore, useMemoFirebase, addDocumentNonBlocking, updateDocumentNonBlocking, deleteDocumentNonBlocking, useFirebaseApp } from '@/firebase';
-import { collection, doc, serverTimestamp } from 'firebase/firestore';
+import { collection, doc, serverTimestamp, query, orderBy, Timestamp } from 'firebase/firestore';
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { Product, Order } from '@/lib/types';
 import { Button } from '@/components/ui/button';
@@ -22,6 +22,8 @@ import { Separator } from '@/components/ui/separator';
 import { Progress } from '@/components/ui/progress';
 import { useToast } from '@/hooks/use-toast';
 import { Switch } from '@/components/ui/switch';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { format } from 'date-fns';
 
 const PRESET_COLORS = [
     { name: 'Black', hex: '#111827' }, { name: 'White', hex: '#FFFFFF' },
@@ -109,7 +111,7 @@ export default function AdminDashboard() {
   const productsQuery = useMemoFirebase(() => firestore ? collection(firestore, 'products') : null, [firestore]);
   const categoriesQuery = useMemoFirebase(() => firestore ? collection(firestore, 'categories') : null, [firestore]);
   const stylesQuery = useMemoFirebase(() => firestore ? collection(firestore, 'styles') : null, [firestore]);
-  const ordersQuery = useMemoFirebase(() => firestore ? collection(firestore, 'orders') : null, [firestore]);
+  const ordersQuery = useMemoFirebase(() => firestore ? query(collection(firestore, 'orders'), orderBy('createdAt', 'desc')) : null, [firestore]);
 
   const { data: products, isLoading: isLoadingProducts } = useCollection<Product>(productsQuery);
   const { data: categories, isLoading: isLoadingCategories } = useCollection<Category>(categoriesQuery);
@@ -189,7 +191,6 @@ export default function AdminDashboard() {
         (snapshot) => setUploadProgress((snapshot.bytesTransferred / snapshot.totalBytes) * 100),
         (error) => {
             console.error("Upload failed", error);
-            toast({ variant: "destructive", title: "Upload Failed", description: error.message });
             setUploading(false);
         },
         () => {
@@ -282,6 +283,15 @@ export default function AdminDashboard() {
     addDocumentNonBlocking(collection(firestore, 'styles'), { name: newStyleName.trim() });
     setNewStyleName('');
     setIsStyleDialogOpen(false);
+  };
+  
+  const handleUpdateOrderStatus = (orderId: string, status: Order['status']) => {
+    if (!firestore) return;
+    updateDocumentNonBlocking(doc(firestore, 'orders', orderId), { status });
+    toast({
+      title: 'Order Status Updated',
+      description: `Order ${orderId.substring(0,6)}... has been set to ${status}.`
+    })
   };
 
   if (!isAuthenticated) {
@@ -499,6 +509,78 @@ export default function AdminDashboard() {
           </Card>
         ))}
       </div>
+
+      <Separator className="my-12" />
+
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-2xl font-bold">Recent Orders</h2>
+      </div>
+
+      <Card>
+        <CardContent className="p-0">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-[150px]">Date</TableHead>
+                <TableHead>Customer ID</TableHead>
+                <TableHead>Products</TableHead>
+                <TableHead>Total</TableHead>
+                <TableHead>Shipping Address</TableHead>
+                <TableHead className="text-right w-[140px]">Status</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {isLoadingOrders && (
+                  <TableRow>
+                      <TableCell colSpan={6} className="text-center h-24">
+                          Loading orders...
+                      </TableCell>
+                  </TableRow>
+              )}
+              {orders?.map(order => (
+                <TableRow key={order.id}>
+                  <TableCell className="font-medium">{order.createdAt ? format((order.createdAt as Timestamp).toDate(), 'PPP') : 'N/A'}</TableCell>
+                  <TableCell className="text-xs text-muted-foreground font-mono">{order.userId}</TableCell>
+                  <TableCell>
+                    <ul className="text-xs space-y-1">
+                      {order.products.map(p => (
+                        <li key={p.id}>{p.name} (x{p.quantity})</li>
+                      ))}
+                    </ul>
+                  </TableCell>
+                  <TableCell>Ksh {order.totalAmount.toFixed(2)}</TableCell>
+                  <TableCell className="text-xs">
+                      {order.shippingAddress.description},<br/>{order.shippingAddress.region}, {order.shippingAddress.county}
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <Select
+                      value={order.status}
+                      onValueChange={(newStatus) => handleUpdateOrderStatus(order.id, newStatus as Order['status'])}
+                    >
+                      <SelectTrigger className="w-[120px] h-8 text-xs">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="pending">Pending</SelectItem>
+                        <SelectItem value="shipped">Shipped</SelectItem>
+                        <SelectItem value="delivered">Delivered</SelectItem>
+                        <SelectItem value="cancelled">Cancelled</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </TableCell>
+                </TableRow>
+              ))}
+              {!isLoadingOrders && orders?.length === 0 && (
+                  <TableRow>
+                      <TableCell colSpan={6} className="text-center h-24">
+                          No orders found.
+                      </TableCell>
+                  </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
     </div>
   );
 }
