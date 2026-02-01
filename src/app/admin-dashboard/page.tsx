@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useMemo, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -75,23 +74,6 @@ type Style = { id: string; name: string };
 
 export default function AdminDashboard() {
   const { toast } = useToast();
-  const router = useRouter();
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  useEffect(() => {
-    const password = prompt('Please enter the admin password:');
-    if (password !== 'Mmm@29315122') {
-        toast({
-            variant: "destructive",
-            title: "Access Denied",
-            description: "Incorrect password. You will be redirected.",
-        });
-        router.push('/');
-    } else {
-        setIsAuthenticated(true);
-    }
-  }, [router, toast]);
-
   const firestore = useFirestore();
   const firebaseApp = useFirebaseApp();
 
@@ -293,15 +275,6 @@ export default function AdminDashboard() {
       description: `Order ${orderId.substring(0,6)}... has been set to ${status}.`
     })
   };
-
-  if (!isAuthenticated) {
-      return (
-          <div className="container mx-auto py-8 text-center">
-              <h1 className="text-2xl font-bold">Verifying Access...</h1>
-              <p className="mt-2 text-muted-foreground">Please enter the password to continue.</p>
-          </div>
-      );
-  }
 
   return (
     <div className="container mx-auto py-8">
@@ -522,7 +495,7 @@ export default function AdminDashboard() {
             <TableHeader>
               <TableRow>
                 <TableHead className="w-[150px]">Date</TableHead>
-                <TableHead>Customer ID</TableHead>
+                <TableHead>Customer</TableHead>
                 <TableHead>Products</TableHead>
                 <TableHead>Total</TableHead>
                 <TableHead>Shipping Address</TableHead>
@@ -540,7 +513,10 @@ export default function AdminDashboard() {
               {orders?.map(order => (
                 <TableRow key={order.id}>
                   <TableCell className="font-medium">{order.createdAt ? format((order.createdAt as Timestamp).toDate(), 'PPP') : 'N/A'}</TableCell>
-                  <TableCell className="text-xs text-muted-foreground font-mono">{order.userId}</TableCell>
+                  <TableCell>
+                    <div className="font-medium">{order.customerName || 'N/A'}</div>
+                    <div className="text-xs text-muted-foreground">{order.customerEmail}</div>
+                  </TableCell>
                   <TableCell>
                     <ul className="text-xs space-y-1">
                       {order.products.map(p => (

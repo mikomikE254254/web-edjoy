@@ -25,7 +25,6 @@ export type Product = {
 
 export type Review = {
   id: string;
-  userId: string;
   userName: string;
   rating: number;
   comment: string;
@@ -34,7 +33,6 @@ export type Review = {
 
 export type Order = {
   id: string;
-  userId: string;
   products: {
     id: string;
     name: string;
@@ -49,4 +47,9 @@ export type Order = {
   };
   status: 'pending' | 'shipped' | 'delivered' | 'cancelled';
   createdAt: Timestamp;
+  // Optional customer info
+  customerName?: string;
+  customerEmail?: string;
 };
+
+export type WithId<T> = T & { id: string };

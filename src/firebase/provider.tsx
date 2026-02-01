@@ -74,8 +74,8 @@ export const FirebaseProvider: React.FC<FirebaseProviderProps> = ({
       return;
     }
 
-    setUserAuthState({ user: null, isUserLoading: true, userError: null }); // Reset on auth instance change
-
+    // This provider no longer handles complex auth logic, just reflects the current user.
+    // If you add authentication back, this is where you'd handle anonymous sign-in logic.
     const unsubscribe = onAuthStateChanged(
       auth,
       (firebaseUser) => { // Auth state determined

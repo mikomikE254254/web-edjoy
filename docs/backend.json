@@ -115,10 +115,6 @@
       "type": "object",
       "description": "Represents a user's review for a product, including a star rating and a text comment.",
       "properties": {
-        "userId": {
-          "type": "string",
-          "description": "The UID of the user who left the review."
-        },
         "userName": {
           "type": "string",
           "description": "The display name of the user who left the review."
@@ -137,14 +133,15 @@
           "description": "The timestamp when the review was created."
         }
       },
-      "required": ["userId", "userName", "rating", "comment", "createdAt"]
+      "required": ["userName", "rating", "comment", "createdAt"]
     },
     "Order": {
       "title": "Order",
       "type": "object",
       "description": "Represents a customer's order.",
       "properties": {
-        "userId": { "type": "string" },
+        "customerName": { "type": "string", "description": "Name of the customer who placed the order." },
+        "customerEmail": { "type": "string", "description": "Email of the customer.", "format": "email"},
         "products": {
           "type": "array",
           "items": {
@@ -174,14 +171,11 @@
         },
         "createdAt": { "type": "string", "format": "date-time" }
       },
-      "required": ["userId", "products", "totalAmount", "shippingAddress", "status", "createdAt"]
+      "required": ["products", "totalAmount", "shippingAddress", "status", "createdAt"]
     }
   },
   "auth": {
-    "providers": [
-      "password",
-      "anonymous"
-    ]
+    "providers": []
   },
   "firestore": {
     "structure": [

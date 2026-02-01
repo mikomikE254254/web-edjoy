@@ -1,12 +1,12 @@
 'use client';
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Star, Send } from 'lucide-react';
-import { useCollection, useFirestore, useUser, useMemoFirebase, addDocumentNonBlocking } from '@/firebase';
+import { useCollection, useFirestore, useMemoFirebase, addDocumentNonBlocking } from '@/firebase';
 import { collection, query, orderBy, serverTimestamp, Timestamp } from 'firebase/firestore';
 import type { Review as ReviewType, WithId } from '@/lib/types';
 import { Button } from '@/components/ui/button';
@@ -86,7 +86,6 @@ const StarRatingInput = ({ value, onChange }: { value: number, onChange: (value:
 export default function ProductReviews({ productId }: { productId: string }) {
   const { toast } = useToast();
   const firestore = useFirestore();
-  const { user, isUserLoading } = useUser();
 
   const reviewsQuery = useMemoFirebase(
     () => firestore ? query(collection(firestore, 'products', productId, 'reviews'), orderBy('createdAt', 'desc')) : null,
@@ -104,26 +103,19 @@ export default function ProductReviews({ productId }: { productId: string }) {
   });
   
   const { formState: { isSubmitting } } = form;
-  
-  useEffect(() => {
-    if (user && !form.getValues('userName')) {
-        form.setValue('userName', user.isAnonymous ? 'Anonymous' : user.displayName || 'Guest');
-    }
-  }, [user, form]);
 
   async function onSubmit(values: z.infer<typeof reviewSchema>) {
-    if (!firestore || !user) {
+    if (!firestore) {
         toast({
             variant: "destructive",
-            title: "Authentication Error",
-            description: "You must be signed in to leave a review.",
+            title: "Database Error",
+            description: "Could not connect to the database.",
         });
         return;
     }
     
     const reviewData = {
         ...values,
-        userId: user.uid,
         createdAt: serverTimestamp(),
     };
 
@@ -134,7 +126,7 @@ export default function ProductReviews({ productId }: { productId: string }) {
                 description: "Thank you for your feedback.",
             });
             form.reset({
-                userName: user.isAnonymous ? 'Anonymous' : user.displayName || 'Guest',
+                userName: '',
                 rating: 0,
                 comment: ''
             });
@@ -162,7 +154,7 @@ export default function ProductReviews({ productId }: { productId: string }) {
   };
   
   const sortedReviews = useMemo(() => {
-    return reviews ? [...reviews].sort((a, b) => (b.createdAt?.toMillis() || 0) - (a.createdAt?.toMillis() || 0)) : [];
+    return reviews ? [...reviews].sort((a, b) => ((b.createdAt as Timestamp)?.toMillis() || 0) - ((a.createdAt as Timestamp)?.toMillis() || 0)) : [];
   }, [reviews]);
 
   return (
@@ -215,7 +207,7 @@ export default function ProductReviews({ productId }: { productId: string }) {
                     </FormItem>
                   )}
                 />
-                <Button type="submit" disabled={isSubmitting || isUserLoading} className="w-full">
+                <Button type="submit" disabled={isSubmitting} className="w-full">
                   {isSubmitting ? 'Submitting...' : 'Submit Review'}
                   <Send className="ml-2 h-4 w-4"/>
                 </Button>

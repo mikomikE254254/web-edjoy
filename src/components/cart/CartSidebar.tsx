@@ -18,7 +18,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { kenyanCounties } from '@/lib/kenyan-counties';
-import { useFirestore, useUser, addDocumentNonBlocking } from '@/firebase';
+import { useFirestore, addDocumentNonBlocking } from '@/firebase';
 import { collection, serverTimestamp } from 'firebase/firestore';
 
 const WhatsAppIcon = () => (
@@ -31,26 +31,27 @@ const WhatsAppIcon = () => (
   </svg>
 );
 
-const addressSchema = z.object({
+const checkoutSchema = z.object({
+  name: z.string().min(2, 'Name is required'),
+  email: z.string().email('A valid email is required'),
   county: z.string().min(1, 'County is required'),
   region: z.string().min(1, 'Region/Town is required'),
   description: z.string().min(1, 'Address description is required'),
 });
-type AddressFormData = z.infer<typeof addressSchema>;
+type CheckoutFormData = z.infer<typeof checkoutSchema>;
 
 export default function CartSidebar() {
   const { cart, removeFromCart, updateQuantity, cartCount, cartTotal, clearCart } = useAppContext();
   const [open, setOpen] = React.useState(false);
-  const [isAddressDialogOpen, setIsAddressDialogOpen] = React.useState(false);
-  const [addressData, setAddressData] = React.useState<AddressFormData | null>(null);
+  const [isCheckoutDialogOpen, setIsCheckoutDialogOpen] = React.useState(false);
+  const [checkoutData, setCheckoutData] = React.useState<CheckoutFormData | null>(null);
   
   const { toast } = useToast();
   const firestore = useFirestore();
-  const { user } = useUser();
 
-  const addressForm = useForm<AddressFormData>({
-    resolver: zodResolver(addressSchema),
-    defaultValues: { county: '', region: '', description: '' },
+  const checkoutForm = useForm<CheckoutFormData>({
+    resolver: zodResolver(checkoutSchema),
+    defaultValues: { name: '', email: '', county: '', region: '', description: '' },
   });
 
   const handleCheckoutViaWhatsApp = () => {
@@ -69,19 +70,20 @@ export default function CartSidebar() {
 
   const paystackConfig = {
     reference: (new Date()).getTime().toString(),
-    email: "customer@example.com", // Using a placeholder email
+    email: checkoutData?.email || "customer@example.com",
     amount: cartTotal * 100, // Amount in cents
     publicKey: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY || '',
     currency: 'KES',
     metadata: {
       cartItems: cart.map(item => ({ name: item.name, quantity: item.quantity, price: item.price })),
       total: cartTotal,
+      customerName: checkoutData?.name || "",
       custom_fields: [
         { display_name: "Cart Total", variable_name: "cart_total", value: `Ksh ${cartTotal.toFixed(2)}`},
         { display_name: "Number of Items", variable_name: "number_of_items", value: cartCount },
-        { display_name: "County", variable_name: "shipping_county", value: addressData?.county || "" },
-        { display_name: "Region", variable_name: "shipping_region", value: addressData?.region || "" },
-        { display_name: "Address Description", variable_name: "shipping_description", value: addressData?.description || "" }
+        { display_name: "County", variable_name: "shipping_county", value: checkoutData?.county || "" },
+        { display_name: "Region", variable_name: "shipping_region", value: checkoutData?.region || "" },
+        { display_name: "Address Description", variable_name: "shipping_description", value: checkoutData?.description || "" }
       ]
     }
   };
@@ -89,18 +91,23 @@ export default function CartSidebar() {
   const initializePayment = usePaystackPayment(paystackConfig);
 
   const onPaystackSuccess = (reference: any) => {
-    if (!firestore || !user || !addressData) {
-      toast({ variant: "destructive", title: "Error", description: "Could not save order. User or address missing."});
+    if (!firestore || !checkoutData) {
+      toast({ variant: "destructive", title: "Error", description: "Could not save order. Checkout details missing."});
       return;
     }
 
     const orderData = {
-      userId: user.uid,
       products: cart.map(item => ({ id: item.id, name: item.name, quantity: item.quantity, price: item.price })),
       totalAmount: cartTotal,
-      shippingAddress: addressData,
+      shippingAddress: {
+        county: checkoutData.county,
+        region: checkoutData.region,
+        description: checkoutData.description,
+      },
       status: 'pending' as const,
       createdAt: serverTimestamp(),
+      customerName: checkoutData.name,
+      customerEmail: checkoutData.email,
     };
 
     addDocumentNonBlocking(collection(firestore, 'orders'), orderData);
@@ -117,9 +124,9 @@ export default function CartSidebar() {
       // silent on close
   };
   
-  const handleAddressSubmit = (data: AddressFormData) => {
-    setAddressData(data);
-    setIsAddressDialogOpen(false);
+  const handleCheckoutSubmit = (data: CheckoutFormData) => {
+    setCheckoutData(data);
+    setIsCheckoutDialogOpen(false);
     initializePayment({ onSuccess: onPaystackSuccess, onClose: onPaystackClose });
   }
 
@@ -132,7 +139,7 @@ export default function CartSidebar() {
       toast({ variant: "destructive", title: "Configuration Error", description: "Payment gateway is not configured." });
       return;
     }
-    setIsAddressDialogOpen(true);
+    setIsCheckoutDialogOpen(true);
   };
 
   return (
@@ -213,14 +220,28 @@ export default function CartSidebar() {
         </SheetContent>
       </Sheet>
       
-      <Dialog open={isAddressDialogOpen} onOpenChange={setIsAddressDialogOpen}>
+      <Dialog open={isCheckoutDialogOpen} onOpenChange={setIsCheckoutDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Shipping Address</DialogTitle>
+            <DialogTitle>Checkout Details</DialogTitle>
           </DialogHeader>
-          <Form {...addressForm}>
-            <form onSubmit={addressForm.handleSubmit(handleAddressSubmit)} className="space-y-4 py-4">
-              <FormField control={addressForm.control} name="county" render={({ field }) => (
+          <Form {...checkoutForm}>
+            <form onSubmit={checkoutForm.handleSubmit(handleCheckoutSubmit)} className="space-y-4 py-4">
+                <FormField control={checkoutForm.control} name="name" render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Full Name</FormLabel>
+                    <FormControl><Input placeholder="e.g., Jane Doe" {...field} /></FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}/>
+                <FormField control={checkoutForm.control} name="email" render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email Address</FormLabel>
+                    <FormControl><Input type="email" placeholder="e.g., jane.doe@example.com" {...field} /></FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}/>
+              <FormField control={checkoutForm.control} name="county" render={({ field }) => (
                 <FormItem>
                   <FormLabel>County</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
@@ -232,14 +253,14 @@ export default function CartSidebar() {
                   <FormMessage />
                 </FormItem>
               )}/>
-              <FormField control={addressForm.control} name="region" render={({ field }) => (
+              <FormField control={checkoutForm.control} name="region" render={({ field }) => (
                 <FormItem>
                   <FormLabel>Region / Town</FormLabel>
                   <FormControl><Input placeholder="e.g., Westlands" {...field} /></FormControl>
                   <FormMessage />
                 </FormItem>
               )}/>
-              <FormField control={addressForm.control} name="description" render={({ field }) => (
+              <FormField control={checkoutForm.control} name="description" render={({ field }) => (
                 <FormItem>
                   <FormLabel>Address Description</FormLabel>
                   <FormControl><Textarea placeholder="e.g., Building name, street, house number" {...field} /></FormControl>
